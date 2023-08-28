@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres
+    container_name: team-management
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=team-management
+    volumes:
+      - pgdata:/data/postgres
+
+volumes:
+  pgdata:
+    driver: local
