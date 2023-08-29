@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm'
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryColumn,
+} from 'typeorm'
 
 @Entity('users_roles')
 class UserRole {
@@ -8,10 +14,10 @@ class UserRole {
   @Column({ name: 'user_role_name' })
   name: string
 
-  @Column({ name: 'user_role_created_at' })
+  @CreateDateColumn({ name: 'user_role_created_at' })
   createdAt?: Date
 
-  @Column({ name: 'user_role_deleted_at', nullable: true })
+  @DeleteDateColumn({ name: 'user_role_deleted_at', nullable: true })
   deletedAt?: Date
 }
 
