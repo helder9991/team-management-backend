@@ -1,10 +1,15 @@
 import { type Request, type Response, Router } from 'express'
 import CreateUserController from 'modules/users/controllers/CreateUser/CreateUserController'
+import UpdateUserController from 'modules/users/controllers/UpdateUser/UpdateUserController'
 
 const userRoutes = Router()
 
 userRoutes.post('/', (req: Request, res: Response) =>
   CreateUserController.handle(req, res),
+)
+
+userRoutes.put('/:id', (req: Request, res: Response) =>
+  UpdateUserController.handle(req, res),
 )
 
 export default userRoutes

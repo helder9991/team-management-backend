@@ -11,7 +11,7 @@ async function clearTablesInTest(): Promise<void> {
 
   if (!typeORMConnection.isInitialized) await typeORMConnection.initialize()
 
-  typeORMConnection.getRepository(User).delete({})
+  await typeORMConnection.getRepository(User).delete({})
 }
 
 export default clearTablesInTest

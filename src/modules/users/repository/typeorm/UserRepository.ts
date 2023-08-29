@@ -5,6 +5,7 @@ import User from 'modules/users/entities/User'
 import type IUserRepository from '../interfaces/IUserRepository'
 import { type Repository } from 'typeorm'
 import typeORMConnection from 'database/typeorm'
+import type IUpdateUserDTO from 'modules/users/dtos/IUpdateUserDTO'
 
 class UserRepository implements IUserRepository {
   private readonly repository: Repository<User>
@@ -37,6 +38,34 @@ class UserRepository implements IUserRepository {
 
   async findByEmail(email: string): Promise<User | null> {
     const user = await this.repository.findOneBy({ email })
+
+    return user
+  }
+
+  async findById(id: string): Promise<User | null> {
+    const user = await this.repository.findOneBy({ id })
+
+    return user
+  }
+
+  async update({
+    id,
+    name,
+    password,
+    isNewPassword,
+    roleId,
+    teamId,
+  }: IUpdateUserDTO): Promise<User> {
+    const hashedPassword =
+      isNewPassword === true ? await hash(password, 8) : password
+
+    const user = await this.repository.save({
+      id,
+      name,
+      password: hashedPassword,
+      roleId,
+      teamId,
+    })
 
     return user
   }
