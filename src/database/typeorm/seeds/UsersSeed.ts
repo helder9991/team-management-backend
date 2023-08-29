@@ -1,0 +1,31 @@
+import crypto from 'crypto'
+import typeORMConnection from '..'
+import UserRole from '../../../modules/users/entities/UserRole'
+import { hash } from 'bcryptjs'
+
+class UsersSeed {
+  async run(): Promise<void> {
+    const sqlQuery =
+      'INSERT INTO users (user_id, user_name, user_email, user_password, user_role_id, user_created_at) VALUES ($1, $2, $3, $4, $5, $6)'
+
+    try {
+      const adminRole = await typeORMConnection
+        .getRepository(UserRole)
+        .findOne({ where: { name: 'Administrador' } })
+
+      await typeORMConnection.query(sqlQuery, [
+        crypto.randomUUID(),
+        'Administrador',
+        'admin@team.com.br',
+        await hash('admin123', 8),
+        adminRole?.id,
+        new Date(),
+      ])
+      console.log(`Users: Add Row 'admin@team.com.br'`)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+}
+
+export default new UsersSeed()

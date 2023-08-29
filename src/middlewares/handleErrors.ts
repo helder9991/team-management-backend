@@ -9,13 +9,13 @@ function handleErrors(
 ): Response {
   if (err instanceof AppError) {
     return res.status(err.statusCode).json({
-      mensagem: err.message,
+      message: err.message,
     })
   }
   console.log(err)
 
   return res.status(500).json({
-    mensagem: 'Internal Server error',
+    message: 'Internal Server error',
   })
 }
 

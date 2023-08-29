@@ -1,5 +1,6 @@
 import typeORMConnection from 'database/typeorm'
 import AppError from './AppError'
+import User from 'modules/users/entities/User'
 
 async function clearTablesInTest(): Promise<void> {
   if (process.env.NODE_ENV !== 'test')
@@ -9,6 +10,8 @@ async function clearTablesInTest(): Promise<void> {
     )
 
   if (!typeORMConnection.isInitialized) await typeORMConnection.initialize()
+
+  typeORMConnection.getRepository(User).delete({})
 }
 
 export default clearTablesInTest
