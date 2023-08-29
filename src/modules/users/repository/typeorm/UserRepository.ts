@@ -69,6 +69,22 @@ class UserRepository implements IUserRepository {
 
     return user
   }
+
+  async list(): Promise<User[]> {
+    const users = await this.repository.find({
+      select: [
+        'id',
+        'name',
+        'email',
+        'teamId',
+        'roleId',
+        'createdAt',
+        'deletedAt',
+      ],
+    })
+
+    return users
+  }
 }
 
 export default UserRepository

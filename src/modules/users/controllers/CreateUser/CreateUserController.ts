@@ -52,7 +52,7 @@ class CreateUserController {
       name,
       email,
       roleId,
-      teamId,
+      teamId: teamId ?? null,
     })
   }
 }

@@ -7,6 +7,7 @@ interface IUserRepository {
   update: (data: IUpdateUserDTO) => Promise<User>
   findByEmail: (email: string) => Promise<User | null>
   findById: (id: string) => Promise<User | null>
+  list: () => Promise<User[]>
 }
 
 export default IUserRepository
