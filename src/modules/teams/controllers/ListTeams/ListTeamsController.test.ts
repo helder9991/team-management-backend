@@ -120,4 +120,17 @@ describe('List Teams E2E', () => {
       })
     }
   })
+
+  it('Shouldn`t be able to list all teams if you pass a wrong parameters', async () => {
+    const response = await request(app)
+      .get('/team')
+      .set('Authorization', `Bearer ${adminToken}`)
+      .query({
+        page: -1,
+      })
+
+    expect(response.status).toBe(400)
+
+    expect(response.body).toMatchObject({ message: 'Validation Fails.' })
+  })
 })

@@ -28,7 +28,7 @@ class ListTeamsController {
     const { page = 1 } = req.query as IQueryRequest
 
     if (!(await this.schema.isValid({ page })))
-      throw new AppError('Validation Fails', 400)
+      throw new AppError('Validation Fails.', 400)
 
     const listTeamsUseCase: ListTeamsUseCase =
       container.resolve(ListTeamsUseCase)
