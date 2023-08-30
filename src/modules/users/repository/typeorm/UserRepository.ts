@@ -6,7 +6,10 @@ import type IUserRepository from '../interfaces/IUserRepository'
 import { type Repository } from 'typeorm'
 import typeORMConnection from 'database/typeorm'
 import type IUpdateUserDTO from 'modules/users/dtos/IUpdateUserDTO'
+import type IListUsersDTO from 'modules/users/dtos/IListUsersDTO'
+import { type SavedItemCount } from '../interfaces/IUserRepository'
 
+const itensPerPage = 30
 class UserRepository implements IUserRepository {
   private readonly repository: Repository<User>
 
@@ -70,8 +73,8 @@ class UserRepository implements IUserRepository {
     return user
   }
 
-  async list(): Promise<User[]> {
-    const users = await this.repository.find({
+  async list({ page }: IListUsersDTO): Promise<[User[], SavedItemCount]> {
+    const users = await this.repository.findAndCount({
       select: [
         'id',
         'name',
@@ -81,6 +84,8 @@ class UserRepository implements IUserRepository {
         'createdAt',
         'deletedAt',
       ],
+      skip: (page - 1) * itensPerPage,
+      take: itensPerPage,
     })
 
     return users

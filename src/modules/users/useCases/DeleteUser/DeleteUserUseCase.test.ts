@@ -58,13 +58,12 @@ describe('Delete User', () => {
   })
 
   it('Should be able to delete a existing user', async () => {
-    let users = await listUsers.execute()
+    let [users] = await listUsers.execute({})
 
     expect(users).toHaveLength(3)
 
     await deleteUser.execute({ id: createdUsers[0].id })
-
-    users = await listUsers.execute()
+    ;[users] = await listUsers.execute({})
 
     expect(users).toHaveLength(2)
   })

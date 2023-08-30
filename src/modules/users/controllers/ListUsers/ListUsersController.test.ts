@@ -80,9 +80,9 @@ describe('List Users E2E', () => {
 
     expect(response.status).toBe(200)
 
-    expect(body).toHaveLength(4)
+    expect(body.users).toHaveLength(4)
     expect(
-      body.map(({ createdAt, deletedAt, ...rest }) => {
+      body.users.map(({ createdAt, deletedAt, ...rest }) => {
         return {
           ...rest,
         }

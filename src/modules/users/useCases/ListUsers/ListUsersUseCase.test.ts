@@ -55,7 +55,7 @@ describe('List Users', () => {
   })
 
   it('Should be able to list all users', async () => {
-    const users = await listUsers.execute()
+    const [users] = await listUsers.execute({})
 
     expect(users).toEqual(
       expect.arrayContaining(

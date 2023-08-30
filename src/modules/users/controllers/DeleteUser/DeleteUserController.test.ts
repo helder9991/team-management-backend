@@ -70,7 +70,7 @@ describe('Delete User E2E', () => {
       .get('/user')
       .set('Authorization', `Bearer ${adminToken}`)
 
-    expect(response.body).toHaveLength(3)
+    expect(response.body.users).toHaveLength(3)
 
     response = await request(app)
       .delete(`/user/${createdUsers[0].id}`)
@@ -82,7 +82,7 @@ describe('Delete User E2E', () => {
       .get('/user')
       .set('Authorization', `Bearer ${adminToken}`)
 
-    expect(response.body).toHaveLength(2)
+    expect(response.body.users).toHaveLength(2)
   })
 
   it('Shouldn`t be able to delete a non-existing user', async () => {

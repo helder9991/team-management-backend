@@ -1,6 +1,12 @@
 import type User from 'modules/users/entities/User'
-import IUserRepository from 'modules/users/repository/interfaces/IUserRepository'
+import IUserRepository, {
+  type SavedItemCount,
+} from 'modules/users/repository/interfaces/IUserRepository'
 import { inject, injectable } from 'tsyringe'
+
+interface IListUsersParams {
+  page?: number
+}
 
 @injectable()
 class ListUsersUseCase {
@@ -9,10 +15,14 @@ class ListUsersUseCase {
     private readonly userRepository: IUserRepository,
   ) {}
 
-  async execute(): Promise<User[]> {
-    const users = await this.userRepository.list()
+  async execute({
+    page = 1,
+  }: IListUsersParams): Promise<[User[], SavedItemCount]> {
+    const [users, savedItemCount] = await this.userRepository.list({
+      page,
+    })
 
-    return users
+    return [users, savedItemCount]
   }
 }
 
