@@ -21,14 +21,14 @@ class ListTeamsUseCase {
   async execute({
     page = 1,
   }: IListTeamsParams): Promise<[Team[], ISavedItemCount]> {
-    const usersListCached = await this.cacheProvider.recover<
+    const teamsListCached = await this.cacheProvider.recover<
       [Team[], ISavedItemCount]
     >(`teams-list:${page}`)
 
     let teams, savedItemCount
 
-    if (usersListCached !== null) {
-      ;[teams, savedItemCount] = usersListCached
+    if (teamsListCached !== null) {
+      ;[teams, savedItemCount] = teamsListCached
     } else {
       ;[teams, savedItemCount] = await this.teamRepository.list({
         page,
