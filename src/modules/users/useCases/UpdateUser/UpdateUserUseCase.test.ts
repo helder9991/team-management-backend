@@ -7,11 +7,13 @@ import type UserRole from 'modules/users/entities/UserRole'
 import crypto from 'crypto'
 import CreateUserUseCase from '../CreateUser/CreateUserUseCase'
 import type User from 'modules/users/entities/User'
+import FakeCacheProvider from 'container/providers/CacheProvider/fakes/FakeCacheProvider'
 
 let updateUser: UpdateUserUseCase
 let createUser: CreateUserUseCase
 let userRepository: UserRepository
 let userRoleRepository: UserRoleRepository
+let fakeCacheProvider: FakeCacheProvider
 let roles: UserRole[] = []
 let createdUser: User
 
@@ -20,8 +22,17 @@ describe('Update User', () => {
     try {
       userRepository = new UserRepository()
       userRoleRepository = new UserRoleRepository()
-      updateUser = new UpdateUserUseCase(userRepository, userRoleRepository)
-      createUser = new CreateUserUseCase(userRepository, userRoleRepository)
+      fakeCacheProvider = new FakeCacheProvider()
+      updateUser = new UpdateUserUseCase(
+        userRepository,
+        userRoleRepository,
+        fakeCacheProvider,
+      )
+      createUser = new CreateUserUseCase(
+        userRepository,
+        userRoleRepository,
+        fakeCacheProvider,
+      )
 
       await clearTablesInTest()
       roles = await userRoleRepository.list()

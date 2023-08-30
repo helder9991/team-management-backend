@@ -6,10 +6,12 @@ import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleReposit
 import type UserRole from 'modules/users/entities/UserRole'
 import CreateUserUseCase from '../CreateUser/CreateUserUseCase'
 import type User from 'modules/users/entities/User'
+import FakeCacheProvider from 'container/providers/CacheProvider/fakes/FakeCacheProvider'
 
 let listUsers: ListUsersUseCase
 let createUser: CreateUserUseCase
 let userRepository: UserRepository
+let fakeCacheProvider: FakeCacheProvider
 let userRoleRepository: UserRoleRepository
 let roles: UserRole[] = []
 const createdUsers: User[] = []
@@ -19,8 +21,13 @@ describe('List Users', () => {
     try {
       userRepository = new UserRepository()
       userRoleRepository = new UserRoleRepository()
-      listUsers = new ListUsersUseCase(userRepository)
-      createUser = new CreateUserUseCase(userRepository, userRoleRepository)
+      fakeCacheProvider = new FakeCacheProvider()
+      listUsers = new ListUsersUseCase(userRepository, fakeCacheProvider)
+      createUser = new CreateUserUseCase(
+        userRepository,
+        userRoleRepository,
+        fakeCacheProvider,
+      )
 
       await clearTablesInTest()
       roles = await userRoleRepository.list()
@@ -55,6 +62,19 @@ describe('List Users', () => {
   })
 
   it('Should be able to list all users', async () => {
+    const [users] = await listUsers.execute({})
+
+    expect(users).toEqual(
+      expect.arrayContaining(
+        createdUsers.map(({ password, ...rest }) => {
+          return { ...rest, password: undefined }
+        }),
+      ),
+    )
+  })
+
+  it('Should be able to list all users by cache', async () => {
+    await listUsers.execute({})
     const [users] = await listUsers.execute({})
 
     expect(users).toEqual(

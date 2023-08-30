@@ -7,12 +7,14 @@ import type UserRole from 'modules/users/entities/UserRole'
 import CreateUserUseCase from '../CreateUser/CreateUserUseCase'
 import type User from 'modules/users/entities/User'
 import ListUsersUseCase from '../ListUsers/ListUsersUseCase'
+import FakeCacheProvider from 'container/providers/CacheProvider/fakes/FakeCacheProvider'
 
 let deleteUser: DeleteUserUseCase
 let createUser: CreateUserUseCase
 let listUsers: ListUsersUseCase
 let userRepository: UserRepository
 let userRoleRepository: UserRoleRepository
+let fakeCacheProvider: FakeCacheProvider
 let roles: UserRole[] = []
 const createdUsers: User[] = []
 
@@ -21,9 +23,14 @@ describe('Delete User', () => {
     try {
       userRepository = new UserRepository()
       userRoleRepository = new UserRoleRepository()
-      deleteUser = new DeleteUserUseCase(userRepository)
-      createUser = new CreateUserUseCase(userRepository, userRoleRepository)
-      listUsers = new ListUsersUseCase(userRepository)
+      fakeCacheProvider = new FakeCacheProvider()
+      deleteUser = new DeleteUserUseCase(userRepository, fakeCacheProvider)
+      createUser = new CreateUserUseCase(
+        userRepository,
+        userRoleRepository,
+        fakeCacheProvider,
+      )
+      listUsers = new ListUsersUseCase(userRepository, fakeCacheProvider)
 
       await clearTablesInTest()
       roles = await userRoleRepository.list()

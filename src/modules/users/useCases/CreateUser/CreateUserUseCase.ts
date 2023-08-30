@@ -1,6 +1,7 @@
 import type User from 'modules/users/entities/User'
 import IUserRepository from 'modules/users/repository/interfaces/IUserRepository'
 import IUserRoleRepository from 'modules/users/repository/interfaces/IUserRoleRepository'
+import ICacheProviders from 'container/providers/CacheProvider/models/ICacheProvider'
 import { inject, injectable } from 'tsyringe'
 import AppError from 'utils/AppError'
 
@@ -11,8 +12,12 @@ class CreateUserUseCase {
   constructor(
     @inject('UserRepository')
     private readonly userRepository: IUserRepository,
+
     @inject('UserRoleRepository')
     private readonly userRoleRepository: IUserRoleRepository,
+
+    @inject('CacheProvider')
+    private readonly cacheProvider: ICacheProviders,
   ) {}
 
   async execute({
@@ -38,6 +43,8 @@ class CreateUserUseCase {
       roleId,
       teamId,
     })
+
+    await this.cacheProvider.invalidatePrefix('users-list')
 
     return user
   }

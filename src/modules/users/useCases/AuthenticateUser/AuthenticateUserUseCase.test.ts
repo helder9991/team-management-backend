@@ -6,12 +6,14 @@ import type UserRole from 'modules/users/entities/UserRole'
 import CreateUserUseCase from '../CreateUser/CreateUserUseCase'
 import AuthenticateUserUseCase from './AuthenticateUserUseCase'
 import AuthenticateRepository from 'modules/users/repository/jwt/AuthenticateRepository'
+import FakeCacheProvider from 'container/providers/CacheProvider/fakes/FakeCacheProvider'
 
 let authenticateUser: AuthenticateUserUseCase
 let createUser: CreateUserUseCase
 let userRepository: UserRepository
 let userRoleRepository: UserRoleRepository
 let authenticateRepository: AuthenticateRepository
+let fakeCacheProvider: FakeCacheProvider
 let roles: UserRole[] = []
 
 const user = {
@@ -27,11 +29,16 @@ describe('Authenticate User', () => {
       userRepository = new UserRepository()
       authenticateRepository = new AuthenticateRepository()
       userRoleRepository = new UserRoleRepository()
+      fakeCacheProvider = new FakeCacheProvider()
       authenticateUser = new AuthenticateUserUseCase(
         userRepository,
         authenticateRepository,
       )
-      createUser = new CreateUserUseCase(userRepository, userRoleRepository)
+      createUser = new CreateUserUseCase(
+        userRepository,
+        userRoleRepository,
+        fakeCacheProvider,
+      )
 
       await clearTablesInTest()
 

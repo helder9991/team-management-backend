@@ -5,10 +5,12 @@ import clearTablesInTest from 'utils/clearTablesInTest'
 import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleRepository'
 import type UserRole from 'modules/users/entities/UserRole'
 import crypto from 'crypto'
+import FakeCacheProvider from 'container/providers/CacheProvider/fakes/FakeCacheProvider'
 
 let createUser: CreateUserUseCase
 let userRepository: UserRepository
 let userRoleRepository: UserRoleRepository
+let fakeCacheProvider: FakeCacheProvider
 let roles: UserRole[] = []
 
 describe('Create User', () => {
@@ -16,7 +18,12 @@ describe('Create User', () => {
     try {
       userRepository = new UserRepository()
       userRoleRepository = new UserRoleRepository()
-      createUser = new CreateUserUseCase(userRepository, userRoleRepository)
+      fakeCacheProvider = new FakeCacheProvider()
+      createUser = new CreateUserUseCase(
+        userRepository,
+        userRoleRepository,
+        fakeCacheProvider,
+      )
 
       await clearTablesInTest()
       roles = await userRoleRepository.list()
