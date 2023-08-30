@@ -83,7 +83,7 @@ describe('List Teams E2E', () => {
 
   it('Shouldn`t be able to list all teams with a non-admin account', async () => {
     for (const role of roles) {
-      if (role.name === 'Administrador') return
+      if (role.name === 'Administrador') continue
 
       await clearTablesInTest()
       const user = {
