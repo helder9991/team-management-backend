@@ -6,6 +6,7 @@ import Team from 'modules/teams/entities/Team'
 import type ICreateTeamDTO from 'modules/teams/dtos/ICreateTeamDTO'
 import type IListTeamsDTO from 'modules/teams/dtos/IListTeamsDTO'
 import { type ISavedItemCount } from 'shared/interfaces/database'
+import type IUpdateTeamDTO from 'modules/teams/dtos/IUpdateTeamDTO'
 
 const itensPerPage = 30
 
@@ -39,6 +40,15 @@ class TeamRepository implements ITeamRepository {
 
   async findById(id: string): Promise<Team | null> {
     const team = await this.repository.findOneBy({ id })
+
+    return team
+  }
+
+  async update({ id, name }: IUpdateTeamDTO): Promise<Team> {
+    const team = await this.repository.save({
+      id,
+      name,
+    })
 
     return team
   }
