@@ -11,6 +11,7 @@ const config: Config = {
   },
   coverageDirectory: 'jest/coverage',
   collectCoverageFrom: [
+    '<rootDir>/src/modules/**/repository/!(*interfaces)/**',
     '<rootDir>/src/modules/**/useCases/**',
     '<rootDir>/src/modules/**/controllers/**',
   ],

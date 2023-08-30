@@ -19,6 +19,7 @@
         "@typescript-eslint/no-misused-promises": "off",
         "prettier/prettier": ["error", { "singleQuote": true, "semi": false }],
         "@typescript-eslint/no-throw-literal": "off",
-        "@typescript-eslint/no-floating-promises": "off"
+        "@typescript-eslint/no-floating-promises": "off",
+        "@typescript-eslint/no-dynamic-delete": "off"
     }
 }
