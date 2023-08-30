@@ -36,6 +36,12 @@ class TeamRepository implements ITeamRepository {
 
     return teams
   }
+
+  async findById(id: string): Promise<Team | null> {
+    const team = await this.repository.findOneBy({ id })
+
+    return team
+  }
 }
 
 export default TeamRepository

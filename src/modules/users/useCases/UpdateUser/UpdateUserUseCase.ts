@@ -1,5 +1,6 @@
 import { compare } from 'bcryptjs'
 import ICacheProvider from 'container/providers/CacheProvider/models/ICacheProvider'
+import ITeamRepository from 'modules/teams/repository/interfaces/ITeamRepository'
 import type User from 'modules/users/entities/User'
 import IUserRepository from 'modules/users/repository/interfaces/IUserRepository'
 import IUserRoleRepository from 'modules/users/repository/interfaces/IUserRoleRepository'
@@ -21,6 +22,9 @@ class UpdateUserUseCase {
     @inject('UserRoleRepository')
     private readonly userRoleRepository: IUserRoleRepository,
 
+    @inject('TeamRepository')
+    private readonly teamRepository: ITeamRepository,
+
     @inject('CacheProvider')
     private readonly cacheProvider: ICacheProvider,
   ) {}
@@ -41,6 +45,12 @@ class UpdateUserUseCase {
 
       if (userRoleExists === null)
         throw new AppError('User Role doesn`t exist.', 400)
+    }
+
+    if (teamId !== undefined) {
+      const teamExists = await this.teamRepository.findById(teamId)
+
+      if (teamExists === null) throw new AppError('Team doesn`t exist.', 400)
     }
 
     const isNewPassword =
