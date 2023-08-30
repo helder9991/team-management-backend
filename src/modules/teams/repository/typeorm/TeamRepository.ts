@@ -42,6 +42,12 @@ class TeamRepository implements ITeamRepository {
 
     return team
   }
+
+  async delete(id: string): Promise<boolean> {
+    const wasDeleted = await this.repository.softDelete(id)
+
+    return wasDeleted.affected !== undefined && wasDeleted.affected > 0
+  }
 }
 
 export default TeamRepository

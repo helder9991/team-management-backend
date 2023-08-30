@@ -7,6 +7,7 @@ interface ITeamRepository {
   create: (data: ICreateTeamDTO) => Promise<Team>
   list: (data: IListTeamsDTO) => Promise<[Team[], ISavedItemCount]>
   findById: (id: string) => Promise<Team | null>
+  delete: (id: string) => Promise<boolean>
 }
 
 export default ITeamRepository
