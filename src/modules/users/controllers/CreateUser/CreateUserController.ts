@@ -18,7 +18,7 @@ class CreateUserController {
 
   constructor() {
     this.schema = Yup.object().shape({
-      name: Yup.string().required(),
+      name: Yup.string().strict().required(),
       email: Yup.string().email().required(),
       password: Yup.string().min(8).required(),
       roleId: Yup.string().uuid().required(),
