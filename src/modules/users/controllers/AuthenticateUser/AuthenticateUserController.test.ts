@@ -9,6 +9,7 @@ import type User from 'modules/users/entities/User'
 let userRoleRepository: UserRoleRepository
 let roles: UserRole[] = []
 let user: Omit<User, 'id'>
+let adminToken = ''
 
 describe('Authenticate User E2E', () => {
   beforeAll(async () => {
@@ -24,6 +25,16 @@ describe('Authenticate User E2E', () => {
         password: '123456789',
         roleId: roles[0].id,
       }
+
+      const response = await request(app).post('/auth').send({
+        email: 'admin@team.com.br',
+        password: 'admin123',
+      })
+
+      const body: IAuthenticateUserControllerResponse =
+        response.body as IAuthenticateUserControllerResponse
+
+      adminToken = body.token
     } catch (err) {
       console.error(err)
     }
@@ -32,7 +43,10 @@ describe('Authenticate User E2E', () => {
   beforeEach(async () => {
     try {
       await clearTablesInTest()
-      await request(app).post('/user').send(user)
+      await request(app)
+        .post('/user')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send(user)
     } catch (err) {
       console.error(err)
     }
@@ -66,7 +80,7 @@ describe('Authenticate User E2E', () => {
     expect(body).toMatchObject({ message: 'User doesn`t exist.' })
   })
 
-  it('Shouldn`t be able to authenticate with if you pass a wrong password', async () => {
+  it('Shouldn`t be able to authenticate if you pass a wrong password', async () => {
     const response = await request(app).post('/auth').send({
       email: 'john@mail.com',
       password: 'wrong-password',

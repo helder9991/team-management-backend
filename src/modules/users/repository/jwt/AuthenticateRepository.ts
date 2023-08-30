@@ -1,5 +1,5 @@
 import type IAuthenticateRepository from '../interfaces/IAuthenticateRepository'
-import type IAuhtenticateUserDTO from 'modules/users/dtos/IAuthenticateUserDTO'
+import type IAuhtenticateUserDTO from '../../dtos/IAuthenticateUserDTO'
 import { type IToken } from '../interfaces/IAuthenticateRepository'
 import { compare } from 'bcryptjs'
 import AppError from 'utils/AppError'
