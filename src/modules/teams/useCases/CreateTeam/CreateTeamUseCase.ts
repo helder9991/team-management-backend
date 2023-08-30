@@ -3,7 +3,7 @@ import { inject, injectable } from 'tsyringe'
 import ITeamRepository from 'modules/teams/repository/interfaces/ITeamRepository'
 import type Team from 'modules/teams/entities/Team'
 
-type ICreateUserParams = Pick<Team, 'name'>
+type ICreateTeamParams = Pick<Team, 'name'>
 
 @injectable()
 class CreateTeamUseCase {
@@ -15,7 +15,7 @@ class CreateTeamUseCase {
     private readonly cacheProvider: ICacheProviders,
   ) {}
 
-  async execute({ name }: ICreateUserParams): Promise<Team> {
+  async execute({ name }: ICreateTeamParams): Promise<Team> {
     const team = await this.teamRepository.create({
       name,
     })

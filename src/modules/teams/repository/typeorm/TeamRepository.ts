@@ -4,6 +4,10 @@ import { type Repository } from 'typeorm'
 import typeORMConnection from 'database/typeorm'
 import Team from 'modules/teams/entities/Team'
 import type ICreateTeamDTO from 'modules/teams/dtos/ICreateTeamDTO'
+import type IListTeamsDTO from 'modules/teams/dtos/IListTeamsDTO'
+import { type ISavedItemCount } from 'shared/interfaces/database'
+
+const itensPerPage = 30
 
 class TeamRepository implements ITeamRepository {
   private readonly repository: Repository<Team>
@@ -22,6 +26,15 @@ class TeamRepository implements ITeamRepository {
     await this.repository.save(team)
 
     return team
+  }
+
+  async list({ page }: IListTeamsDTO): Promise<[Team[], ISavedItemCount]> {
+    const teams = await this.repository.findAndCount({
+      skip: (page - 1) * itensPerPage,
+      take: itensPerPage,
+    })
+
+    return teams
   }
 }
 
