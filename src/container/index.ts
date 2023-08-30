@@ -8,6 +8,8 @@ import UserRepository from 'modules/users/repository/typeorm/UserRepository'
 import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleRepository'
 import type ITeamRepository from 'modules/teams/repository/interfaces/ITeamRepository'
 import TeamRepository from 'modules/teams/repository/typeorm/TeamRepository'
+import ProjectRepository from 'modules/project/repository/typeorm/ProjectRepository'
+import type IProjectRepository from 'modules/project/repository/interfaces/IProjectRepository'
 
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository)
 container.registerSingleton<IUserRoleRepository>(
@@ -19,3 +21,7 @@ container.registerSingleton<IAuthenticateRepository>(
   AuthenticateRepository,
 )
 container.registerSingleton<ITeamRepository>('TeamRepository', TeamRepository)
+container.registerSingleton<IProjectRepository>(
+  'ProjectRepository',
+  ProjectRepository,
+)
