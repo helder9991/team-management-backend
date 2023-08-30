@@ -7,7 +7,7 @@ import { type Repository } from 'typeorm'
 import typeORMConnection from 'database/typeorm'
 import type IUpdateUserDTO from 'modules/users/dtos/IUpdateUserDTO'
 import type IListUsersDTO from 'modules/users/dtos/IListUsersDTO'
-import { type SavedItemCount } from '../interfaces/IUserRepository'
+import { type ISavedItemCount } from 'shared/interfaces/database'
 
 const itensPerPage = 30
 class UserRepository implements IUserRepository {
@@ -73,7 +73,7 @@ class UserRepository implements IUserRepository {
     return user
   }
 
-  async list({ page }: IListUsersDTO): Promise<[User[], SavedItemCount]> {
+  async list({ page }: IListUsersDTO): Promise<[User[], ISavedItemCount]> {
     const users = await this.repository.findAndCount({
       select: [
         'id',

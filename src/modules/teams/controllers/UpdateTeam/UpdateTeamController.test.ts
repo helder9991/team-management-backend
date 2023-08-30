@@ -1,18 +1,19 @@
 import request from 'supertest'
 import crypto from 'crypto'
 import app from '../../../../app'
-import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleRepository'
-import type UserRole from 'modules/users/entities/UserRole'
 import clearTablesInTest from 'utils/clearTablesInTest'
-import type User from 'modules/users/entities/User'
-import { type IAuthenticateUserControllerResponse } from '../AuthenticateUser/AuthenticateUserController'
+import type Team from 'modules/teams/entities/Team'
+import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleRepository'
+import { type IUpdateTeamControllerResponse } from './UpdateTeamController'
+import { type IAuthenticateUserControllerResponse } from 'modules/users/controllers/AuthenticateUser/AuthenticateUserController'
+import type UserRole from 'modules/users/entities/UserRole'
 
 let userRoleRepository: UserRoleRepository
 let roles: UserRole[] = []
-const createdUsers: User[] = []
+let createdTeam: Team
 let adminToken = ''
 
-describe('Delete User E2E', () => {
+describe('Update Team E2E', () => {
   beforeAll(async () => {
     try {
       userRoleRepository = new UserRoleRepository()
@@ -37,65 +38,55 @@ describe('Delete User E2E', () => {
   beforeEach(async () => {
     try {
       await clearTablesInTest()
-      let response = await request(app)
-        .post('/user')
+      const team = {
+        name: 'Team 1',
+      }
+      const response = await request(app)
+        .post('/team')
+        .send(team)
         .set('Authorization', `Bearer ${adminToken}`)
-        .send({
-          name: 'John',
-          email: 'john@mail.com',
-          password: '123456789',
-          roleId: roles[0].id,
-        })
 
-      createdUsers.push(response.body)
-
-      response = await request(app)
-        .post('/user')
-        .set('Authorization', `Bearer ${adminToken}`)
-        .send({
-          name: 'Peter',
-          email: 'peter@mail.com',
-          password: '123456789',
-          roleId: roles[0].id,
-        })
-
-      createdUsers.push(response.body)
+      createdTeam = response.body
     } catch (err) {
       console.error(err)
     }
   })
 
-  it('Should be able to delete a existing user', async () => {
-    let response = await request(app)
-      .get('/user')
+  it('Should be able to update a team', async () => {
+    const response = await request(app)
+      .put(`/team/${createdTeam.id}`)
+      .send({
+        name: 'New team name',
+      })
       .set('Authorization', `Bearer ${adminToken}`)
 
-    expect(response.body.users).toHaveLength(3)
+    const body: IUpdateTeamControllerResponse =
+      response.body as IUpdateTeamControllerResponse
 
-    response = await request(app)
-      .delete(`/user/${createdUsers[0].id}`)
-      .set('Authorization', `Bearer ${adminToken}`)
+    expect(response.status).toBe(200)
 
-    expect(response.status).toBe(204)
-
-    response = await request(app)
-      .get('/user')
-      .set('Authorization', `Bearer ${adminToken}`)
-
-    expect(response.body.users).toHaveLength(2)
+    expect(body).toMatchObject({
+      name: 'New team name',
+    })
   })
 
-  it('Shouldn`t be able to delete a non-existing user', async () => {
+  it('Shouldn`t be able to update a non-existing team', async () => {
     const response = await request(app)
-      .delete(`/user/${crypto.randomUUID()}`)
+      .put(`/team/${crypto.randomUUID()}`)
+      .send({
+        name: 'Team 1',
+      })
       .set('Authorization', `Bearer ${adminToken}`)
+
+    const body: IUpdateTeamControllerResponse =
+      response.body as IUpdateTeamControllerResponse
 
     expect(response.status).toBe(400)
 
-    expect(response.body).toMatchObject({ message: 'User doesn`t exist.' })
+    expect(body).toMatchObject({ message: 'Team doesn`t exist.' })
   })
 
-  it('Shouldn`t be able to delete a user with a non-admin account', async () => {
+  it('Shouldn`t be able to update a team with a non-admin account', async () => {
     for (const role of roles) {
       if (role.name === 'Administrador') continue
 
@@ -118,8 +109,12 @@ describe('Delete User E2E', () => {
         response.body as IAuthenticateUserControllerResponse
 
       response = await request(app)
-        .delete(`/user/${createdUsers[0].id}`)
+        .put(`/team/${createdTeam.id}`)
         .set('Authorization', `Bearer ${authBody.token}`)
+        .send({
+          name: 'Peter',
+          roleId: roles[1].id,
+        })
 
       expect(response.status).toBe(401)
 
@@ -129,14 +124,19 @@ describe('Delete User E2E', () => {
     }
   })
 
-  it('Shouldn`t be able to delete if you pass a wrong parameters', async () => {
-    const nonExistingId = 'non-existing-id'
+  it('Shouldn`t be able to update if you pass a wrong parameters', async () => {
     const response = await request(app)
-      .delete(`/user/${nonExistingId}`)
+      .put(`/team/1`)
+      .send({
+        name: -1,
+      })
       .set('Authorization', `Bearer ${adminToken}`)
+
+    const body: IUpdateTeamControllerResponse =
+      response.body as IUpdateTeamControllerResponse
 
     expect(response.status).toBe(400)
 
-    expect(response.body).toMatchObject({ message: 'Validation Fails.' })
+    expect(body).toMatchObject({ message: 'Validation Fails.' })
   })
 })

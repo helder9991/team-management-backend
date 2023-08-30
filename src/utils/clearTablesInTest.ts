@@ -2,6 +2,7 @@ import typeORMConnection from 'database/typeorm'
 import AppError from './AppError'
 import User from 'modules/users/entities/User'
 import { Not } from 'typeorm'
+import Team from 'modules/teams/entities/Team'
 
 async function clearTablesInTest(): Promise<void> {
   if (process.env.NODE_ENV !== 'test')
@@ -21,6 +22,7 @@ async function clearTablesInTest(): Promise<void> {
     return
   }
   await typeORMConnection.getRepository(User).delete({ id: Not(admin.id) })
+  await typeORMConnection.getRepository(Team).delete({})
 }
 
 export default clearTablesInTest

@@ -8,24 +8,36 @@ import crypto from 'crypto'
 import CreateUserUseCase from '../CreateUser/CreateUserUseCase'
 import type User from 'modules/users/entities/User'
 import FakeCacheProvider from 'container/providers/CacheProvider/fakes/FakeCacheProvider'
+import CreateTeamUseCase from 'modules/teams/useCases/CreateTeam/CreateTeamUseCase'
+import TeamRepository from 'modules/teams/repository/typeorm/TeamRepository'
+import type Team from 'modules/teams/entities/Team'
 
 let updateUser: UpdateUserUseCase
 let createUser: CreateUserUseCase
+let createTeam: CreateTeamUseCase
+
 let userRepository: UserRepository
+let teamRepository: TeamRepository
 let userRoleRepository: UserRoleRepository
 let fakeCacheProvider: FakeCacheProvider
+
 let roles: UserRole[] = []
+
 let createdUser: User
+let createdTeam: Team
 
 describe('Update User', () => {
   beforeAll(async () => {
     try {
       userRepository = new UserRepository()
+      teamRepository = new TeamRepository()
       userRoleRepository = new UserRoleRepository()
       fakeCacheProvider = new FakeCacheProvider()
+
       updateUser = new UpdateUserUseCase(
         userRepository,
         userRoleRepository,
+        teamRepository,
         fakeCacheProvider,
       )
       createUser = new CreateUserUseCase(
@@ -33,6 +45,7 @@ describe('Update User', () => {
         userRoleRepository,
         fakeCacheProvider,
       )
+      createTeam = new CreateTeamUseCase(teamRepository, fakeCacheProvider)
 
       await clearTablesInTest()
       roles = await userRoleRepository.list()
@@ -52,6 +65,10 @@ describe('Update User', () => {
       }
 
       createdUser = await createUser.execute(user)
+
+      createdTeam = await createTeam.execute({
+        name: 'Team 1',
+      })
     } catch (err) {
       console.error(err)
     }
@@ -66,9 +83,9 @@ describe('Update User', () => {
       roleId: roles[1].id,
     }
 
-    const updatedUser = await updateUser.execute(userUpdated)
+    await updateUser.execute(userUpdated)
     await updateUser.execute({ id: userUpdated.id })
-    await updateUser.execute({
+    const updatedUser = await updateUser.execute({
       id: userUpdated.id,
       password: userUpdated.password,
     })
@@ -77,6 +94,21 @@ describe('Update User', () => {
       id: createdUser.id,
       name: 'Peter',
       roleId: roles[1].id,
+    })
+  })
+
+  it('Should be able to update a user with a teamId', async () => {
+    const userUpdated = {
+      id: createdUser.id,
+      teamId: createdTeam.id,
+    }
+
+    await updateUser.execute(userUpdated)
+    const updatedUser = await updateUser.execute(userUpdated)
+
+    expect(updatedUser).toMatchObject({
+      id: createdUser.id,
+      teamId: createdTeam.id,
     })
   })
 
@@ -100,6 +132,18 @@ describe('Update User', () => {
     await expect(updateUser.execute(user)).rejects.toHaveProperty(
       'message',
       'User Role doesn`t exist.',
+    )
+  })
+
+  it('Shouldn`t be able to update a user with a non-existing teamId', async () => {
+    const user = {
+      id: createdUser.id,
+      teamId: crypto.randomUUID(),
+    }
+
+    await expect(updateUser.execute(user)).rejects.toHaveProperty(
+      'message',
+      'Team doesn`t exist.',
     )
   })
 })
