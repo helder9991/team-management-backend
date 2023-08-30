@@ -1,12 +1,11 @@
 import type ICreateTeamDTO from 'modules/teams/dtos/ICreateTeamDTO'
 import type IListTeamsDTO from 'modules/teams/dtos/IListTeamsDTO'
 import type Team from 'modules/teams/entities/Team'
-
-export type SavedItemCount = number
+import { type ISavedItemCount } from 'shared/interfaces/database'
 
 interface ITeamRepository {
   create: (data: ICreateTeamDTO) => Promise<Team>
-  list: (data: IListTeamsDTO) => Promise<[Team[], SavedItemCount]>
+  list: (data: IListTeamsDTO) => Promise<[Team[], ISavedItemCount]>
 }
 
 export default ITeamRepository
