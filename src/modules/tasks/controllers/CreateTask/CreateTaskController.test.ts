@@ -113,6 +113,14 @@ describe('Create Task E2E', () => {
     const createdTask: ICreateTaskControllerResponse =
       response.body as ICreateTaskControllerResponse
 
+    await request(app)
+      .post('/task')
+      .set('Authorization', `Bearer ${teamMemberToken}`)
+      .send({
+        name: task.name,
+        projectId: task.projectId,
+      })
+
     expect(response.status).toBe(201)
 
     expect(createdTask).toMatchObject(task)
