@@ -7,6 +7,7 @@ import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleReposit
 import { type IUpdateTeamControllerResponse } from './UpdateTeamController'
 import { type IAuthenticateUserControllerResponse } from 'modules/users/controllers/AuthenticateUser/AuthenticateUserController'
 import type UserRole from 'modules/users/entities/UserRole'
+import { adminUserRoleName } from 'modules/users/entities/UserRole'
 
 let userRoleRepository: UserRoleRepository
 let roles: UserRole[] = []
@@ -88,7 +89,7 @@ describe('Update Team E2E', () => {
 
   it('Shouldn`t be able to update a team with a non-admin account', async () => {
     for (const role of roles) {
-      if (role.name === 'Administrador') continue
+      if (role.name === adminUserRoleName) continue
 
       await clearTablesInTest()
       const user = {

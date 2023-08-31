@@ -8,6 +8,7 @@ import { type IAuthenticateUserControllerResponse } from 'modules/users/controll
 import type UserRole from 'modules/users/entities/UserRole'
 import type Project from 'modules/project/entities/Project'
 import type Team from 'modules/teams/entities/Team'
+import { adminUserRoleName } from 'modules/users/entities/UserRole'
 
 let userRoleRepository: UserRoleRepository
 
@@ -108,7 +109,7 @@ describe('Update Project E2E', () => {
 
   it('Shouldn`t be able to update a project with a non-admin account', async () => {
     for (const role of roles) {
-      if (role.name === 'Administrador') continue
+      if (role.name === adminUserRoleName) continue
 
       await clearTablesInTest()
       const user = {

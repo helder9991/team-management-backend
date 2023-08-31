@@ -7,6 +7,7 @@ import clearTablesInTest from 'utils/clearTablesInTest'
 import type Team from 'modules/teams/entities/Team'
 import { type IAuthenticateUserControllerResponse } from 'modules/users/controllers/AuthenticateUser/AuthenticateUserController'
 import type Project from 'modules/project/entities/Project'
+import { adminUserRoleName } from 'modules/users/entities/UserRole'
 
 let userRoleRepository: UserRoleRepository
 
@@ -107,7 +108,7 @@ describe('List Projects E2E', () => {
 
   it('Shouldn`t be able to list all projects with a non-admin account', async () => {
     for (const role of roles) {
-      if (role.name === 'Administrador') continue
+      if (role.name === adminUserRoleName) continue
 
       await clearTablesInTest()
       const user = {

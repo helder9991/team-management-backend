@@ -6,6 +6,7 @@ import type UserRole from 'modules/users/entities/UserRole'
 import clearTablesInTest from 'utils/clearTablesInTest'
 import type Team from 'modules/teams/entities/Team'
 import { type IAuthenticateUserControllerResponse } from 'modules/users/controllers/AuthenticateUser/AuthenticateUserController'
+import { adminUserRoleName } from 'modules/users/entities/UserRole'
 
 let userRoleRepository: UserRoleRepository
 let roles: UserRole[] = []
@@ -83,7 +84,7 @@ describe('List Teams E2E', () => {
 
   it('Shouldn`t be able to list all teams with a non-admin account', async () => {
     for (const role of roles) {
-      if (role.name === 'Administrador') continue
+      if (role.name === adminUserRoleName) continue
 
       await clearTablesInTest()
       const user = {

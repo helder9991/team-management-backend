@@ -10,6 +10,7 @@ import FakeCacheProvider from 'container/providers/CacheProvider/fakes/FakeCache
 import TeamRepository from 'modules/teams/repository/typeorm/TeamRepository'
 import CreateTeamUseCase from 'modules/teams/useCases/CreateTeam/CreateTeamUseCase'
 import type Team from 'modules/teams/entities/Team'
+import { adminUserRoleName } from 'modules/users/entities/UserRole'
 
 let createTeam: CreateTeamUseCase
 
@@ -83,7 +84,7 @@ describe('Create Project E2E', () => {
 
   it('Shouldn`t be able to create a new project with a non-admin account', async () => {
     for (const role of roles) {
-      if (role.name === 'Administrador') continue
+      if (role.name === adminUserRoleName) continue
 
       await clearTablesInTest()
       const user = {

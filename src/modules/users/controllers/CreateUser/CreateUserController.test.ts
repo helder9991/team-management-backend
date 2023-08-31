@@ -7,6 +7,7 @@ import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleReposit
 import type UserRole from 'modules/users/entities/UserRole'
 import clearTablesInTest from 'utils/clearTablesInTest'
 import { type IAuthenticateUserControllerResponse } from '../AuthenticateUser/AuthenticateUserController'
+import { adminUserRoleName } from 'modules/users/entities/UserRole'
 
 let userRoleRepository: UserRoleRepository
 let roles: UserRole[] = []
@@ -60,7 +61,7 @@ describe('Create User E2E', () => {
 
   it('Shouldn`t be able to create a new user with a non-admin account', async () => {
     for (const role of roles) {
-      if (role.name === 'Administrador') continue
+      if (role.name === adminUserRoleName) continue
 
       await clearTablesInTest()
       const user = {

@@ -6,6 +6,7 @@ import type UserRole from 'modules/users/entities/UserRole'
 import clearTablesInTest from 'utils/clearTablesInTest'
 import type User from 'modules/users/entities/User'
 import { type IAuthenticateUserControllerResponse } from '../AuthenticateUser/AuthenticateUserController'
+import { adminUserRoleName } from 'modules/users/entities/UserRole'
 
 let userRoleRepository: UserRoleRepository
 let roles: UserRole[] = []
@@ -97,7 +98,7 @@ describe('Delete User E2E', () => {
 
   it('Shouldn`t be able to delete a user with a non-admin account', async () => {
     for (const role of roles) {
-      if (role.name === 'Administrador') continue
+      if (role.name === adminUserRoleName) continue
 
       await clearTablesInTest()
       const user = {
