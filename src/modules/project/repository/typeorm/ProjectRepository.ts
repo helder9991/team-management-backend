@@ -6,6 +6,7 @@ import Project from 'modules/project/entities/Project'
 import type ICreateProjectDTO from 'modules/project/dtos/ICreateProjectDTO'
 import type IListProjectsDTO from 'modules/project/dtos/IListProjectDTO'
 import { type ISavedItemCount } from 'shared/interfaces/database'
+import type IUpdateProjectDTO from 'modules/project/dtos/IUpdateProjectDTO'
 
 const itensPerPage = 30
 
@@ -29,6 +30,12 @@ class ProjectRepository implements IProjectRepository {
     return project
   }
 
+  async findById(id: string): Promise<Project | null> {
+    const project = await this.repository.findOneBy({ id })
+
+    return project
+  }
+
   async findByName(name: string): Promise<Project | null> {
     const project = await this.repository.findOneBy({ name })
 
@@ -41,6 +48,16 @@ class ProjectRepository implements IProjectRepository {
     const project = await this.repository.findAndCount({
       skip: (page - 1) * itensPerPage,
       take: itensPerPage,
+    })
+
+    return project
+  }
+
+  async update({ id, name, teamId }: IUpdateProjectDTO): Promise<Project> {
+    const project = await this.repository.save({
+      id,
+      name,
+      teamId,
     })
 
     return project

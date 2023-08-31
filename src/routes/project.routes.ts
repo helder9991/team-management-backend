@@ -2,11 +2,16 @@ import { type Request, type Response, Router } from 'express'
 import CreateProjectController from 'modules/project/controllers/CreateProject/CreateProjectController'
 import DeleteProjectController from 'modules/project/controllers/DeleteTeam/DeleteProjectController'
 import ListProjectsController from 'modules/project/controllers/ListProjects/ListProjectsController'
+import UpdateProjectController from 'modules/project/controllers/UpdateProject/UpdateProjectController'
 
 const projectRoutes = Router()
 
 projectRoutes.post('/', (req: Request, res: Response) =>
   CreateProjectController.handle(req, res),
+)
+
+projectRoutes.put('/:id', (req: Request, res: Response) =>
+  UpdateProjectController.handle(req, res),
 )
 
 projectRoutes.get('/', (req: Request, res: Response) =>
