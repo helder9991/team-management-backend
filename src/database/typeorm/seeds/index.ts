@@ -1,4 +1,5 @@
 import typeORMConnection from '..'
+import TasksStatusSeed from './TasksStatusSeed'
 import UsersRolesSeed from './UsersRolesSeed'
 import UsersSeed from './UsersSeed'
 
@@ -9,6 +10,7 @@ class MainSeedController {
       if (!typeORMConnection.isInitialized) await typeORMConnection.initialize()
       await UsersRolesSeed.run()
       await UsersSeed.run()
+      await TasksStatusSeed.run()
 
       console.log('Seed Controller finished!')
     } catch (err) {

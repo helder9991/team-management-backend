@@ -4,6 +4,7 @@ import User from 'modules/users/entities/User'
 import { Not } from 'typeorm'
 import Team from 'modules/teams/entities/Team'
 import Project from 'modules/project/entities/Project'
+import Task from 'modules/tasks/entities/Task'
 
 async function clearTablesInTest(): Promise<void> {
   if (process.env.NODE_ENV !== 'test')
@@ -22,9 +23,14 @@ async function clearTablesInTest(): Promise<void> {
     console.error('User admin not found')
     return
   }
-  await typeORMConnection.getRepository(User).delete({ id: Not(admin.id) })
-  await typeORMConnection.getRepository(Project).delete({})
-  await typeORMConnection.getRepository(Team).delete({})
+  try {
+    await typeORMConnection.getRepository(User).delete({ id: Not(admin.id) })
+    await typeORMConnection.getRepository(Task).delete({})
+    await typeORMConnection.getRepository(Project).delete({})
+    await typeORMConnection.getRepository(Team).delete({})
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 export default clearTablesInTest

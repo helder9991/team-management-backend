@@ -17,9 +17,15 @@ class UserRoleRepository implements IUserRoleRepository {
   }
 
   async findById(id: string): Promise<UserRole | null> {
-    const user = await this.repository.findOneBy({ id })
+    const userRole = await this.repository.findOneBy({ id })
 
-    return user
+    return userRole
+  }
+
+  async findByName(name: string): Promise<UserRole | null> {
+    const userRole = await this.repository.findOneBy({ name })
+
+    return userRole
   }
 }
 

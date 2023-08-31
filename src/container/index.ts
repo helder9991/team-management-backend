@@ -10,6 +10,10 @@ import type ITeamRepository from 'modules/teams/repository/interfaces/ITeamRepos
 import TeamRepository from 'modules/teams/repository/typeorm/TeamRepository'
 import ProjectRepository from 'modules/project/repository/typeorm/ProjectRepository'
 import type IProjectRepository from 'modules/project/repository/interfaces/IProjectRepository'
+import type ITaskRepository from 'modules/tasks/repository/interfaces/ITaskRepository'
+import TaskRepository from 'modules/tasks/repository/typeorm/TaskRepository'
+import type ITaskStatusRepository from 'modules/tasks/repository/interfaces/ITaskStatusRepository'
+import TaskStatusRepository from 'modules/tasks/repository/typeorm/TaskStatusRepository'
 
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository)
 container.registerSingleton<IUserRoleRepository>(
@@ -24,4 +28,9 @@ container.registerSingleton<ITeamRepository>('TeamRepository', TeamRepository)
 container.registerSingleton<IProjectRepository>(
   'ProjectRepository',
   ProjectRepository,
+)
+container.registerSingleton<ITaskRepository>('TaskRepository', TaskRepository)
+container.registerSingleton<ITaskStatusRepository>(
+  'TaskStatusRepository',
+  TaskStatusRepository,
 )

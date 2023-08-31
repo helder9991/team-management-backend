@@ -2,9 +2,11 @@ import { type Response, type Request, type NextFunction } from 'express'
 
 import AppError from 'utils/AppError'
 import typeORMConnection from 'database/typeorm'
-import UserRole, { adminUserRoleName } from 'modules/users/entities/UserRole'
+import UserRole, {
+  teamMemberUserRoleName,
+} from 'modules/users/entities/UserRole'
 
-export default async function ensureAdministrator(
+export default async function ensureTeamMember(
   req: Request,
   res: Response,
   next: NextFunction,
@@ -15,7 +17,7 @@ export default async function ensureAdministrator(
 
   if (userRole === null) throw new AppError('Missing RoleId.', 400)
 
-  if (userRole.name !== adminUserRoleName)
+  if (userRole.name !== teamMemberUserRoleName)
     throw new AppError(
       'This user doesn`t have permission to do this action.',
       401,
