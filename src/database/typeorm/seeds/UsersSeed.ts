@@ -23,7 +23,7 @@ class UsersSeed {
       ])
       console.log(`Users: Add Row 'admin@team.com.br'`)
     } catch (err) {
-      console.error(err)
+      console.log(`Users: Row 'Administrador' already exists`)
     }
   }
 }
