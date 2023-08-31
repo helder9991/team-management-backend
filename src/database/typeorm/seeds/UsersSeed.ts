@@ -1,6 +1,8 @@
 import crypto from 'crypto'
 import typeORMConnection from '..'
-import UserRole from '../../../modules/users/entities/UserRole'
+import UserRole, {
+  adminUserRoleName,
+} from '../../../modules/users/entities/UserRole'
 import { hash } from 'bcryptjs'
 
 class UsersSeed {
@@ -11,7 +13,7 @@ class UsersSeed {
     try {
       const adminRole = await typeORMConnection
         .getRepository(UserRole)
-        .findOne({ where: { name: 'Administrador' } })
+        .findOne({ where: { name: adminUserRoleName } })
 
       await typeORMConnection.query(sqlQuery, [
         crypto.randomUUID(),

@@ -1,11 +1,16 @@
 import crypto from 'crypto'
 import typeORMConnection from '..'
+import {
+  completedTaskStatus,
+  inProgressTaskStatus,
+  readyTaskStatus,
+} from '../../../modules/tasks/entities/TaskStatus'
 
 class TasksStatusSeed {
   async run(): Promise<void> {
     const sqlQuery =
       'INSERT INTO tasks_status (task_status_id, task_status_name, task_status_created_at) VALUES ($1, $2, $3)'
-    const names = ['Pronta para Iniciar', 'Em Andamento', 'Finalizada']
+    const names = [readyTaskStatus, inProgressTaskStatus, completedTaskStatus]
 
     for (const name of names) {
       try {
