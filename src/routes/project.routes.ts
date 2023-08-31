@@ -1,5 +1,6 @@
 import { type Request, type Response, Router } from 'express'
 import CreateProjectController from 'modules/project/controllers/CreateProject/CreateProjectController'
+import DeleteProjectController from 'modules/project/controllers/DeleteTeam/DeleteProjectController'
 import ListProjectsController from 'modules/project/controllers/ListProjects/ListProjectsController'
 
 const projectRoutes = Router()
@@ -10,6 +11,10 @@ projectRoutes.post('/', (req: Request, res: Response) =>
 
 projectRoutes.get('/', (req: Request, res: Response) =>
   ListProjectsController.handle(req, res),
+)
+
+projectRoutes.delete('/:id', (req: Request, res: Response) =>
+  DeleteProjectController.handle(req, res),
 )
 
 export default projectRoutes

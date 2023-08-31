@@ -7,6 +7,7 @@ interface IProjectRepository {
   create: (data: ICreateProjectDTO) => Promise<Project>
   findByName: (name: string) => Promise<Project | null>
   list: (data: IListProjectsDTO) => Promise<[Project[], ISavedItemCount]>
+  delete: (id: string) => Promise<boolean>
 }
 
 export default IProjectRepository

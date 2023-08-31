@@ -21,7 +21,6 @@ export class CreateProjects1693436229184 implements MigrationInterface {
             name: 'project_name',
             type: 'varchar(20)',
             isNullable: false,
-            isUnique: true,
           },
           {
             name: 'team_id',
