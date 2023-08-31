@@ -4,7 +4,7 @@ import ITeamRepository from 'modules/teams/repository/interfaces/ITeamRepository
 import { inject, injectable } from 'tsyringe'
 import AppError from 'utils/AppError'
 
-type IUpdateUserParams = Pick<Team, 'id' | 'name'>
+type IUpdateTeamParams = Pick<Team, 'id' | 'name'>
 
 @injectable()
 class UpdateTeamUseCase {
@@ -16,7 +16,7 @@ class UpdateTeamUseCase {
     private readonly cacheProvider: ICacheProvider,
   ) {}
 
-  async execute({ id, name }: IUpdateUserParams): Promise<Team> {
+  async execute({ id, name }: IUpdateTeamParams): Promise<Team> {
     const teamExists = await this.teamRepository.findById(id)
 
     if (teamExists === null) throw new AppError('Team doesn`t exist.', 400)
