@@ -11,6 +11,8 @@ import { readyTaskStatus } from 'modules/tasks/entities/TaskStatus'
 import CreateProjectUseCase from 'modules/projects/useCases/CreateProject/CreateProjectUseCase'
 import ProjectRepository from 'modules/projects/repository/typeorm/ProjectRepository'
 import type Project from 'modules/projects/entities/Project'
+import type Team from 'modules/teams/entities/Team'
+import MainSeedController from 'database/typeorm/seeds'
 
 let createTask: CreateTaskUseCase
 let createTeam: CreateTeamUseCase
@@ -23,6 +25,7 @@ let projectRepository: ProjectRepository
 let fakeCacheProvider: FakeCacheProvider
 
 let createdProject: Project
+const createdTeams: Team[] = []
 
 describe('Create Task', () => {
   beforeAll(async () => {
@@ -48,16 +51,21 @@ describe('Create Task', () => {
       await clearTablesInTest({})
 
       // Create Team
-      const team = {
-        name: 'Team 1',
-      }
-
-      const createdTeam = await createTeam.execute(team)
+      createdTeams.push(
+        await createTeam.execute({
+          name: 'Team 1',
+        }),
+      )
+      createdTeams.push(
+        await createTeam.execute({
+          name: 'Team 2',
+        }),
+      )
 
       // Create Project
       const project = {
         name: 'Project 1',
-        teamId: createdTeam.id,
+        teamId: createdTeams[0].id,
       }
 
       createdProject = await createProject.execute(project)
@@ -78,11 +86,15 @@ describe('Create Task', () => {
     const task = {
       name: 'Task 1',
       projectId: createdProject.id,
+      userTeamId: createdTeams[0].id,
     }
 
     const createdTask = await createTask.execute(task)
 
-    expect(createdTask).toMatchObject(task)
+    expect(createdTask).toMatchObject({
+      name: task.name,
+      projectId: task.projectId,
+    })
     expect(createdTask).toHaveProperty('id')
   })
 
@@ -91,6 +103,7 @@ describe('Create Task', () => {
       name: 'Task 1',
       description: 'Project 1 description',
       projectId: crypto.randomUUID(),
+      userTeamId: createdTeams[0].id,
     }
 
     await expect(createTask.execute(task)).rejects.toHaveProperty(
@@ -104,6 +117,7 @@ describe('Create Task', () => {
       name: 'Task 1',
       description: 'Project 1 description',
       projectId: createdProject.id,
+      userTeamId: createdTeams[0].id,
     }
     const taskStatus = await taskStatusRepository.findByName(readyTaskStatus)
 
@@ -111,11 +125,27 @@ describe('Create Task', () => {
 
     if (taskStatus === null) return
 
-    taskStatusRepository.delete(taskStatus.id)
+    await clearTablesInTest({ tasks: true, tasksStatus: true })
 
     await expect(createTask.execute(task)).rejects.toHaveProperty(
       'message',
       'Task Status doesn`t exists.',
+    )
+
+    await MainSeedController.run({ silent: true })
+  })
+
+  it('Shouldn`t be able to create a task if the user doesn`t belongs to those team project', async () => {
+    const task = {
+      name: 'Task 1',
+      description: 'Project 1 description',
+      projectId: createdProject.id,
+      userTeamId: createdTeams[1].id,
+    }
+
+    await expect(createTask.execute(task)).rejects.toHaveProperty(
+      'message',
+      'This user doesn`t belongs to this project.',
     )
   })
 })

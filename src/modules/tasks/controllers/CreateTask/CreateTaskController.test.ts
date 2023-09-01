@@ -72,6 +72,7 @@ describe('Create Task E2E', () => {
         email: 'peter@mail.com',
         password: '123456789',
         roleId: teamMemberRole?.id,
+        teamId: createdTeam.id,
       }
 
       response = await request(app)
@@ -124,7 +125,10 @@ describe('Create Task E2E', () => {
 
     expect(response.status).toBe(201)
 
-    expect(createdTask).toMatchObject(task)
+    expect(createdTask).toMatchObject({
+      name: task.name,
+      projectId: task.projectId,
+    })
   })
 
   it('Shouldn`t be able to create a new task with a non-team-member account', async () => {

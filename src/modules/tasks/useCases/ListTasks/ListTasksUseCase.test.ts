@@ -1,4 +1,5 @@
 import 'reflect-metadata'
+import crypto from 'crypto'
 import ListTasksUseCase from './ListTasksUseCase'
 import clearTablesInTest from 'utils/clearTablesInTest'
 import FakeCacheProvider from 'container/providers/CacheProvider/fakes/FakeCacheProvider'
@@ -10,6 +11,8 @@ import TaskStatusRepository from 'modules/tasks/repository/typeorm/TaskStatusRep
 import CreateProjectUseCase from 'modules/projects/useCases/CreateProject/CreateProjectUseCase'
 import CreateTaskUseCase from '../CreateTask/CreateTaskUseCase'
 import type Task from 'modules/tasks/entities/Task'
+import type Project from 'modules/projects/entities/Project'
+import type Team from 'modules/teams/entities/Team'
 
 let listTasks: ListTasksUseCase
 let createProject: CreateProjectUseCase
@@ -23,6 +26,8 @@ let projectRepository: ProjectRepository
 let fakeCacheProvider: FakeCacheProvider
 
 const createdTasks: Task[] = []
+const createdProjects: Project[] = []
+const createdTeams: Team[] = []
 
 describe('List Tasks', () => {
   beforeAll(async () => {
@@ -44,39 +49,63 @@ describe('List Tasks', () => {
         projectRepository,
         fakeCacheProvider,
       )
-      listTasks = new ListTasksUseCase(taskRepository, fakeCacheProvider)
+      listTasks = new ListTasksUseCase(
+        taskRepository,
+        projectRepository,
+        fakeCacheProvider,
+      )
 
       await clearTablesInTest({})
 
       // Create Team
-      const team = {
-        name: 'Team 1',
-      }
-
-      const createdTeam = await createTeam.execute(team)
+      createdTeams.push(
+        await createTeam.execute({
+          name: 'Team 1',
+        }),
+      )
+      createdTeams.push(
+        await createTeam.execute({
+          name: 'Team 2',
+        }),
+      )
 
       // Create Project
-      const project = {
-        name: 'Project 1',
-        teamId: createdTeam.id,
-      }
-
-      const createdProject = await createProject.execute(project)
+      createdProjects.push(
+        await createProject.execute({
+          name: 'Project 1',
+          teamId: createdTeams[0].id,
+        }),
+      )
+      createdProjects.push(
+        await createProject.execute({
+          name: 'Project 2',
+          teamId: createdTeams[0].id,
+        }),
+      )
 
       // Create Task
-
       createdTasks.push(
         await createTask.execute({
           name: 'Task 1',
           description: 'Task 1 description',
-          projectId: createdProject.id,
+          projectId: createdProjects[0].id,
+          userTeamId: createdTeams[0].id,
         }),
       )
 
       createdTasks.push(
         await createTask.execute({
           name: 'Task 2',
-          projectId: createdProject.id,
+          projectId: createdProjects[0].id,
+          userTeamId: createdTeams[0].id,
+        }),
+      )
+
+      createdTasks.push(
+        await createTask.execute({
+          name: 'Task 3',
+          projectId: createdProjects[1].id,
+          userTeamId: createdTeams[0].id,
         }),
       )
     } catch (err) {
@@ -84,9 +113,13 @@ describe('List Tasks', () => {
     }
   })
 
-  it('Should be able to list all tasks', async () => {
-    const [tasks] = await listTasks.execute({})
+  it('Should be able to list all tasks by projectId', async () => {
+    const [tasks] = await listTasks.execute({
+      projectId: createdProjects[0].id,
+      userTeamId: createdProjects[0].teamId,
+    })
 
+    expect(tasks).toHaveLength(2)
     expect(
       tasks.map(({ taskStatus, createdAt, deletedAt, ...rest }) => {
         return {
@@ -95,21 +128,29 @@ describe('List Tasks', () => {
       }),
     ).toEqual(
       expect.arrayContaining(
-        createdTasks.map(({ id, name, projectId, description, ...rest }) => {
-          return {
-            id,
-            name,
-            projectId,
-            description: description ?? null,
-          }
-        }),
+        createdTasks
+          .filter((task) => task.projectId === createdProjects[0].id)
+          .map(({ id, name, projectId, description, ...rest }) => {
+            return {
+              id,
+              name,
+              projectId,
+              description: description ?? null,
+            }
+          }),
       ),
     )
   })
 
-  it('Should be able to list all tasks by cache', async () => {
-    await listTasks.execute({})
-    const [tasks] = await listTasks.execute({})
+  it('Should be able to list all tasks in cache by productId', async () => {
+    await listTasks.execute({
+      projectId: createdProjects[0].id,
+      userTeamId: createdProjects[0].teamId,
+    })
+    const [tasks] = await listTasks.execute({
+      projectId: createdProjects[0].id,
+      userTeamId: createdProjects[0].teamId,
+    })
 
     expect(
       tasks.map(({ taskStatus, createdAt, deletedAt, ...rest }) => {
@@ -119,15 +160,38 @@ describe('List Tasks', () => {
       }),
     ).toEqual(
       expect.arrayContaining(
-        createdTasks.map(({ id, name, projectId, description, ...rest }) => {
-          return {
-            id,
-            name,
-            projectId,
-            description: description ?? null,
-          }
-        }),
+        createdTasks
+          .filter((task) => task.projectId === createdProjects[0].id)
+          .map(({ id, name, projectId, description, ...rest }) => {
+            return {
+              id,
+              name,
+              projectId,
+              description: description ?? null,
+            }
+          }),
       ),
     )
+  })
+
+  it('Shouldn`t be able to list all tasks by productId if the user doesn`t belongs to those team project', async () => {
+    await expect(
+      listTasks.execute({
+        projectId: createdProjects[0].id,
+        userTeamId: createdTeams[1].id,
+      }),
+    ).rejects.toHaveProperty(
+      'message',
+      'This user doesn`t belongs to this project.',
+    )
+  })
+
+  it('Shouldn`t be able to list all tasks by productId if the project doesn`t exist', async () => {
+    await expect(
+      listTasks.execute({
+        projectId: crypto.randomUUID(),
+        userTeamId: createdTeams[1].id,
+      }),
+    ).rejects.toHaveProperty('message', 'Project doesn`t exist.')
   })
 })

@@ -9,13 +9,14 @@ import type Team from 'modules/teams/entities/Team'
 import { type IAuthenticateUserControllerResponse } from 'modules/users/controllers/AuthenticateUser/AuthenticateUserController'
 import { teamMemberUserRoleName } from 'modules/users/entities/UserRole'
 import { type ICreateTeamControllerResponse } from 'modules/teams/controllers/CreateTeam/CreateTeamController'
-import { type ICreateProjectControllerResponse } from 'modules/projects/controllers/CreateProject/CreateProjectController'
 import type Task from 'modules/tasks/entities/Task'
+import type Project from 'modules/projects/entities/Project'
 
 let userRoleRepository: UserRoleRepository
 
 let roles: UserRole[] = []
 const createdTasks: Task[] = []
+const createdProjects: Project[] = []
 let createdTeam: Team
 
 let teamMemberToken = ''
@@ -52,18 +53,27 @@ describe('List Tasks E2E', () => {
 
       createdTeam = response.body as ICreateTeamControllerResponse
 
-      // Create Project
-      const project = {
-        name: 'Project 1',
-        teamId: createdTeam.id,
-      }
+      // Create Projects
 
       response = await request(app)
         .post('/project')
-        .send(project)
+        .send({
+          name: 'Project 1',
+          teamId: createdTeam.id,
+        })
         .set('Authorization', `Bearer ${adminToken}`)
 
-      const createdProject = response.body as ICreateProjectControllerResponse
+      createdProjects.push(response.body)
+
+      response = await request(app)
+        .post('/project')
+        .send({
+          name: 'Project 2',
+          teamId: createdTeam.id,
+        })
+        .set('Authorization', `Bearer ${adminToken}`)
+
+      createdProjects.push(response.body)
 
       // Create team-member user
       const teamMemberRole = await userRoleRepository.findByName(
@@ -75,6 +85,7 @@ describe('List Tasks E2E', () => {
         email: 'peter@mail.com',
         password: '123456789',
         roleId: teamMemberRole?.id,
+        teamId: createdTeam.id,
       }
 
       response = await request(app)
@@ -97,7 +108,7 @@ describe('List Tasks E2E', () => {
         .send({
           name: 'Task 1',
           description: 'Task 1 description',
-          projectId: createdProject.id,
+          projectId: createdProjects[0].id,
         })
 
       createdTasks.push(response.body)
@@ -107,7 +118,7 @@ describe('List Tasks E2E', () => {
         .set('Authorization', `Bearer ${teamMemberToken}`)
         .send({
           name: 'Task 2',
-          projectId: createdProject.id,
+          projectId: createdProjects[0].id,
         })
 
       createdTasks.push(response.body)
@@ -117,7 +128,7 @@ describe('List Tasks E2E', () => {
         .set('Authorization', `Bearer ${teamMemberToken}`)
         .send({
           name: 'Task 3',
-          projectId: createdProject.id,
+          projectId: createdProjects[1].id,
         })
 
       createdTasks.push(response.body)
@@ -126,17 +137,20 @@ describe('List Tasks E2E', () => {
     }
   })
 
-  it('Should be able to list all tasks', async () => {
+  it('Should be able to list all tasks by ProjectId', async () => {
     const response = await request(app)
       .get(`/task`)
       .set('Authorization', `Bearer ${teamMemberToken}`)
+      .query({
+        projectId: createdTasks[0].projectId,
+      })
 
     const body: IListTasksControllerResponse =
       response.body as IListTasksControllerResponse
 
     expect(response.status).toBe(200)
 
-    expect(body.tasks).toHaveLength(3)
+    expect(body.tasks).toHaveLength(2)
     expect(
       body.tasks.map(({ taskStatus, createdAt, deletedAt, ...rest }) => {
         return {
@@ -145,14 +159,14 @@ describe('List Tasks E2E', () => {
       }),
     ).toEqual(
       expect.arrayContaining(
-        createdTasks.map(
-          ({ taskStatus, createdAt, deletedAt, description, ...rest }) => {
+        createdTasks
+          .filter((task) => task.projectId === createdTasks[0].projectId)
+          .map(({ taskStatus, createdAt, deletedAt, description, ...rest }) => {
             return {
               description: description ?? null,
               ...rest,
             }
-          },
-        ),
+          }),
       ),
     )
   })
@@ -203,10 +217,6 @@ describe('List Tasks E2E', () => {
       .set('Authorization', `Bearer ${teamMemberToken}`)
       .query({
         page: -1,
-      })
-      .send({
-        name: 1,
-        teamId: 1,
       })
 
     expect(response.status).toBe(400)

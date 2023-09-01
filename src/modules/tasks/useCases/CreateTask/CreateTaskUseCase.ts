@@ -9,6 +9,7 @@ import AppError from 'utils/AppError'
 
 type ICreateTaskParams = Pick<Task, 'name' | 'projectId'> & {
   description?: string
+  userTeamId: string
 }
 
 @injectable()
@@ -31,17 +32,20 @@ class CreateTaskUseCase {
     name,
     description,
     projectId,
+    userTeamId,
   }: ICreateTaskParams): Promise<Task> {
     const projectExists = await this.projectRepository.findById(projectId)
 
     if (projectExists === null)
       throw new AppError('Project doesn`t exists.', 400)
-
     const taskStatusExists =
       await this.taskStatusRepository.findByName(readyTaskStatus)
 
     if (taskStatusExists === null)
       throw new AppError('Task Status doesn`t exists.', 400)
+
+    if (projectExists?.teamId !== userTeamId)
+      throw new AppError('This user doesn`t belongs to this project.')
 
     const task = await this.taskRepository.create({
       name,

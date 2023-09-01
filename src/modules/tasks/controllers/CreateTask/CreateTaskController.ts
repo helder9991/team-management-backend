@@ -20,15 +20,17 @@ class CreateTaskController {
       name: Yup.string().strict().required(),
       description: Yup.string().strict(),
       projectId: Yup.string().uuid().required(),
+      userTeamId: Yup.string().uuid().required(),
     })
   }
 
   async handle(req: Request, res: Response): Promise<Response> {
     const { name, description, projectId } = req.body
+    const userTeamId = req.user.teamId as string
 
     if (
       !(await this.schema.isValid(
-        trimObjectValues({ name, description, projectId }),
+        trimObjectValues({ name, description, projectId, userTeamId }),
       ))
     )
       throw new AppError('Validation Fails.', 400)
@@ -40,6 +42,7 @@ class CreateTaskController {
       name,
       description,
       projectId,
+      userTeamId,
     })
 
     return res.status(201).json({

@@ -15,6 +15,7 @@ import ProjectRepository from 'modules/projects/repository/typeorm/ProjectReposi
 import type Project from 'modules/projects/entities/Project'
 import CreateTaskUseCase from '../CreateTask/CreateTaskUseCase'
 import type Task from 'modules/tasks/entities/Task'
+import type Team from 'modules/teams/entities/Team'
 
 let createTask: CreateTaskUseCase
 let completeTask: CompleteTaskUseCase
@@ -27,6 +28,7 @@ let teamRepository: TeamRepository
 let projectRepository: ProjectRepository
 let fakeCacheProvider: FakeCacheProvider
 
+let createdTeam: Team
 let createdTask: Task
 let createdProject: Project
 let completeTaskStatusRow: TaskStatus | null
@@ -65,7 +67,7 @@ describe('Complete Task', () => {
         name: 'Team 1',
       }
 
-      const createdTeam = await createTeam.execute(team)
+      createdTeam = await createTeam.execute(team)
 
       // Create Project
       const project = {
@@ -95,6 +97,7 @@ describe('Complete Task', () => {
       const task = {
         name: 'Task 1',
         projectId: createdProject.id,
+        userTeamId: createdTeam.id,
       }
 
       createdTask = await createTask.execute(task)

@@ -4,9 +4,9 @@ import { type Repository } from 'typeorm'
 import typeORMConnection from 'database/typeorm'
 import Task from 'modules/tasks/entities/Task'
 import type ICreateTaskDTO from 'modules/tasks/dtos/ICreateTaskDTO'
-import type IListTasksDTO from 'modules/tasks/dtos/IListTasksDTO'
 import { type ISavedItemCount } from 'shared/interfaces/database'
 import type IUpdateTaskDTO from 'modules/tasks/dtos/IUpdateTaskDTO'
+import type IListTasksDTO from 'modules/tasks/dtos/IListTasksDTO'
 
 const itensPerPage = 30
 class TaskRepository implements ITaskRepository {
@@ -36,8 +36,12 @@ class TaskRepository implements ITaskRepository {
     return task
   }
 
-  async list({ page }: IListTasksDTO): Promise<[Task[], ISavedItemCount]> {
+  async list({
+    page,
+    where = {},
+  }: IListTasksDTO): Promise<[Task[], ISavedItemCount]> {
     const tasks = await this.repository.findAndCount({
+      where,
       relations: ['taskStatus'],
       select: [
         'id',
