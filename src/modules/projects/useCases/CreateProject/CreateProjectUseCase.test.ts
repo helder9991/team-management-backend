@@ -4,7 +4,7 @@ import clearTablesInTest from 'utils/clearTablesInTest'
 import FakeCacheProvider from 'container/providers/CacheProvider/fakes/FakeCacheProvider'
 import TeamRepository from 'modules/teams/repository/typeorm/TeamRepository'
 import CreateTeamUseCase from 'modules/teams/useCases/CreateTeam/CreateTeamUseCase'
-import ProjectRepository from 'modules/project/repository/typeorm/ProjectRepository'
+import ProjectRepository from 'modules/projects/repository/typeorm/ProjectRepository'
 import type Team from 'modules/teams/entities/Team'
 
 let createTeam: CreateTeamUseCase

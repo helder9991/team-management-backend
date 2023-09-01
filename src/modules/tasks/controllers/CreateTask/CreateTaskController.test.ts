@@ -8,9 +8,9 @@ import type UserRole from 'modules/users/entities/UserRole'
 import clearTablesInTest from 'utils/clearTablesInTest'
 import { type IAuthenticateUserControllerResponse } from 'modules/users/controllers/AuthenticateUser/AuthenticateUserController'
 import { type ICreateTeamControllerResponse } from 'modules/teams/controllers/CreateTeam/CreateTeamController'
-import { type ICreateProjectControllerResponse } from 'modules/project/controllers/CreateProject/CreateProjectController'
-import type Project from 'modules/project/entities/Project'
 import { teamMemberUserRoleName } from 'modules/users/entities/UserRole'
+import { type ICreateProjectControllerResponse } from 'modules/projects/controllers/CreateProject/CreateProjectController'
+import type Project from 'modules/projects/entities/Project'
 
 let userRoleRepository: UserRoleRepository
 let roles: UserRole[] = []

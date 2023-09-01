@@ -5,7 +5,7 @@ import FakeCacheProvider from 'container/providers/CacheProvider/fakes/FakeCache
 import TeamRepository from 'modules/teams/repository/typeorm/TeamRepository'
 import type Team from 'modules/teams/entities/Team'
 import CreateTeamUseCase from 'modules/teams/useCases/CreateTeam/CreateTeamUseCase'
-import ProjectRepository from 'modules/project/repository/typeorm/ProjectRepository'
+import ProjectRepository from 'modules/projects/repository/typeorm/ProjectRepository'
 import CreateProjectUseCase from '../CreateProject/CreateProjectUseCase'
 import ListProjectsUseCase from '../ListProjects/ListProjectsUseCase'
 

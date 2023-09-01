@@ -4,13 +4,13 @@ import clearTablesInTest from 'utils/clearTablesInTest'
 import FakeCacheProvider from 'container/providers/CacheProvider/fakes/FakeCacheProvider'
 import TeamRepository from 'modules/teams/repository/typeorm/TeamRepository'
 import CreateTeamUseCase from 'modules/teams/useCases/CreateTeam/CreateTeamUseCase'
-import ProjectRepository from 'modules/project/repository/typeorm/ProjectRepository'
 import CreateTaskUseCase from './CreateTaskUseCase'
 import TaskRepository from 'modules/tasks/repository/typeorm/TaskRepository'
 import TaskStatusRepository from 'modules/tasks/repository/typeorm/TaskStatusRepository'
-import type Project from 'modules/project/entities/Project'
-import CreateProjectUseCase from 'modules/project/useCases/CreateProject/CreateProjectUseCase'
 import { readyTaskStatus } from 'modules/tasks/entities/TaskStatus'
+import CreateProjectUseCase from 'modules/projects/useCases/CreateProject/CreateProjectUseCase'
+import ProjectRepository from 'modules/projects/repository/typeorm/ProjectRepository'
+import type Project from 'modules/projects/entities/Project'
 
 let createTask: CreateTaskUseCase
 let createTeam: CreateTeamUseCase

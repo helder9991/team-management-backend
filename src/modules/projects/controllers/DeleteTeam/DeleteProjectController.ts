@@ -1,5 +1,5 @@
 import { type Request, type Response } from 'express'
-import DeleteProjectUseCase from 'modules/project/useCases/DeleteProject/DeleteProjectUseCase'
+import DeleteProjectUseCase from 'modules/projects/useCases/DeleteProject/DeleteProjectUseCase'
 import { container } from 'tsyringe'
 import AppError from 'utils/AppError'
 import { trimObjectValues } from 'utils/trimObjectValues'

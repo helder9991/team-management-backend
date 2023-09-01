@@ -1,7 +1,7 @@
-import type ICreateProjectDTO from 'modules/project/dtos/ICreateProjectDTO'
-import type IListProjectsDTO from 'modules/project/dtos/IListProjectDTO'
-import type IUpdateProjectDTO from 'modules/project/dtos/IUpdateProjectDTO'
-import type Project from 'modules/project/entities/Project'
+import type ICreateProjectDTO from 'modules/projects/dtos/ICreateProjectDTO'
+import type IListProjectsDTO from 'modules/projects/dtos/IListProjectDTO'
+import type IUpdateProjectDTO from 'modules/projects/dtos/IUpdateProjectDTO'
+import type Project from 'modules/projects/entities/Project'
 import { type ISavedItemCount } from 'shared/interfaces/database'
 
 interface IProjectRepository {

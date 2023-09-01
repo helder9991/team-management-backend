@@ -3,8 +3,8 @@ import { container } from 'tsyringe'
 import { type ParsedQs } from 'qs'
 import * as Yup from 'yup'
 import AppError from 'utils/AppError'
-import type Project from 'modules/project/entities/Project'
-import ListProjectsUseCase from 'modules/project/useCases/ListProjects/ListProjectsUseCase'
+import type Project from 'modules/projects/entities/Project'
+import ListProjectsUseCase from 'modules/projects/useCases/ListProjects/ListProjectsUseCase'
 
 export interface IListProjectsControllerResponse {
   projects: Project[]

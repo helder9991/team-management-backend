@@ -1,6 +1,6 @@
 import ICacheProvider from 'container/providers/CacheProvider/models/ICacheProvider'
-import type Project from 'modules/project/entities/Project'
-import IProjectRepository from 'modules/project/repository/interfaces/IProjectRepository'
+import type Project from 'modules/projects/entities/Project'
+import IProjectRepository from 'modules/projects/repository/interfaces/IProjectRepository'
 import { inject, injectable } from 'tsyringe'
 import AppError from 'utils/AppError'
 

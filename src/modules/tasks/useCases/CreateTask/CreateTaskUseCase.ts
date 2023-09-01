@@ -1,5 +1,5 @@
 import ICacheProvider from 'container/providers/CacheProvider/models/ICacheProvider'
-import IProjectRepository from 'modules/project/repository/interfaces/IProjectRepository'
+import IProjectRepository from 'modules/projects/repository/interfaces/IProjectRepository'
 import type Task from 'modules/tasks/entities/Task'
 import { readyTaskStatus } from 'modules/tasks/entities/TaskStatus'
 import ITaskRepository from 'modules/tasks/repository/interfaces/ITaskRepository'

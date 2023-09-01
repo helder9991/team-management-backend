@@ -2,11 +2,11 @@ import crypto from 'crypto'
 import type IProjectRepository from '../interfaces/IProjectRepository'
 import { type Repository } from 'typeorm'
 import typeORMConnection from 'database/typeorm'
-import Project from 'modules/project/entities/Project'
-import type ICreateProjectDTO from 'modules/project/dtos/ICreateProjectDTO'
-import type IListProjectsDTO from 'modules/project/dtos/IListProjectDTO'
+import Project from 'modules/projects/entities/Project'
+import type ICreateProjectDTO from 'modules/projects/dtos/ICreateProjectDTO'
+import type IListProjectsDTO from 'modules/projects/dtos/IListProjectDTO'
 import { type ISavedItemCount } from 'shared/interfaces/database'
-import type IUpdateProjectDTO from 'modules/project/dtos/IUpdateProjectDTO'
+import type IUpdateProjectDTO from 'modules/projects/dtos/IUpdateProjectDTO'
 
 const itensPerPage = 30
 

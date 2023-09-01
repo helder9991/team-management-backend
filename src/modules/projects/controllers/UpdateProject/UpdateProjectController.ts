@@ -1,5 +1,5 @@
 import { type Request, type Response } from 'express'
-import UpdateProjectUseCase from 'modules/project/useCases/UpdateProject/UpdateProjectUseCase'
+import UpdateProjectUseCase from 'modules/projects/useCases/UpdateProject/UpdateProjectUseCase'
 import { container } from 'tsyringe'
 import AppError from 'utils/AppError'
 import { trimObjectValues } from 'utils/trimObjectValues'

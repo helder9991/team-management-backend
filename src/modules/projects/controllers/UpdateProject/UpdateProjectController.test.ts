@@ -1,22 +1,23 @@
 import request from 'supertest'
 import crypto from 'crypto'
 import app from '../../../../app'
-import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleRepository'
-import type UserRole from 'modules/users/entities/UserRole'
 import clearTablesInTest from 'utils/clearTablesInTest'
+import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleRepository'
+import { type IUpdateProjectControllerResponse } from './UpdateProjectController'
 import { type IAuthenticateUserControllerResponse } from 'modules/users/controllers/AuthenticateUser/AuthenticateUserController'
-import type Project from 'modules/project/entities/Project'
+import type UserRole from 'modules/users/entities/UserRole'
+import type Project from 'modules/projects/entities/Project'
 import type Team from 'modules/teams/entities/Team'
 import { adminUserRoleName } from 'modules/users/entities/UserRole'
 
 let userRoleRepository: UserRoleRepository
 
 let roles: UserRole[] = []
-const createdProjects: Project[] = []
-
+let createdTeam: Team
+let createdProject: Project
 let adminToken = ''
 
-describe('Delete Project E2E', () => {
+describe('Update Project E2E', () => {
   beforeAll(async () => {
     try {
       userRoleRepository = new UserRoleRepository()
@@ -24,7 +25,7 @@ describe('Delete Project E2E', () => {
       await clearTablesInTest({})
       roles = await userRoleRepository.list()
 
-      const response = await request(app).post('/auth').send({
+      let response = await request(app).post('/auth').send({
         email: 'admin@team.com.br',
         password: 'admin123',
       })
@@ -33,78 +34,75 @@ describe('Delete Project E2E', () => {
         response.body as IAuthenticateUserControllerResponse
 
       adminToken = body.token
-    } catch (err) {
-      console.error(err)
-    }
-  })
 
-  beforeEach(async () => {
-    try {
-      await clearTablesInTest({ projects: true, teams: true })
-      let response = await request(app)
+      // Create Team
+      const team = {
+        name: 'Team 1',
+      }
+
+      response = await request(app)
         .post('/team')
+        .send(team)
         .set('Authorization', `Bearer ${adminToken}`)
-        .send({
-          name: 'Team 1',
-        })
 
-      const createdTeam: Team = response.body
+      createdTeam = response.body
+
+      // Create Projects
+      const project = {
+        name: 'Project 1',
+        teamId: createdTeam.id,
+      }
 
       response = await request(app)
         .post('/project')
+        .send(project)
         .set('Authorization', `Bearer ${adminToken}`)
-        .send({
-          name: 'Project 1',
-          teamId: createdTeam.id,
-        })
 
-      createdProjects.push(response.body)
-
-      response = await request(app)
-        .post('/project')
-        .set('Authorization', `Bearer ${adminToken}`)
-        .send({
-          name: 'Project 2',
-          teamId: createdTeam.id,
-        })
-
-      createdProjects.push(response.body)
+      createdProject = response.body
     } catch (err) {
       console.error(err)
     }
   })
 
-  it('Should be able to delete a existing project', async () => {
-    let response = await request(app)
-      .get('/project')
+  it('Should be able to update a project', async () => {
+    const updatedProject = {
+      name: 'New project name',
+      teamId: createdTeam.id,
+    }
+
+    const response = await request(app)
+      .put(`/project/${createdProject.id}`)
+      .send(updatedProject)
       .set('Authorization', `Bearer ${adminToken}`)
 
-    expect(response.body.projects).toHaveLength(2)
+    const body: IUpdateProjectControllerResponse =
+      response.body as IUpdateProjectControllerResponse
 
-    response = await request(app)
-      .delete(`/project/${createdProjects[0].id}`)
-      .set('Authorization', `Bearer ${adminToken}`)
+    expect(response.status).toBe(200)
 
-    expect(response.status).toBe(204)
-
-    response = await request(app)
-      .get('/project')
-      .set('Authorization', `Bearer ${adminToken}`)
-
-    expect(response.body.projects).toHaveLength(1)
+    expect(body).toMatchObject(updatedProject)
   })
 
-  it('Shouldn`t be able to delete a non-existing project', async () => {
+  it('Shouldn`t be able to update a non-existing project', async () => {
+    const project = {
+      name: 'Project 1',
+      teamId: createdTeam.id,
+    }
+
     const response = await request(app)
-      .delete(`/project/${crypto.randomUUID()}`)
+      .put(`/project/${crypto.randomUUID()}`)
+      .send(project)
       .set('Authorization', `Bearer ${adminToken}`)
+
+    const body: IUpdateProjectControllerResponse =
+      response.body as IUpdateProjectControllerResponse
 
     expect(response.status).toBe(400)
 
-    expect(response.body).toMatchObject({ message: 'Project doesn`t exist.' })
+    expect(body).toMatchObject({ message: 'Project doesn`t exist.' })
   })
 
-  it('Shouldn`t be able to delete a project with a non-admin account', async () => {
+  it('Shouldn`t be able to update a project with a non-admin account', async () => {
     for (const role of roles) {
       if (role.name === adminUserRoleName) continue
 
@@ -125,9 +123,15 @@ describe('Delete Project E2E', () => {
       const authBody: IAuthenticateUserControllerResponse =
         response.body as IAuthenticateUserControllerResponse
 
+      const project = {
+        name: 'Project 1',
+        teamId: createdTeam.id,
+      }
+
       response = await request(app)
-        .delete(`/project/${createdProjects[0].id}`)
+        .put(`/project/${createdProject.id}`)
         .set('Authorization', `Bearer ${authBody.token}`)
+        .send(project)
 
       expect(response.status).toBe(401)
 
@@ -137,14 +141,22 @@ describe('Delete Project E2E', () => {
     }
   })
 
-  it('Shouldn`t be able to delete if you pass a wrong parameters', async () => {
-    const nonExistingId = 'non-existing-id'
+  it('Shouldn`t be able to update if you pass a wrong parameters', async () => {
+    const project = {
+      name: 1,
+      teamId: 1,
+    }
+
     const response = await request(app)
-      .delete(`/project/${nonExistingId}`)
+      .put(`/project/1`)
+      .send(project)
       .set('Authorization', `Bearer ${adminToken}`)
+
+    const body: IUpdateProjectControllerResponse =
+      response.body as IUpdateProjectControllerResponse
 
     expect(response.status).toBe(400)
 
-    expect(response.body).toMatchObject({ message: 'Validation Fails.' })
+    expect(body).toMatchObject({ message: 'Validation Fails.' })
   })
 })

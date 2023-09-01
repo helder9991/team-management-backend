@@ -1,8 +1,8 @@
 import ICacheProvider from 'container/providers/CacheProvider/models/ICacheProvider'
 import { inject, injectable } from 'tsyringe'
 import { type ISavedItemCount } from 'shared/interfaces/database'
-import IProjectRepository from 'modules/project/repository/interfaces/IProjectRepository'
-import type Project from 'modules/project/entities/Project'
+import IProjectRepository from 'modules/projects/repository/interfaces/IProjectRepository'
+import type Project from 'modules/projects/entities/Project'
 
 interface IListProjectsParams {
   page?: number

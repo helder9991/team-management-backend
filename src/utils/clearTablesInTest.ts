@@ -3,7 +3,7 @@ import AppError from './AppError'
 import User from 'modules/users/entities/User'
 import { Not } from 'typeorm'
 import Team from 'modules/teams/entities/Team'
-import Project from 'modules/project/entities/Project'
+import Project from 'modules/projects/entities/Project'
 import Task from 'modules/tasks/entities/Task'
 
 interface IClearTables {
