@@ -3,8 +3,10 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryColumn,
 } from 'typeorm'
+import Task from './Task'
 
 export type ITaskStatusName =
   | 'Pronta para Iniciar'
@@ -22,6 +24,9 @@ class TaskStatus {
 
   @Column({ name: 'task_status_name' })
   name: string
+
+  @OneToMany(() => Task, (task) => task.taskStatus)
+  tasks: Task[]
 
   @CreateDateColumn({ name: 'task_status_created_at' })
   createdAt?: Date

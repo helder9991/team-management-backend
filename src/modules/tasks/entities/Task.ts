@@ -3,8 +3,11 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryColumn,
 } from 'typeorm'
+import TaskStatus from './TaskStatus'
 
 @Entity('tasks')
 class Task {
@@ -22,6 +25,10 @@ class Task {
 
   @Column({ name: 'project_id' })
   projectId: string
+
+  @ManyToOne(() => TaskStatus, (taskStatus) => taskStatus.tasks)
+  @JoinColumn({ name: 'task_status_id' })
+  taskStatus: TaskStatus
 
   @CreateDateColumn({ name: 'task_created_at' })
   createdAt?: Date
