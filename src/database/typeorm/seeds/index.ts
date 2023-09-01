@@ -3,24 +3,29 @@ import TasksStatusSeed from './TasksStatusSeed'
 import UsersRolesSeed from './UsersRolesSeed'
 import UsersSeed from './UsersSeed'
 
+interface MainSeedParams {
+  silent?: boolean
+}
 class MainSeedController {
-  async run(): Promise<void> {
+  async run({ silent = false }: MainSeedParams): Promise<void> {
     try {
-      console.log('Initializate Seed Controller!')
-      if (!typeORMConnection.isInitialized) await typeORMConnection.initialize()
-      await UsersRolesSeed.run()
-      await UsersSeed.run()
-      await TasksStatusSeed.run()
+      if (!silent) console.log('Initializate Seed Controller!')
 
-      console.log('Seed Controller finished!')
+      if (!typeORMConnection.isInitialized) await typeORMConnection.initialize()
+
+      await UsersRolesSeed.run(silent)
+      await UsersSeed.run(silent)
+      await TasksStatusSeed.run(silent)
+
+      if (!silent) console.log('Seed Controller finished!')
     } catch (err) {
-      console.error(err)
+      if (!silent) console.error(err)
     }
   }
 }
 
 if (process.env.RUN_SEED === 'true') {
-  new MainSeedController().run()
+  new MainSeedController().run({ silent: false })
 }
 
 export default new MainSeedController()

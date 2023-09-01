@@ -6,7 +6,7 @@ import UserRole, {
 import { hash } from 'bcryptjs'
 
 class UsersSeed {
-  async run(): Promise<void> {
+  async run(silent: boolean): Promise<void> {
     const sqlQuery =
       'INSERT INTO users (user_id, user_name, user_email, user_password, user_role_id, user_created_at) VALUES ($1, $2, $3, $4, $5, $6)'
 
@@ -23,9 +23,10 @@ class UsersSeed {
         adminRole?.id,
         new Date(),
       ])
-      console.log(`Users: Add Row 'admin@team.com.br'`)
+
+      if (!silent) console.log(`Users: Add Row 'admin@team.com.br'`)
     } catch (err) {
-      console.log(`Users: Row 'Administrador' already exists`)
+      if (!silent) console.log(`Users: Row 'Administrador' already exists`)
     }
   }
 }

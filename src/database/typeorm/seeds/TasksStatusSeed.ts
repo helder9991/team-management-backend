@@ -7,7 +7,7 @@ import {
 } from '../../../modules/tasks/entities/TaskStatus'
 
 class TasksStatusSeed {
-  async run(): Promise<void> {
+  async run(silent: boolean): Promise<void> {
     const sqlQuery =
       'INSERT INTO tasks_status (task_status_id, task_status_name, task_status_created_at) VALUES ($1, $2, $3)'
     const names = [readyTaskStatus, inProgressTaskStatus, completedTaskStatus]
@@ -19,9 +19,9 @@ class TasksStatusSeed {
           name,
           new Date(),
         ])
-        console.log(`TasksStatus: Add Row '${name}'`)
+        if (!silent) console.log(`TasksStatus: Add Row '${name}'`)
       } catch (err) {
-        console.log(`TasksStatus: Row '${name}' already exists`)
+        if (!silent) console.log(`TasksStatus: Row '${name}' already exists`)
       }
     }
   }

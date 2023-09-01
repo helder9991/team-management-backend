@@ -7,7 +7,7 @@ export default async (): Promise<void> => {
     await typeORMConnection.runMigrations()
     console.log('Migrations finished.')
     
-    await MainSeedController.run()
+    await MainSeedController.run({})
 
     await typeORMConnection.destroy()
   } catch (err) {

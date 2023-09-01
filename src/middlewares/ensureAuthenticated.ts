@@ -35,6 +35,7 @@ export default async function ensureAuthenticated(
     req.user = {
       id: sub,
       roleId,
+      teamId: user.teamId,
     }
   }
 

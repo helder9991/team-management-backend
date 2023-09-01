@@ -5,10 +5,12 @@ import { Not } from 'typeorm'
 import Team from 'modules/teams/entities/Team'
 import Project from 'modules/projects/entities/Project'
 import Task from 'modules/tasks/entities/Task'
+import TaskStatus from 'modules/tasks/entities/TaskStatus'
 
 interface IClearTables {
   users?: boolean
   tasks?: boolean
+  tasksStatus?: boolean
   projects?: boolean
   teams?: boolean
 }
@@ -39,6 +41,9 @@ async function clearTablesInTest(tables: IClearTables): Promise<void> {
 
     if (deleteAll || tables.tasks === true)
       await typeORMConnection.getRepository(Task).delete({})
+
+    if (tables.tasksStatus === true)
+      await typeORMConnection.getRepository(TaskStatus).delete({})
 
     if (deleteAll || tables.projects === true)
       await typeORMConnection.getRepository(Project).delete({})

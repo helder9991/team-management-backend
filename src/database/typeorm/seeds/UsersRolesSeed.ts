@@ -7,7 +7,7 @@ import {
 } from '../../../modules/users/entities/UserRole'
 
 class UsersRolesSeed {
-  async run(): Promise<void> {
+  async run(silent: boolean): Promise<void> {
     const sqlQuery =
       'INSERT INTO users_roles (user_role_id, user_role_name, user_role_created_at) VALUES ($1, $2, $3)'
     const names = [
@@ -23,9 +23,10 @@ class UsersRolesSeed {
           name,
           new Date(),
         ])
-        console.log(`UsersRoles: Add Row '${name}'`)
+
+        if (!silent) console.log(`UsersRoles: Add Row '${name}'`)
       } catch (err) {
-        console.log(`UsersRoles: Row '${name}' already exists`)
+        if (!silent) console.log(`UsersRoles: Row '${name}' already exists`)
       }
     }
   }
