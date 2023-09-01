@@ -9,6 +9,7 @@ interface ITaskRepository {
   list: (data: IListTasksDTO) => Promise<[Task[], ISavedItemCount]>
   findById: (id: string) => Promise<Task | null>
   update: (data: IUpdateTaskDTO) => Promise<Task>
+  delete: (id: string) => Promise<boolean>
 }
 
 export default ITaskRepository
