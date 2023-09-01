@@ -18,7 +18,7 @@ class CreateTaskController {
   constructor() {
     this.schema = Yup.object().shape({
       name: Yup.string().strict().required(),
-      description: Yup.string().strict().required(),
+      description: Yup.string().strict(),
       projectId: Yup.string().uuid().required(),
     })
   }
