@@ -17,7 +17,7 @@ describe('List Users E2E', () => {
     try {
       userRoleRepository = new UserRoleRepository()
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
       roles = await userRoleRepository.list()
 
       let response = await request(app).post('/auth').send({
@@ -30,6 +30,7 @@ describe('List Users E2E', () => {
 
       adminToken = body.token
 
+      // Create Users
       response = await request(app)
         .post('/user')
         .send({

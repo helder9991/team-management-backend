@@ -29,9 +29,10 @@ describe('List Users', () => {
         fakeCacheProvider,
       )
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
       roles = await userRoleRepository.list()
 
+      // Create Users
       createdUsers.push(
         await createUser.execute({
           name: 'John',

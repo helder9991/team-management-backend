@@ -22,10 +22,10 @@ describe('Update Project E2E', () => {
     try {
       userRoleRepository = new UserRoleRepository()
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
       roles = await userRoleRepository.list()
 
-      const response = await request(app).post('/auth').send({
+      let response = await request(app).post('/auth').send({
         email: 'admin@team.com.br',
         password: 'admin123',
       })
@@ -34,25 +34,20 @@ describe('Update Project E2E', () => {
         response.body as IAuthenticateUserControllerResponse
 
       adminToken = body.token
-    } catch (err) {
-      console.error(err)
-    }
-  })
 
-  beforeEach(async () => {
-    try {
-      await clearTablesInTest()
+      // Create Team
       const team = {
         name: 'Team 1',
       }
 
-      let response = await request(app)
+      response = await request(app)
         .post('/team')
         .send(team)
         .set('Authorization', `Bearer ${adminToken}`)
 
       createdTeam = response.body
 
+      // Create Projects
       const project = {
         name: 'Project 1',
         teamId: createdTeam.id,
@@ -111,10 +106,9 @@ describe('Update Project E2E', () => {
     for (const role of roles) {
       if (role.name === adminUserRoleName) continue
 
-      await clearTablesInTest()
       const user = {
         name: 'non-admin',
-        email: 'non-admin@mail.com',
+        email: `non-admin-${crypto.randomUUID()}@mail.com`,
         password: '123456789',
         roleId: role.id,
       }

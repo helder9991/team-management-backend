@@ -1,4 +1,5 @@
 import request from 'supertest'
+import crypto from 'crypto'
 import app from '../../../../app'
 import { type IListTeamsControllerResponse } from './ListTeamsController'
 import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleRepository'
@@ -18,7 +19,7 @@ describe('List Teams E2E', () => {
     try {
       userRoleRepository = new UserRoleRepository()
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
       roles = await userRoleRepository.list()
 
       let response = await request(app).post('/auth').send({
@@ -31,6 +32,7 @@ describe('List Teams E2E', () => {
 
       adminToken = body.token
 
+      // Create Teams
       response = await request(app)
         .post('/team')
         .send({
@@ -86,10 +88,9 @@ describe('List Teams E2E', () => {
     for (const role of roles) {
       if (role.name === adminUserRoleName) continue
 
-      await clearTablesInTest()
       const user = {
         name: 'non-admin',
-        email: 'non-admin@mail.com',
+        email: `non-admin-${crypto.randomUUID()}@mail.com`,
         password: '123456789',
         roleId: role.id,
       }

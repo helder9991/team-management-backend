@@ -47,16 +47,11 @@ describe('Update User', () => {
       )
       createTeam = new CreateTeamUseCase(teamRepository, fakeCacheProvider)
 
-      await clearTablesInTest()
-      roles = await userRoleRepository.list()
-    } catch (err) {
-      console.error(err)
-    }
-  })
+      await clearTablesInTest({})
 
-  beforeEach(async () => {
-    try {
-      await clearTablesInTest()
+      roles = await userRoleRepository.list()
+
+      // Create User
       const user = {
         name: 'John',
         email: 'john@mail.com',
@@ -66,9 +61,12 @@ describe('Update User', () => {
 
       createdUser = await createUser.execute(user)
 
-      createdTeam = await createTeam.execute({
+      // Create Team
+      const team = {
         name: 'Team 1',
-      })
+      }
+
+      createdTeam = await createTeam.execute(team)
     } catch (err) {
       console.error(err)
     }

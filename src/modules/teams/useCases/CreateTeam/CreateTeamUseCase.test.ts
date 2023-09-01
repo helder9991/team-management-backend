@@ -15,7 +15,7 @@ describe('Create Team', () => {
       fakeCacheProvider = new FakeCacheProvider()
       createTeam = new CreateTeamUseCase(teamRepository, fakeCacheProvider)
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
     } catch (err) {
       console.error(err)
     }

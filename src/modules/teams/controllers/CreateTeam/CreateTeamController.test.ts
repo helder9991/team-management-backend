@@ -1,5 +1,6 @@
 import 'express-async-errors'
 import request from 'supertest'
+import crypto from 'crypto'
 import app from '../../../../app'
 import { type ICreateTeamControllerResponse } from './CreateTeamController'
 import clearTablesInTest from 'utils/clearTablesInTest'
@@ -15,9 +16,10 @@ let adminToken = ''
 describe('Create Team E2E', () => {
   beforeAll(async () => {
     try {
-      await clearTablesInTest()
-
       userRoleRepository = new UserRoleRepository()
+
+      await clearTablesInTest({})
+
       roles = await userRoleRepository.list()
 
       const response = await request(app).post('/auth').send({
@@ -56,10 +58,9 @@ describe('Create Team E2E', () => {
     for (const role of roles) {
       if (role.name === adminUserRoleName) continue
 
-      await clearTablesInTest()
       const user = {
         name: 'non-admin',
-        email: 'non-admin@mail.com',
+        email: `non-admin-${crypto.randomUUID()}@mail.com`,
         password: '123456789',
         roleId: role.id,
       }

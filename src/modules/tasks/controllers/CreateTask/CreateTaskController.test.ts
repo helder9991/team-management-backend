@@ -1,5 +1,6 @@
 import 'express-async-errors'
 import request from 'supertest'
+import crypto from 'crypto'
 import app from '../../../../app'
 import { type ICreateTaskControllerResponse } from './CreateTaskController'
 import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleRepository'
@@ -22,11 +23,11 @@ describe('Create Task E2E', () => {
     try {
       userRoleRepository = new UserRoleRepository()
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
       roles = await userRoleRepository.list()
 
       // generate admin token
-      const response = await request(app).post('/auth').send({
+      let response = await request(app).post('/auth').send({
         email: 'admin@team.com.br',
         password: 'admin123',
       })
@@ -35,28 +36,20 @@ describe('Create Task E2E', () => {
         response.body as IAuthenticateUserControllerResponse
 
       adminToken = body.token
-    } catch (err) {
-      console.error(err)
-    }
-  })
 
-  beforeEach(async () => {
-    try {
-      await clearTablesInTest()
-
-      // create a new team
+      // Create Team
       const team = {
         name: 'Team 1',
       }
 
-      let response = await request(app)
+      response = await request(app)
         .post('/team')
         .send(team)
         .set('Authorization', `Bearer ${adminToken}`)
 
       const createdTeam = response.body as ICreateTeamControllerResponse
 
-      // Create a new project
+      // Create Project
       const project = {
         name: 'Project 1',
         teamId: createdTeam.id,
@@ -69,7 +62,7 @@ describe('Create Task E2E', () => {
 
       createdProject = response.body as ICreateProjectControllerResponse
 
-      // create a new team-member user
+      // create team-member user
       const teamMemberRole = await userRoleRepository.findByName(
         teamMemberUserRoleName,
       )
@@ -93,6 +86,14 @@ describe('Create Task E2E', () => {
         response.body as IAuthenticateUserControllerResponse
 
       teamMemberToken = authBody.token
+    } catch (err) {
+      console.error(err)
+    }
+  })
+
+  beforeEach(async () => {
+    try {
+      await clearTablesInTest({ tasks: true })
     } catch (err) {
       console.error(err)
     }
@@ -130,10 +131,9 @@ describe('Create Task E2E', () => {
     for (const role of roles) {
       if (role.name === teamMemberUserRoleName) continue
 
-      await clearTablesInTest()
       const user = {
         name: 'non-team-member',
-        email: 'non-team-member@mail.com',
+        email: `non-team-member-${crypto.randomUUID()}@mail.com`,
         password: '123456789',
         roleId: role.id,
       }

@@ -41,7 +41,7 @@ describe('Delete Project', () => {
         fakeCacheProvider,
       )
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
     } catch (err) {
       console.error(err)
     }
@@ -49,7 +49,7 @@ describe('Delete Project', () => {
 
   beforeEach(async () => {
     try {
-      await clearTablesInTest()
+      await clearTablesInTest({ teams: true, projects: true })
 
       const createdTeam = await createTeam.execute({
         name: 'Team 1',

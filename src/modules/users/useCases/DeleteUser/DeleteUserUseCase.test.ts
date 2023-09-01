@@ -32,7 +32,7 @@ describe('Delete User', () => {
       )
       listUsers = new ListUsersUseCase(userRepository, fakeCacheProvider)
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
       roles = await userRoleRepository.list()
     } catch (err) {
       console.error(err)
@@ -41,7 +41,7 @@ describe('Delete User', () => {
 
   beforeEach(async () => {
     try {
-      await clearTablesInTest()
+      await clearTablesInTest({})
 
       createdUsers.push(
         await createUser.execute({

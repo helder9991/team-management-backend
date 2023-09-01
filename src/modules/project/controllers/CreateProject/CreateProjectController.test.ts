@@ -1,5 +1,6 @@
 import 'express-async-errors'
 import request from 'supertest'
+import crypto from 'crypto'
 import app from '../../../../app'
 import { type ICreateProjectControllerResponse } from './CreateProjectController'
 import clearTablesInTest from 'utils/clearTablesInTest'
@@ -31,7 +32,7 @@ describe('Create Project E2E', () => {
 
       createTeam = new CreateTeamUseCase(teamRepository, fakeCacheProvider)
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
 
       userRoleRepository = new UserRoleRepository()
       roles = await userRoleRepository.list()
@@ -45,14 +46,7 @@ describe('Create Project E2E', () => {
         response.body as IAuthenticateUserControllerResponse
 
       adminToken = body.token
-    } catch (err) {
-      console.error(err)
-    }
-  })
 
-  beforeEach(async () => {
-    try {
-      await clearTablesInTest()
       const team = {
         name: 'Team 1',
       }
@@ -86,10 +80,9 @@ describe('Create Project E2E', () => {
     for (const role of roles) {
       if (role.name === adminUserRoleName) continue
 
-      await clearTablesInTest()
       const user = {
         name: 'non-admin',
-        email: 'non-admin@mail.com',
+        email: `non-admin-${crypto.randomUUID()}@mail.com`,
         password: '123456789',
         roleId: role.id,
       }

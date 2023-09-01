@@ -20,7 +20,7 @@ describe('List Teams', () => {
       createTeam = new CreateTeamUseCase(teamsRepository, fakeCacheProvider)
       listTeams = new ListTeamsUseCase(teamsRepository, fakeCacheProvider)
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
 
       createdTeams.push(
         await createTeam.execute({

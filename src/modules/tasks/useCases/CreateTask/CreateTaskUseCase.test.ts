@@ -45,7 +45,22 @@ describe('Create Task', () => {
         fakeCacheProvider,
       )
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
+
+      // Create Team
+      const team = {
+        name: 'Team 1',
+      }
+
+      const createdTeam = await createTeam.execute(team)
+
+      // Create Project
+      const project = {
+        name: 'Project 1',
+        teamId: createdTeam.id,
+      }
+
+      createdProject = await createProject.execute(project)
     } catch (err) {
       console.error(err)
     }
@@ -53,19 +68,7 @@ describe('Create Task', () => {
 
   beforeEach(async () => {
     try {
-      await clearTablesInTest()
-      const team = {
-        name: 'Team 1',
-      }
-
-      const createdTeam = await createTeam.execute(team)
-
-      const project = {
-        name: 'Project 1',
-        teamId: createdTeam.id,
-      }
-
-      createdProject = await createProject.execute(project)
+      await clearTablesInTest({ tasks: true })
     } catch (err) {
       console.error(err)
     }

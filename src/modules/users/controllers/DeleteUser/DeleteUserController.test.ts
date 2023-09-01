@@ -18,7 +18,7 @@ describe('Delete User E2E', () => {
     try {
       userRoleRepository = new UserRoleRepository()
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
       roles = await userRoleRepository.list()
 
       const response = await request(app).post('/auth').send({
@@ -37,7 +37,7 @@ describe('Delete User E2E', () => {
 
   beforeEach(async () => {
     try {
-      await clearTablesInTest()
+      await clearTablesInTest({ users: true })
       let response = await request(app)
         .post('/user')
         .set('Authorization', `Bearer ${adminToken}`)
@@ -100,10 +100,9 @@ describe('Delete User E2E', () => {
     for (const role of roles) {
       if (role.name === adminUserRoleName) continue
 
-      await clearTablesInTest()
       const user = {
         name: 'non-admin',
-        email: 'non-admin@mail.com',
+        email: `non-admin-${crypto.randomUUID()}@mail.com`,
         password: '123456789',
         roleId: role.id,
       }

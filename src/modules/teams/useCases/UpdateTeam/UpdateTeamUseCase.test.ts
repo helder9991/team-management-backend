@@ -23,15 +23,8 @@ describe('Update Team', () => {
       updateTeam = new UpdateTeamUseCase(teamRepository, fakeCacheProvider)
       createTeam = new CreateTeamUseCase(teamRepository, fakeCacheProvider)
 
-      await clearTablesInTest()
-    } catch (err) {
-      console.error(err)
-    }
-  })
+      await clearTablesInTest({})
 
-  beforeEach(async () => {
-    try {
-      await clearTablesInTest()
       createdTeam = await createTeam.execute({
         name: 'Team 1',
       })

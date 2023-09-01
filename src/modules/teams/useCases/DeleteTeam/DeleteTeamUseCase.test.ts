@@ -26,7 +26,7 @@ describe('Delete Team', () => {
       createTeam = new CreateTeamUseCase(teamRepository, fakeCacheProvider)
       listTeams = new ListTeamsUseCase(teamRepository, fakeCacheProvider)
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
     } catch (err) {
       console.error(err)
     }
@@ -34,7 +34,7 @@ describe('Delete Team', () => {
 
   beforeEach(async () => {
     try {
-      await clearTablesInTest()
+      await clearTablesInTest({ teams: true })
 
       createdTeams.push(
         await createTeam.execute({

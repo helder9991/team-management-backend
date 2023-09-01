@@ -37,19 +37,14 @@ describe('List Projects', () => {
       )
       createTeam = new CreateTeamUseCase(teamRepository, fakeCacheProvider)
 
-      await clearTablesInTest()
-    } catch (err) {
-      console.error(err)
-    }
-  })
+      await clearTablesInTest({})
 
-  beforeAll(async () => {
-    try {
-      await clearTablesInTest()
-
+      // Create Team
       createdTeam = await createTeam.execute({
         name: 'Team 1',
       })
+
+      // Create Projects
 
       createdProjects.push(
         await createProject.execute({

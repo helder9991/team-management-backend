@@ -25,7 +25,7 @@ describe('Create User', () => {
         fakeCacheProvider,
       )
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
       roles = await userRoleRepository.list()
     } catch (err) {
       console.error(err)
@@ -34,7 +34,7 @@ describe('Create User', () => {
 
   beforeEach(async () => {
     try {
-      await clearTablesInTest()
+      await clearTablesInTest({ users: true })
     } catch (err) {
       console.error(err)
     }

@@ -40,9 +40,10 @@ describe('Authenticate User', () => {
         fakeCacheProvider,
       )
 
-      await clearTablesInTest()
-
+      await clearTablesInTest({})
       roles = await userRoleRepository.list()
+
+      // Create User
       user.roleId = roles[0].id
 
       await createUser.execute(user)
