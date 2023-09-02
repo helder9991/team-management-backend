@@ -14,6 +14,9 @@ export interface IListTasksControllerResponse {
 interface IQueryRequest extends ParsedQs {
   page?: string
   projectId: string
+  taskStatusId: string
+  userId: string
+  taskPriorityId: string
 }
 
 class ListTasksController {
@@ -24,14 +27,32 @@ class ListTasksController {
       page: Yup.number().positive(),
       projectId: Yup.string().strict().required(),
       userTeamId: Yup.string().strict().required(),
+      taskStatusId: Yup.string().strict(),
+      taskPriorityId: Yup.string().strict(),
+      userId: Yup.string().strict(),
     })
   }
 
   async handle(req: Request, res: Response): Promise<Response> {
-    const { page = 1, projectId } = req.query as IQueryRequest
+    const {
+      page = 1,
+      projectId,
+      userId,
+      taskStatusId,
+      taskPriorityId,
+    } = req.query as IQueryRequest
     const userTeamId = req.user.teamId as string
 
-    if (!(await this.schema.isValid({ page, userTeamId, projectId })))
+    if (
+      !(await this.schema.isValid({
+        page,
+        userTeamId,
+        projectId,
+        userId,
+        taskStatusId,
+        taskPriorityId,
+      }))
+    )
       throw new AppError('Validation Fails.', 400)
 
     const listTasksUseCase: ListTasksUseCase =
@@ -41,6 +62,9 @@ class ListTasksController {
       page: Number(page),
       projectId,
       userTeamId,
+      userId,
+      taskStatusId,
+      taskPriorityId,
     })
 
     return res.status(200).json({ tasks, savedItemCount })

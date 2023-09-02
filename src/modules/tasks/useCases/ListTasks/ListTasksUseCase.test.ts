@@ -13,6 +13,7 @@ import CreateTaskUseCase from '../CreateTask/CreateTaskUseCase'
 import type Task from 'modules/tasks/entities/Task'
 import type Project from 'modules/projects/entities/Project'
 import type Team from 'modules/teams/entities/Team'
+import TaskPriorityRepository from 'modules/tasks/repository/typeorm/TaskPriority'
 
 let listTasks: ListTasksUseCase
 let createProject: CreateProjectUseCase
@@ -21,6 +22,7 @@ let createTask: CreateTaskUseCase
 
 let taskRepository: TaskRepository
 let taskStatusRepository: TaskStatusRepository
+let taskPriorityRepository: TaskPriorityRepository
 let teamRepository: TeamRepository
 let projectRepository: ProjectRepository
 let fakeCacheProvider: FakeCacheProvider
@@ -36,6 +38,7 @@ describe('List Tasks', () => {
       projectRepository = new ProjectRepository()
       taskRepository = new TaskRepository()
       taskStatusRepository = new TaskStatusRepository()
+      taskPriorityRepository = new TaskPriorityRepository()
 
       fakeCacheProvider = new FakeCacheProvider()
       createTeam = new CreateTeamUseCase(teamRepository, fakeCacheProvider)
@@ -46,6 +49,7 @@ describe('List Tasks', () => {
       createTask = new CreateTaskUseCase(
         taskRepository,
         taskStatusRepository,
+        taskPriorityRepository,
         projectRepository,
         fakeCacheProvider,
       )

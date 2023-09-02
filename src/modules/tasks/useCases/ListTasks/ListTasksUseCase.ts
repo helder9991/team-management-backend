@@ -10,6 +10,9 @@ interface IListTasksParams {
   page?: number
   projectId: string
   userTeamId: string
+  userId?: string
+  taskStatusId?: string
+  taskPriorityId?: string
 }
 
 @injectable()
@@ -29,6 +32,9 @@ class ListTasksUseCase {
     page = 1,
     projectId,
     userTeamId,
+    userId,
+    taskStatusId,
+    taskPriorityId,
   }: IListTasksParams): Promise<[Task[], ISavedItemCount]> {
     const projectExists = await this.projectRepository.findById(projectId)
 
@@ -37,9 +43,16 @@ class ListTasksUseCase {
     if (projectExists.teamId !== userTeamId)
       throw new AppError('This user doesn`t belongs to this project.')
 
+    const whereConditions = {
+      projectId,
+      userId,
+      taskStatusId,
+      taskPriorityId,
+    }
+
     const tasksListCached = await this.cacheProvider.recover<
       [Task[], ISavedItemCount]
-    >(`tasks-list:${page}`)
+    >(`tasks-list:${page}:params=${JSON.stringify(whereConditions)}`)
 
     let tasks, savedItemCount
 
@@ -50,13 +63,16 @@ class ListTasksUseCase {
         page,
         where: {
           projectId,
+          userId,
+          taskStatusId,
+          taskPriorityId,
         },
       })
 
-      await this.cacheProvider.save(`tasks-list:${page}`, [
-        tasks,
-        savedItemCount,
-      ])
+      await this.cacheProvider.save(
+        `tasks-list:${page}:params=${JSON.stringify(whereConditions)}`,
+        [tasks, savedItemCount],
+      )
     }
     return [tasks, savedItemCount]
   }

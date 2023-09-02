@@ -13,11 +13,13 @@ import ProjectRepository from 'modules/projects/repository/typeorm/ProjectReposi
 import type Project from 'modules/projects/entities/Project'
 import type Team from 'modules/teams/entities/Team'
 import MainSeedController from 'database/typeorm/seeds'
+import TaskPriorityRepository from 'modules/tasks/repository/typeorm/TaskPriority'
 
 let createTask: CreateTaskUseCase
 let createTeam: CreateTeamUseCase
 let createProject: CreateProjectUseCase
 
+let taskPriorityRepository: TaskPriorityRepository
 let taskRepository: TaskRepository
 let taskStatusRepository: TaskStatusRepository
 let teamRepository: TeamRepository
@@ -34,6 +36,7 @@ describe('Create Task', () => {
       projectRepository = new ProjectRepository()
       taskRepository = new TaskRepository()
       taskStatusRepository = new TaskStatusRepository()
+      taskPriorityRepository = new TaskPriorityRepository()
 
       fakeCacheProvider = new FakeCacheProvider()
       createTeam = new CreateTeamUseCase(teamRepository, fakeCacheProvider)
@@ -44,6 +47,7 @@ describe('Create Task', () => {
       createTask = new CreateTaskUseCase(
         taskRepository,
         taskStatusRepository,
+        taskPriorityRepository,
         projectRepository,
         fakeCacheProvider,
       )
@@ -130,6 +134,29 @@ describe('Create Task', () => {
     await expect(createTask.execute(task)).rejects.toHaveProperty(
       'message',
       'Task Status doesn`t exists.',
+    )
+
+    await MainSeedController.run({ silent: true })
+  })
+
+  it('Shouldn`t be able to create a new task if doesn`t find normalTaskPriority', async () => {
+    const task = {
+      name: 'Task 1',
+      description: 'Project 1 description',
+      projectId: createdProject.id,
+      userTeamId: createdTeams[0].id,
+    }
+    const taskStatus = await taskStatusRepository.findByName(readyTaskStatus)
+
+    expect(taskStatus).not.toBeNull()
+
+    if (taskStatus === null) return
+
+    await clearTablesInTest({ tasks: true, tasksPriority: true })
+
+    await expect(createTask.execute(task)).rejects.toHaveProperty(
+      'message',
+      'Task Priority doesn`t exists.',
     )
 
     await MainSeedController.run({ silent: true })

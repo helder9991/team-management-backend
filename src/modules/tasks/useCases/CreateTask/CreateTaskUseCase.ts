@@ -1,7 +1,9 @@
 import ICacheProvider from 'container/providers/CacheProvider/models/ICacheProvider'
 import IProjectRepository from 'modules/projects/repository/interfaces/IProjectRepository'
 import type Task from 'modules/tasks/entities/Task'
+import { normalTaskPriority } from 'modules/tasks/entities/TaskPriority'
 import { readyTaskStatus } from 'modules/tasks/entities/TaskStatus'
+import ITaskPriorityRepository from 'modules/tasks/repository/interfaces/ITaskPriority'
 import ITaskRepository from 'modules/tasks/repository/interfaces/ITaskRepository'
 import ITaskStatusRepository from 'modules/tasks/repository/interfaces/ITaskStatusRepository'
 import { inject, injectable } from 'tsyringe'
@@ -21,6 +23,9 @@ class CreateTaskUseCase {
     @inject('TaskStatusRepository')
     private readonly taskStatusRepository: ITaskStatusRepository,
 
+    @inject('TaskPriorityRepository')
+    private readonly taskPriorityRepository: ITaskPriorityRepository,
+
     @inject('ProjectRepository')
     private readonly projectRepository: IProjectRepository,
 
@@ -38,6 +43,7 @@ class CreateTaskUseCase {
 
     if (projectExists === null)
       throw new AppError('Project doesn`t exists.', 400)
+
     const taskStatusExists =
       await this.taskStatusRepository.findByName(readyTaskStatus)
 
@@ -47,11 +53,18 @@ class CreateTaskUseCase {
     if (projectExists?.teamId !== userTeamId)
       throw new AppError('This user doesn`t belongs to this project.')
 
+    const taskPriorityExists =
+      await this.taskPriorityRepository.findByName(normalTaskPriority)
+
+    if (taskPriorityExists === null)
+      throw new AppError('Task Priority doesn`t exists.', 400)
+
     const task = await this.taskRepository.create({
       name,
       description,
       projectId,
-      taskStatusId: taskStatusExists?.id,
+      taskStatusId: taskStatusExists.id,
+      taskPriorityId: taskPriorityExists.id,
     })
 
     await this.cacheProvider.invalidatePrefix('tasks-list')

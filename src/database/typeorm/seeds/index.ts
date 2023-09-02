@@ -1,4 +1,5 @@
 import typeORMConnection from '..'
+import TasksPrioritySeed from './TasksPrioritySeed'
 import TasksStatusSeed from './TasksStatusSeed'
 import UsersRolesSeed from './UsersRolesSeed'
 import UsersSeed from './UsersSeed'
@@ -16,6 +17,7 @@ class MainSeedController {
       await UsersRolesSeed.run(silent)
       await UsersSeed.run(silent)
       await TasksStatusSeed.run(silent)
+      await TasksPrioritySeed.run(silent)
 
       if (!silent) console.log('Seed Controller finished!')
     } catch (err) {
