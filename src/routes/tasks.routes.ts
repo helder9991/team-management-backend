@@ -3,6 +3,7 @@ import CompleteTaskController from 'modules/tasks/controllers/CompleteTask/Compl
 import CreateTaskController from 'modules/tasks/controllers/CreateTask/CreateTaskController'
 import DeleteTaskController from 'modules/tasks/controllers/DeleteTask/DeleteTaskController'
 import ListTasksController from 'modules/tasks/controllers/ListTasks/ListTasksController'
+import ReadyTaskController from 'modules/tasks/controllers/ReadyTask/ReadyTaskController'
 
 const taskRoutes = Router()
 
@@ -12,6 +13,10 @@ taskRoutes.post('/', (req: Request, res: Response) =>
 
 taskRoutes.get('/', (req: Request, res: Response) =>
   ListTasksController.handle(req, res),
+)
+
+taskRoutes.post('/:id/ready', (req: Request, res: Response) =>
+  ReadyTaskController.handle(req, res),
 )
 
 taskRoutes.post('/:id/complete', (req: Request, res: Response) =>

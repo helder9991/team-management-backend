@@ -78,12 +78,16 @@ class TaskRepository implements ITaskRepository {
     name,
     description,
     taskStatusId,
+    taskPriorityId,
+    userId,
   }: IUpdateTaskDTO): Promise<Task> {
     const task = await this.repository.save({
       id,
       name,
       description,
       taskStatusId,
+      taskPriorityId,
+      userId,
     })
 
     return task

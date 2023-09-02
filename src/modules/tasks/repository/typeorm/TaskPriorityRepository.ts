@@ -1,5 +1,5 @@
 import typeORMConnection from 'database/typeorm'
-import type ITaskPriorityRepository from '../interfaces/ITaskPriority'
+import type ITaskPriorityRepository from '../interfaces/ITaskPriorityRepository'
 import { type Repository } from 'typeorm'
 import TaskPriority, {
   type ITaskPriorityName,
