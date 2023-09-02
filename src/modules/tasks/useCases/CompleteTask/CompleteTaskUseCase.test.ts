@@ -146,7 +146,7 @@ describe('Complete Task', () => {
     await MainSeedController.run({ silent: true })
   })
 
-  it('Shouldn`t be able to complete task if TaskStatus doesn`t exists', async () => {
+  it('Shouldn`t be able to complete task if task doesn`t exists', async () => {
     await clearTablesInTest({ tasks: true })
 
     await expect(
