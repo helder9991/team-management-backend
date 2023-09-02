@@ -10,6 +10,7 @@ export interface ICreateTaskControllerResponse {
   name: string
   description: string | null
   projectId: string
+  userId: string
 }
 
 class CreateTaskController {
@@ -21,16 +22,18 @@ class CreateTaskController {
       description: Yup.string().strict(),
       projectId: Yup.string().uuid().required(),
       userTeamId: Yup.string().uuid().required(),
+      userId: Yup.string().uuid(),
     })
   }
 
   async handle(req: Request, res: Response): Promise<Response> {
     const { name, description, projectId } = req.body
     const userTeamId = req.user.teamId as string
+    const userId = req.user.id
 
     if (
       !(await this.schema.isValid(
-        trimObjectValues({ name, description, projectId, userTeamId }),
+        trimObjectValues({ name, description, projectId, userTeamId, userId }),
       ))
     )
       throw new AppError('Validation Fails.', 400)
@@ -43,6 +46,7 @@ class CreateTaskController {
       description,
       projectId,
       userTeamId,
+      userId,
     })
 
     return res.status(201).json({

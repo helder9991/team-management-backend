@@ -12,6 +12,7 @@ import AppError from 'utils/AppError'
 type ICreateTaskParams = Pick<Task, 'name' | 'projectId'> & {
   description?: string
   userTeamId: string
+  userId: string
 }
 
 @injectable()
@@ -38,6 +39,7 @@ class CreateTaskUseCase {
     description,
     projectId,
     userTeamId,
+    userId,
   }: ICreateTaskParams): Promise<Task> {
     const projectExists = await this.projectRepository.findById(projectId)
 
@@ -65,6 +67,7 @@ class CreateTaskUseCase {
       projectId,
       taskStatusId: taskStatusExists.id,
       taskPriorityId: taskPriorityExists.id,
+      userId,
     })
 
     await this.cacheProvider.invalidatePrefix('tasks-list')

@@ -23,6 +23,7 @@ class TaskRepository implements ITaskRepository {
     projectId,
     taskStatusId,
     taskPriorityId,
+    userId,
   }: ICreateTaskDTO): Promise<Task> {
     const task = this.repository.create({
       id: crypto.randomUUID(),
@@ -31,6 +32,7 @@ class TaskRepository implements ITaskRepository {
       projectId,
       taskStatusId,
       taskPriorityId,
+      userId,
       createdAt: new Date(),
     })
 
