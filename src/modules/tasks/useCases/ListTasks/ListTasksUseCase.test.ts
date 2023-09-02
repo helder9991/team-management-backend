@@ -13,7 +13,7 @@ import CreateTaskUseCase from '../CreateTask/CreateTaskUseCase'
 import type Task from 'modules/tasks/entities/Task'
 import type Project from 'modules/projects/entities/Project'
 import type Team from 'modules/teams/entities/Team'
-import TaskPriorityRepository from 'modules/tasks/repository/typeorm/TaskPriority'
+import TaskPriorityRepository from 'modules/tasks/repository/typeorm/TaskPriorityRepository'
 
 let listTasks: ListTasksUseCase
 let createProject: CreateProjectUseCase
@@ -125,23 +125,33 @@ describe('List Tasks', () => {
 
     expect(tasks).toHaveLength(2)
     expect(
-      tasks.map(({ taskStatus, createdAt, deletedAt, ...rest }) => {
+      tasks.map(({ taskPriority, taskStatus, userId = null, ...rest }) => {
         return {
           ...rest,
+          userId,
+          taskStatusId: taskStatus.id,
+          taskPriorityId: taskPriority.id,
         }
       }),
     ).toEqual(
       expect.arrayContaining(
         createdTasks
           .filter((task) => task.projectId === createdProjects[0].id)
-          .map(({ id, name, projectId, description, ...rest }) => {
-            return {
-              id,
-              name,
-              projectId,
-              description: description ?? null,
-            }
-          }),
+          .map(
+            ({
+              taskPriority,
+              taskStatus,
+              userId = null,
+              description = null,
+              ...rest
+            }) => {
+              return {
+                ...rest,
+                userId,
+                description,
+              }
+            },
+          ),
       ),
     )
   })
@@ -157,23 +167,33 @@ describe('List Tasks', () => {
     })
 
     expect(
-      tasks.map(({ taskStatus, createdAt, deletedAt, ...rest }) => {
+      tasks.map(({ taskPriority, taskStatus, userId = null, ...rest }) => {
         return {
           ...rest,
+          userId,
+          taskStatusId: taskStatus.id,
+          taskPriorityId: taskPriority.id,
         }
       }),
     ).toEqual(
       expect.arrayContaining(
         createdTasks
           .filter((task) => task.projectId === createdProjects[0].id)
-          .map(({ id, name, projectId, description, ...rest }) => {
-            return {
-              id,
-              name,
-              projectId,
-              description: description ?? null,
-            }
-          }),
+          .map(
+            ({
+              taskPriority,
+              taskStatus,
+              userId = null,
+              description = null,
+              ...rest
+            }) => {
+              return {
+                ...rest,
+                userId,
+                description,
+              }
+            },
+          ),
       ),
     )
   })

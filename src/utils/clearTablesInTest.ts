@@ -38,9 +38,6 @@ async function clearTablesInTest(tables: IClearTables): Promise<void> {
   const deleteAll = Object.keys(tables).length === 0
 
   try {
-    if (deleteAll || tables.users === true)
-      await typeORMConnection.getRepository(User).delete({ id: Not(admin.id) })
-
     if (deleteAll || tables.tasks === true)
       await typeORMConnection.getRepository(Task).delete({})
 
@@ -52,6 +49,9 @@ async function clearTablesInTest(tables: IClearTables): Promise<void> {
 
     if (deleteAll || tables.projects === true)
       await typeORMConnection.getRepository(Project).delete({})
+
+    if (deleteAll || tables.users === true)
+      await typeORMConnection.getRepository(User).delete({ id: Not(admin.id) })
 
     if (deleteAll || tables.teams === true)
       await typeORMConnection.getRepository(Team).delete({})

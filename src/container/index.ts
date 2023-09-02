@@ -15,7 +15,7 @@ import TaskRepository from 'modules/tasks/repository/typeorm/TaskRepository'
 import type ITaskStatusRepository from 'modules/tasks/repository/interfaces/ITaskStatusRepository'
 import TaskStatusRepository from 'modules/tasks/repository/typeorm/TaskStatusRepository'
 import type ITaskPriorityRepository from 'modules/tasks/repository/interfaces/ITaskPriority'
-import TaskPriorityRepository from 'modules/tasks/repository/typeorm/TaskPriority'
+import TaskPriorityRepository from 'modules/tasks/repository/typeorm/TaskPriorityRepository'
 
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository)
 container.registerSingleton<IUserRoleRepository>(

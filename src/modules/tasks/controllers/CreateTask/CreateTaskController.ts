@@ -54,6 +54,7 @@ class CreateTaskController {
       name,
       description,
       projectId,
+      userId,
     })
   }
 }

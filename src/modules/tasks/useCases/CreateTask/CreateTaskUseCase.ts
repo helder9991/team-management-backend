@@ -12,7 +12,7 @@ import AppError from 'utils/AppError'
 type ICreateTaskParams = Pick<Task, 'name' | 'projectId'> & {
   description?: string
   userTeamId: string
-  userId: string
+  userId?: string
 }
 
 @injectable()

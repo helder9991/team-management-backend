@@ -4,7 +4,7 @@ interface ICreateTaskDTO {
   projectId: string
   taskStatusId: string
   taskPriorityId: string
-  userId: string
+  userId?: string
 }
 
 export default ICreateTaskDTO

@@ -16,7 +16,7 @@ import type Project from 'modules/projects/entities/Project'
 import CreateTaskUseCase from '../CreateTask/CreateTaskUseCase'
 import type Task from 'modules/tasks/entities/Task'
 import type Team from 'modules/teams/entities/Team'
-import TaskPriorityRepository from 'modules/tasks/repository/typeorm/TaskPriority'
+import TaskPriorityRepository from 'modules/tasks/repository/typeorm/TaskPriorityRepository'
 
 let createTask: CreateTaskUseCase
 let completeTask: CompleteTaskUseCase

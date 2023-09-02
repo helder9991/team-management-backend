@@ -13,7 +13,7 @@ import ProjectRepository from 'modules/projects/repository/typeorm/ProjectReposi
 import type Project from 'modules/projects/entities/Project'
 import type Team from 'modules/teams/entities/Team'
 import MainSeedController from 'database/typeorm/seeds'
-import TaskPriorityRepository from 'modules/tasks/repository/typeorm/TaskPriority'
+import TaskPriorityRepository from 'modules/tasks/repository/typeorm/TaskPriorityRepository'
 
 let createTask: CreateTaskUseCase
 let createTeam: CreateTeamUseCase

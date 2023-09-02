@@ -152,11 +152,13 @@ describe('List Tasks E2E', () => {
 
     expect(body.tasks).toHaveLength(2)
     expect(
-      body.tasks.map(({ taskStatus, createdAt, deletedAt, ...rest }) => {
-        return {
-          ...rest,
-        }
-      }),
+      body.tasks.map(
+        ({ taskStatus, createdAt, deletedAt, taskPriority, ...rest }) => {
+          return {
+            ...rest,
+          }
+        },
+      ),
     ).toEqual(
       expect.arrayContaining(
         createdTasks

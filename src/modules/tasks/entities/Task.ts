@@ -19,7 +19,7 @@ class Task {
   name: string
 
   @Column({ name: 'task_description' })
-  description: string
+  description?: string
 
   @Column({ name: 'task_status_id' })
   taskStatusId: string
