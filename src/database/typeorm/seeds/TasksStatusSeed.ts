@@ -6,13 +6,18 @@ import {
   readyTaskStatus,
 } from '../../../modules/tasks/entities/TaskStatus'
 
+export const insertTasksStatusName = [
+  readyTaskStatus,
+  inProgressTaskStatus,
+  completedTaskStatus,
+]
+
 class TasksStatusSeed {
   async run(silent: boolean): Promise<void> {
     const sqlQuery =
       'INSERT INTO tasks_status (task_status_id, task_status_name, task_status_created_at) VALUES ($1, $2, $3)'
-    const names = [readyTaskStatus, inProgressTaskStatus, completedTaskStatus]
 
-    for (const name of names) {
+    for (const name of insertTasksStatusName) {
       try {
         await typeORMConnection.query(sqlQuery, [
           crypto.randomUUID(),

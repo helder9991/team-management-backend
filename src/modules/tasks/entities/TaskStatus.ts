@@ -28,10 +28,14 @@ class TaskStatus {
   @OneToMany(() => Task, (task) => task.taskStatus)
   tasks: Task[]
 
-  @CreateDateColumn({ name: 'task_status_created_at' })
+  @CreateDateColumn({ name: 'task_status_created_at', select: false })
   createdAt?: Date
 
-  @DeleteDateColumn({ name: 'task_status_deleted_at', nullable: true })
+  @DeleteDateColumn({
+    name: 'task_status_deleted_at',
+    nullable: true,
+    select: false,
+  })
   deletedAt?: Date
 }
 
