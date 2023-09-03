@@ -1,5 +1,5 @@
 import { compare } from 'bcryptjs'
-import ICacheProvider from 'shared/container/providers/CacheProvider/models/ICacheProvider'
+import ICacheProvider from 'shared/container/providers/CacheProvider/interfaces/ICacheProvider'
 import ITeamRepository from 'modules/teams/repository/interfaces/ITeamRepository'
 import type User from 'modules/users/entities/User'
 import IUserRepository from 'modules/users/repository/interfaces/IUserRepository'

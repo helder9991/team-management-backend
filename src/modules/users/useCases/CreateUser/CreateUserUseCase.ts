@@ -1,7 +1,7 @@
 import type User from 'modules/users/entities/User'
 import IUserRepository from 'modules/users/repository/interfaces/IUserRepository'
 import IUserRoleRepository from 'modules/users/repository/interfaces/IUserRoleRepository'
-import ICacheProviders from 'shared/container/providers/CacheProvider/models/ICacheProvider'
+import ICacheProviders from 'shared/container/providers/CacheProvider/interfaces/ICacheProvider'
 import { inject, injectable } from 'tsyringe'
 import AppError from 'shared/utils/AppError'
 

@@ -1,4 +1,4 @@
-import ICacheProvider from 'shared/container/providers/CacheProvider/models/ICacheProvider'
+import ICacheProvider from 'shared/container/providers/CacheProvider/interfaces/ICacheProvider'
 import type Project from 'modules/projects/entities/Project'
 import IProjectRepository from 'modules/projects/repository/interfaces/IProjectRepository'
 import { inject, injectable } from 'tsyringe'

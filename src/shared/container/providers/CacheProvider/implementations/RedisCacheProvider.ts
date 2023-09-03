@@ -1,6 +1,6 @@
 import Redis, { type Redis as RedisClient } from 'ioredis'
 
-import type ICacheProvider from '../models/ICacheProvider'
+import type ICacheProvider from '../interfaces/ICacheProvider'
 import cacheConfig from '../../../../config/cache'
 
 export default class RedisCacheProvider implements ICacheProvider {

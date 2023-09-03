@@ -1,4 +1,4 @@
-import ICacheProvider from 'shared/container/providers/CacheProvider/models/ICacheProvider'
+import ICacheProvider from 'shared/container/providers/CacheProvider/interfaces/ICacheProvider'
 import IProjectRepository from 'modules/projects/repository/interfaces/IProjectRepository'
 import type Task from 'modules/tasks/entities/Task'
 import { inProgressTaskStatus } from 'modules/tasks/entities/TaskStatus'

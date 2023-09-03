@@ -1,4 +1,4 @@
-import type ICacheProvider from '../models/ICacheProvider'
+import type ICacheProvider from '../interfaces/ICacheProvider'
 
 type ICacheData = Record<string, string>
 

@@ -1,4 +1,4 @@
-import ICacheProvider from 'shared/container/providers/CacheProvider/models/ICacheProvider'
+import ICacheProvider from 'shared/container/providers/CacheProvider/interfaces/ICacheProvider'
 import type User from 'modules/users/entities/User'
 import IUserRepository from 'modules/users/repository/interfaces/IUserRepository'
 import { inject, injectable } from 'tsyringe'
