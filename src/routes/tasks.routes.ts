@@ -2,6 +2,7 @@ import { type Request, type Response, Router } from 'express'
 import CompleteTaskController from 'modules/tasks/controllers/CompleteTask/CompleteTaskController'
 import CreateTaskController from 'modules/tasks/controllers/CreateTask/CreateTaskController'
 import DeleteTaskController from 'modules/tasks/controllers/DeleteTask/DeleteTaskController'
+import InProgressTaskController from 'modules/tasks/controllers/InProgressTask/InProgressTaskController'
 import ListTasksController from 'modules/tasks/controllers/ListTasks/ListTasksController'
 import ListTasksPriorityController from 'modules/tasks/controllers/ListTasksPriority/ListTasksPriorityController'
 import ListTasksStatusController from 'modules/tasks/controllers/ListTasksStatus/ListTasksStatusController'
@@ -19,6 +20,10 @@ taskRoutes.get('/', (req: Request, res: Response) =>
 
 taskRoutes.post('/:id/ready', (req: Request, res: Response) =>
   ReadyTaskController.handle(req, res),
+)
+
+taskRoutes.post('/:id/in-progress', (req: Request, res: Response) =>
+  InProgressTaskController.handle(req, res),
 )
 
 taskRoutes.post('/:id/complete', (req: Request, res: Response) =>
