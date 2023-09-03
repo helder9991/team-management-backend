@@ -43,7 +43,7 @@ class TaskRepository implements ITaskRepository {
 
   async list({
     page,
-    where = {},
+    where,
   }: IListTasksDTO): Promise<[Task[], ISavedItemCount]> {
     const tasks = await this.repository.findAndCount({
       where: removeUndefinedProperties(where),
