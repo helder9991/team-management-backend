@@ -3,6 +3,7 @@ import CompleteTaskController from 'modules/tasks/controllers/CompleteTask/Compl
 import CreateTaskController from 'modules/tasks/controllers/CreateTask/CreateTaskController'
 import DeleteTaskController from 'modules/tasks/controllers/DeleteTask/DeleteTaskController'
 import ListTasksController from 'modules/tasks/controllers/ListTasks/ListTasksController'
+import ListTasksPriorityController from 'modules/tasks/controllers/ListTasksPriority/ListTasksPriorityController'
 import ListTasksStatusController from 'modules/tasks/controllers/ListTasksStatus/ListTasksStatusController'
 import ReadyTaskController from 'modules/tasks/controllers/ReadyTask/ReadyTaskController'
 
@@ -30,6 +31,10 @@ taskRoutes.delete('/:id', (req: Request, res: Response) =>
 
 taskRoutes.get('/task-status', (req: Request, res: Response) =>
   ListTasksStatusController.handle(req, res),
+)
+
+taskRoutes.get('/task-priority', (req: Request, res: Response) =>
+  ListTasksPriorityController.handle(req, res),
 )
 
 export default taskRoutes

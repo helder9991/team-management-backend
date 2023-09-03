@@ -28,10 +28,14 @@ class TaskPriority {
   @OneToMany(() => Task, (task) => task.taskStatus)
   tasks: Task[]
 
-  @CreateDateColumn({ name: 'task_priority_created_at' })
+  @CreateDateColumn({ name: 'task_priority_created_at', select: false })
   createdAt?: Date
 
-  @DeleteDateColumn({ name: 'task_priority_deleted_at', nullable: true })
+  @DeleteDateColumn({
+    name: 'task_priority_deleted_at',
+    nullable: true,
+    select: false,
+  })
   deletedAt?: Date
 }
 
