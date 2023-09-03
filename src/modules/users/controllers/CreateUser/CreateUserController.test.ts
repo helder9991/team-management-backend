@@ -1,11 +1,11 @@
 import 'express-async-errors'
 import request from 'supertest'
 import crypto from 'crypto'
-import app from '../../../../app'
+import app from 'shared/app'
 import { type ICreateUserControllerResponse } from './CreateUserController'
 import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleRepository'
 import type UserRole from 'modules/users/entities/UserRole'
-import clearTablesInTest from 'utils/clearTablesInTest'
+import clearTablesInTest from 'shared/utils/clearTablesInTest'
 import { type IAuthenticateUserControllerResponse } from '../AuthenticateUser/AuthenticateUserController'
 import { adminUserRoleName } from 'modules/users/entities/UserRole'
 

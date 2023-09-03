@@ -1,13 +1,13 @@
 import crypto from 'crypto'
 import type ITaskRepository from '../interfaces/ITaskRepository'
 import { type Repository } from 'typeorm'
-import typeORMConnection from 'database/typeorm'
+import typeORMConnection from 'shared/database/typeorm'
 import Task from 'modules/tasks/entities/Task'
 import type ICreateTaskDTO from 'modules/tasks/dtos/ICreateTaskDTO'
 import { type ISavedItemCount } from 'shared/interfaces/database'
 import type IUpdateTaskDTO from 'modules/tasks/dtos/IUpdateTaskDTO'
 import type IListTasksDTO from 'modules/tasks/dtos/IListTasksDTO'
-import removeUndefinedProperties from 'utils/removeUndefinedProperties'
+import removeUndefinedProperties from 'shared/utils/removeUndefinedProperties'
 
 const itensPerPage = 30
 class TaskRepository implements ITaskRepository {

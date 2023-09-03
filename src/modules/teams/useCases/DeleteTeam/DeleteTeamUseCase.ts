@@ -1,8 +1,8 @@
-import ICacheProvider from 'container/providers/CacheProvider/models/ICacheProvider'
+import ICacheProvider from 'shared/container/providers/CacheProvider/models/ICacheProvider'
 import type Team from 'modules/teams/entities/Team'
 import ITeamRepository from 'modules/teams/repository/interfaces/ITeamRepository'
 import { inject, injectable } from 'tsyringe'
-import AppError from 'utils/AppError'
+import AppError from 'shared/utils/AppError'
 
 type IDeleteUserParams = Pick<Team, 'id'>
 

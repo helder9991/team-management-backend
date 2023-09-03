@@ -4,9 +4,9 @@ import authRoutes from './auth.routes'
 import teamRoutes from './team.routes'
 import projectRoutes from './project.routes'
 import taskRoutes from './tasks.routes'
-import ensureAuthenticated from 'middlewares/ensureAuthenticated'
-import ensureAdministrator from 'middlewares/ensureAdministrator'
-import ensureTeamMember from 'middlewares/ensureTeamMember'
+import ensureAuthenticated from 'shared/middlewares/ensureAuthenticated'
+import ensureAdministrator from 'shared/middlewares/ensureAdministrator'
+import ensureTeamMember from 'shared/middlewares/ensureTeamMember'
 
 const routes = Router()
 

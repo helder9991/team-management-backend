@@ -4,11 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev:server": "ts-node-dev --respawn -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/server.ts",
-    "start": "ts-node src/server.ts",
+    "dev:server": "ts-node-dev --respawn -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/server.ts",
+    "start": "ts-node src/shared/server.ts",
     "build": "tsc && tsc-alias",
     "typeorm": "typeorm-ts-node-esm",
-    "seed:run": "RUN_SEED=true ts-node -r tsconfig-paths/register src/database/typeorm/seeds/index.ts",
+    "seed:run": "RUN_SEED=true ts-node -r tsconfig-paths/register src/shared/database/typeorm/seeds/index.ts",
     "test": "jest --clearCache && NODE_ENV=test jest --coverage --watch --runInBand  "
   },
   "devDependencies": {

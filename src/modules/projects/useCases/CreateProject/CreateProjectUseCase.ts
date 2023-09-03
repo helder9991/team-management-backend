@@ -1,8 +1,8 @@
-import ICacheProviders from 'container/providers/CacheProvider/models/ICacheProvider'
+import ICacheProviders from 'shared/container/providers/CacheProvider/models/ICacheProvider'
 import { inject, injectable } from 'tsyringe'
 import type Project from 'modules/projects/entities/Project'
 import IProjectRepository from 'modules/projects/repository/interfaces/IProjectRepository'
-import AppError from 'utils/AppError'
+import AppError from 'shared/utils/AppError'
 
 type ICreateProjectParams = Pick<Project, 'name' | 'teamId'>
 

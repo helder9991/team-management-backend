@@ -13,6 +13,7 @@ const databaseConfig = {
       __dirname,
       '..',
       '..',
+      '..',
       'modules',
       '**',
       'entities',

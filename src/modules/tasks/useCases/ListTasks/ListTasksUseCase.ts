@@ -1,10 +1,10 @@
-import ICacheProvider from 'container/providers/CacheProvider/models/ICacheProvider'
+import ICacheProvider from 'shared/container/providers/CacheProvider/models/ICacheProvider'
 import { inject, injectable } from 'tsyringe'
 import { type ISavedItemCount } from 'shared/interfaces/database'
 import ITaskRepository from 'modules/tasks/repository/interfaces/ITaskRepository'
 import type Task from 'modules/tasks/entities/Task'
 import IProjectRepository from 'modules/projects/repository/interfaces/IProjectRepository'
-import AppError from 'utils/AppError'
+import AppError from 'shared/utils/AppError'
 
 interface IListTasksParams {
   page?: number

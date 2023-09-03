@@ -1,9 +1,9 @@
 import 'reflect-metadata'
 import ListTasksStatusUseCase from './ListTasksStatusUseCase'
 import TaskStatusRepository from 'modules/tasks/repository/typeorm/TaskStatusRepository'
-import FakeCacheProvider from 'container/providers/CacheProvider/fakes/FakeCacheProvider'
-import { insertTasksStatusName } from 'database/typeorm/seeds/TasksStatusSeed'
-import clearTablesInTest from 'utils/clearTablesInTest'
+import FakeCacheProvider from 'shared/container/providers/CacheProvider/fakes/FakeCacheProvider'
+import { insertTasksStatusName } from 'shared/database/typeorm/seeds/TasksStatusSeed'
+import clearTablesInTest from 'shared/utils/clearTablesInTest'
 
 let listTasksStatus: ListTasksStatusUseCase
 

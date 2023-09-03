@@ -1,5 +1,5 @@
 import { type NextFunction, type Request, type Response } from 'express'
-import AppError from 'utils/AppError'
+import AppError from 'shared/utils/AppError'
 
 function handleErrors(
   err: Error,

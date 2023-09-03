@@ -4,7 +4,7 @@ import {
   completedTaskStatus,
   inProgressTaskStatus,
   readyTaskStatus,
-} from '../../../modules/tasks/entities/TaskStatus'
+} from '../../../../modules/tasks/entities/TaskStatus'
 
 export const insertTasksStatusName = [
   readyTaskStatus,

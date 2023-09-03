@@ -3,7 +3,7 @@ import TaskStatus, {
 } from 'modules/tasks/entities/TaskStatus'
 import { type Repository } from 'typeorm'
 import type ITaskStatusRepository from '../interfaces/ITaskStatusRepository'
-import typeORMConnection from 'database/typeorm'
+import typeORMConnection from 'shared/database/typeorm'
 
 class TaskStatusRepository implements ITaskStatusRepository {
   private readonly repository: Repository<TaskStatus>

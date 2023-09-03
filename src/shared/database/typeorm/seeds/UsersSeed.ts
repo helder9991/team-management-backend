@@ -2,7 +2,7 @@ import crypto from 'crypto'
 import typeORMConnection from '..'
 import UserRole, {
   adminUserRoleName,
-} from '../../../modules/users/entities/UserRole'
+} from '../../../../modules/users/entities/UserRole'
 import { hash } from 'bcryptjs'
 
 class UsersSeed {

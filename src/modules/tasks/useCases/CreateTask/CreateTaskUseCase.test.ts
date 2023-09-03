@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import crypto from 'crypto'
-import clearTablesInTest from 'utils/clearTablesInTest'
-import FakeCacheProvider from 'container/providers/CacheProvider/fakes/FakeCacheProvider'
+import clearTablesInTest from 'shared/utils/clearTablesInTest'
+import FakeCacheProvider from 'shared/container/providers/CacheProvider/fakes/FakeCacheProvider'
 import TeamRepository from 'modules/teams/repository/typeorm/TeamRepository'
 import CreateTeamUseCase from 'modules/teams/useCases/CreateTeam/CreateTeamUseCase'
 import CreateTaskUseCase from './CreateTaskUseCase'
@@ -12,7 +12,7 @@ import CreateProjectUseCase from 'modules/projects/useCases/CreateProject/Create
 import ProjectRepository from 'modules/projects/repository/typeorm/ProjectRepository'
 import type Project from 'modules/projects/entities/Project'
 import type Team from 'modules/teams/entities/Team'
-import MainSeedController from 'database/typeorm/seeds'
+import MainSeedController from 'shared/database/typeorm/seeds'
 import TaskPriorityRepository from 'modules/tasks/repository/typeorm/TaskPriorityRepository'
 
 let createTask: CreateTaskUseCase

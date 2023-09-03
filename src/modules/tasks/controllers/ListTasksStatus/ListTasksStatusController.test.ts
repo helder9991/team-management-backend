@@ -1,13 +1,13 @@
 import request from 'supertest'
 import crypto from 'crypto'
-import app from '../../../../app'
+import app from 'shared/app'
 import { type IListTasksStatusControllerResponse } from './ListTasksStatusController'
 import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleRepository'
 import type UserRole from 'modules/users/entities/UserRole'
-import clearTablesInTest from 'utils/clearTablesInTest'
+import clearTablesInTest from 'shared/utils/clearTablesInTest'
 import { type IAuthenticateUserControllerResponse } from 'modules/users/controllers/AuthenticateUser/AuthenticateUserController'
 import { teamMemberUserRoleName } from 'modules/users/entities/UserRole'
-import { insertTasksStatusName } from 'database/typeorm/seeds/TasksStatusSeed'
+import { insertTasksStatusName } from 'shared/database/typeorm/seeds/TasksStatusSeed'
 
 let userRoleRepository: UserRoleRepository
 

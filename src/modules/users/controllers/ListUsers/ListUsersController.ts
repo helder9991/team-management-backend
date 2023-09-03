@@ -4,7 +4,7 @@ import ListUsersUseCase from 'modules/users/useCases/ListUsers/ListUsersUseCase'
 import { container } from 'tsyringe'
 import { type ParsedQs } from 'qs'
 import * as Yup from 'yup'
-import AppError from 'utils/AppError'
+import AppError from 'shared/utils/AppError'
 
 export interface IListUsersControllerResponse {
   users: Array<Omit<User, 'password'>>

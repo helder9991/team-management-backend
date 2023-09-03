@@ -1,4 +1,4 @@
-import typeORMConnection from 'database/typeorm'
+import typeORMConnection from 'shared/database/typeorm'
 import AppError from './AppError'
 import User from 'modules/users/entities/User'
 import { Not } from 'typeorm'

@@ -2,8 +2,8 @@ import type IAuthenticateRepository from '../interfaces/IAuthenticateRepository'
 import type IAuhtenticateUserDTO from '../../dtos/IAuthenticateUserDTO'
 import { type IToken } from '../interfaces/IAuthenticateRepository'
 import { compare } from 'bcryptjs'
-import AppError from 'utils/AppError'
-import authConfig from '../../../../config/auth'
+import AppError from 'shared/utils/AppError'
+import authConfig from 'shared/config/auth'
 import { sign } from 'jsonwebtoken'
 
 class AuthenticateRepository implements IAuthenticateRepository {

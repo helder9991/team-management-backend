@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import CreateTeamUseCase from './CreateTeamUseCase'
-import clearTablesInTest from 'utils/clearTablesInTest'
-import FakeCacheProvider from 'container/providers/CacheProvider/fakes/FakeCacheProvider'
+import clearTablesInTest from 'shared/utils/clearTablesInTest'
+import FakeCacheProvider from 'shared/container/providers/CacheProvider/fakes/FakeCacheProvider'
 import TeamRepository from 'modules/teams/repository/typeorm/TeamRepository'
 
 let createTeam: CreateTeamUseCase

@@ -5,9 +5,9 @@ import cors from 'cors'
 
 import './database/typeorm'
 import './container'
-import routes from './routes'
-import initializeDatabaseConnection from 'middlewares/initializeDatabaseConnection'
-import handleErrors from 'middlewares/handleErrors'
+import routes from 'routes/'
+import initializeDatabaseConnection from 'shared/middlewares/initializeDatabaseConnection'
+import handleErrors from 'shared/middlewares/handleErrors'
 
 const app = express()
 

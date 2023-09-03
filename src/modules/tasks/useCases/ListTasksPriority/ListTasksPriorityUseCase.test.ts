@@ -1,9 +1,9 @@
 import 'reflect-metadata'
 import ListTasksPriorityUseCase from './ListTasksPriorityUseCase'
-import FakeCacheProvider from 'container/providers/CacheProvider/fakes/FakeCacheProvider'
-import clearTablesInTest from 'utils/clearTablesInTest'
+import FakeCacheProvider from 'shared/container/providers/CacheProvider/fakes/FakeCacheProvider'
+import clearTablesInTest from 'shared/utils/clearTablesInTest'
 import TaskPriorityRepository from 'modules/tasks/repository/typeorm/TaskPriorityRepository'
-import { insertTasksPriorityName } from 'database/typeorm/seeds/TasksPrioritySeed'
+import { insertTasksPriorityName } from 'shared/database/typeorm/seeds/TasksPrioritySeed'
 
 let listTasksPriority: ListTasksPriorityUseCase
 

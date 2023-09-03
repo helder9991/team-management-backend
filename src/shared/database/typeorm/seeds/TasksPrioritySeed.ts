@@ -4,7 +4,7 @@ import {
   highTaskPriority,
   lowTaskPriority,
   normalTaskPriority,
-} from '../../../modules/tasks/entities/TaskPriority'
+} from '../../../../modules/tasks/entities/TaskPriority'
 
 export const insertTasksPriorityName = [
   lowTaskPriority,

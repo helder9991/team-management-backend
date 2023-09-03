@@ -1,5 +1,5 @@
-import typeORMConnection from '../src/database/typeorm'
-import MainSeedController from '../src/database/typeorm/seeds'
+import typeORMConnection from '../src/shared/database/typeorm'
+import MainSeedController from '../src/shared/database/typeorm/seeds'
 
 export default async (): Promise<void> => {
   try {

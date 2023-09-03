@@ -1,8 +1,8 @@
 import { type Request, type Response } from 'express'
 import DeleteTaskUseCase from 'modules/tasks/useCases/DeleteTask/DeleteTaskUseCase'
 import { container } from 'tsyringe'
-import AppError from 'utils/AppError'
-import { trimObjectValues } from 'utils/trimObjectValues'
+import AppError from 'shared/utils/AppError'
+import { trimObjectValues } from 'shared/utils/trimObjectValues'
 import * as Yup from 'yup'
 
 class DeleteTaskController {

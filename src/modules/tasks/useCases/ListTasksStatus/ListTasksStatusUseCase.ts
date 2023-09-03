@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe'
 import ITaskStatusRepository from 'modules/tasks/repository/interfaces/ITaskStatusRepository'
 import type TaskStatus from 'modules/tasks/entities/TaskStatus'
-import ICacheProvider from 'container/providers/CacheProvider/models/ICacheProvider'
+import ICacheProvider from 'shared/container/providers/CacheProvider/models/ICacheProvider'
 
 @injectable()
 class ListTasksStatusUseCase {

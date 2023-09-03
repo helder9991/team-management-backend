@@ -1,11 +1,11 @@
 import { compare } from 'bcryptjs'
-import ICacheProvider from 'container/providers/CacheProvider/models/ICacheProvider'
+import ICacheProvider from 'shared/container/providers/CacheProvider/models/ICacheProvider'
 import ITeamRepository from 'modules/teams/repository/interfaces/ITeamRepository'
 import type User from 'modules/users/entities/User'
 import IUserRepository from 'modules/users/repository/interfaces/IUserRepository'
 import IUserRoleRepository from 'modules/users/repository/interfaces/IUserRoleRepository'
 import { inject, injectable } from 'tsyringe'
-import AppError from 'utils/AppError'
+import AppError from 'shared/utils/AppError'
 
 type IUpdateUserParams = Partial<
   Omit<User, 'email' | 'createdAt' | 'deletedAt'>

@@ -1,6 +1,6 @@
 import type IUserRoleRepository from '../interfaces/IUserRoleRepository'
 import { type Repository } from 'typeorm'
-import typeORMConnection from 'database/typeorm'
+import typeORMConnection from 'shared/database/typeorm'
 import UserRole from 'modules/users/entities/UserRole'
 
 class UserRoleRepository implements IUserRoleRepository {

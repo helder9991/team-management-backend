@@ -1,9 +1,9 @@
 import type User from 'modules/users/entities/User'
 import IUserRepository from 'modules/users/repository/interfaces/IUserRepository'
 import IUserRoleRepository from 'modules/users/repository/interfaces/IUserRoleRepository'
-import ICacheProviders from 'container/providers/CacheProvider/models/ICacheProvider'
+import ICacheProviders from 'shared/container/providers/CacheProvider/models/ICacheProvider'
 import { inject, injectable } from 'tsyringe'
-import AppError from 'utils/AppError'
+import AppError from 'shared/utils/AppError'
 
 type ICreateUserParams = Omit<User, 'id' | 'createdAt' | 'deletedAt'>
 

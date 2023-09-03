@@ -1,4 +1,4 @@
-import ICacheProvider from 'container/providers/CacheProvider/models/ICacheProvider'
+import ICacheProvider from 'shared/container/providers/CacheProvider/models/ICacheProvider'
 import IProjectRepository from 'modules/projects/repository/interfaces/IProjectRepository'
 import type Task from 'modules/tasks/entities/Task'
 import { normalTaskPriority } from 'modules/tasks/entities/TaskPriority'
@@ -7,7 +7,7 @@ import ITaskPriorityRepository from 'modules/tasks/repository/interfaces/ITaskPr
 import ITaskRepository from 'modules/tasks/repository/interfaces/ITaskRepository'
 import ITaskStatusRepository from 'modules/tasks/repository/interfaces/ITaskStatusRepository'
 import { inject, injectable } from 'tsyringe'
-import AppError from 'utils/AppError'
+import AppError from 'shared/utils/AppError'
 
 type ICreateTaskParams = Pick<Task, 'name' | 'projectId'> & {
   description?: string

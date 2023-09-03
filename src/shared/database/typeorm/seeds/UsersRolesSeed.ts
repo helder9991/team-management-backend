@@ -4,7 +4,7 @@ import {
   adminUserRoleName,
   commonUserUserRoleName,
   teamMemberUserRoleName,
-} from '../../../modules/users/entities/UserRole'
+} from '../../../../modules/users/entities/UserRole'
 
 class UsersRolesSeed {
   async run(silent: boolean): Promise<void> {

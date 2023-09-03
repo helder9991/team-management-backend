@@ -1,8 +1,8 @@
 import request from 'supertest'
-import app from '../../../../app'
+import app from 'shared/app'
 import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleRepository'
 import type UserRole from 'modules/users/entities/UserRole'
-import clearTablesInTest from 'utils/clearTablesInTest'
+import clearTablesInTest from 'shared/utils/clearTablesInTest'
 import { type IAuthenticateUserControllerResponse } from './AuthenticateUserController'
 import type User from 'modules/users/entities/User'
 

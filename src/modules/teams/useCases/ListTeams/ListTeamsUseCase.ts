@@ -1,4 +1,4 @@
-import ICacheProvider from 'container/providers/CacheProvider/models/ICacheProvider'
+import ICacheProvider from 'shared/container/providers/CacheProvider/models/ICacheProvider'
 import { inject, injectable } from 'tsyringe'
 import ITeamRepository from 'modules/teams/repository/interfaces/ITeamRepository'
 import { type ISavedItemCount } from 'shared/interfaces/database'

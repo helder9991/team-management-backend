@@ -1,7 +1,7 @@
 import crypto from 'crypto'
 import type ITeamRepository from '../interfaces/ITeamRepository'
 import { type Repository } from 'typeorm'
-import typeORMConnection from 'database/typeorm'
+import typeORMConnection from 'shared/database/typeorm'
 import Team from 'modules/teams/entities/Team'
 import type ICreateTeamDTO from 'modules/teams/dtos/ICreateTeamDTO'
 import type IListTeamsDTO from 'modules/teams/dtos/IListTeamsDTO'

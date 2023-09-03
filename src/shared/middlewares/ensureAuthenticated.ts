@@ -2,8 +2,8 @@ import { type Response, type Request, type NextFunction } from 'express'
 import { type JwtPayload, verify } from 'jsonwebtoken'
 
 import authConfig from '../config/auth'
-import AppError from 'utils/AppError'
-import typeORMConnection from 'database/typeorm'
+import AppError from 'shared/utils/AppError'
+import typeORMConnection from 'shared/database/typeorm'
 import User from 'modules/users/entities/User'
 
 type Payload = JwtPayload & {

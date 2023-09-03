@@ -9,12 +9,9 @@
     "outDir": "./build",
     "rootDir": "./src",
     "paths": {
-      "container": ["./src/container/*"],
       "modules": ["./src/modules/*"],
-      "middlewares": ["./src/middlewares/*"],
-      "utils": ["./src/utils/*"],
-      "database": ["./src/database/*"],
       "configs": ["./src/configs/*"],
+      "routes": ["./src/routes/*"]
     },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

@@ -1,4 +1,4 @@
-import { normalTaskPriority } from '../../../modules/tasks/entities/TaskPriority'
+import { normalTaskPriority } from '../../../../modules/tasks/entities/TaskPriority'
 import {
   type MigrationInterface,
   type QueryRunner,

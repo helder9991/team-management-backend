@@ -1,7 +1,7 @@
 import crypto from 'crypto'
 import type IProjectRepository from '../interfaces/IProjectRepository'
 import { type Repository } from 'typeorm'
-import typeORMConnection from 'database/typeorm'
+import typeORMConnection from 'shared/database/typeorm'
 import Project from 'modules/projects/entities/Project'
 import type ICreateProjectDTO from 'modules/projects/dtos/ICreateProjectDTO'
 import type IListProjectsDTO from 'modules/projects/dtos/IListProjectDTO'

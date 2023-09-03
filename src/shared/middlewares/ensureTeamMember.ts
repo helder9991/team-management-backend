@@ -1,7 +1,7 @@
 import { type Response, type Request, type NextFunction } from 'express'
 
-import AppError from 'utils/AppError'
-import typeORMConnection from 'database/typeorm'
+import AppError from 'shared/utils/AppError'
+import typeORMConnection from 'shared/database/typeorm'
 import UserRole, {
   teamMemberUserRoleName,
 } from 'modules/users/entities/UserRole'

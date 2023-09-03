@@ -1,12 +1,12 @@
 import 'reflect-metadata'
 import ListUsersUseCase from './ListUsersUseCase'
 import UserRepository from 'modules/users/repository/typeorm/UserRepository'
-import clearTablesInTest from 'utils/clearTablesInTest'
+import clearTablesInTest from 'shared/utils/clearTablesInTest'
 import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleRepository'
 import type UserRole from 'modules/users/entities/UserRole'
 import CreateUserUseCase from '../CreateUser/CreateUserUseCase'
 import type User from 'modules/users/entities/User'
-import FakeCacheProvider from 'container/providers/CacheProvider/fakes/FakeCacheProvider'
+import FakeCacheProvider from 'shared/container/providers/CacheProvider/fakes/FakeCacheProvider'
 
 let listUsers: ListUsersUseCase
 let createUser: CreateUserUseCase
