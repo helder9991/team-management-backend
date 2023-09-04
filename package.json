@@ -8,7 +8,7 @@
     "build": "tsc && tsc-alias",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "seed:run": "RUN_SEED=true ts-node -r tsconfig-paths/register src/shared/database/typeorm/seeds/index.ts",
-    "test": "jest --clearCache && NODE_ENV=test jest --coverage --runInBand  ",
+    "test": "jest --clearCache && NODE_ENV=test jest --coverage --watchAll --runInBand  ",
     "queue": "ts-node-dev -r tsconfig-paths/register --inspect=9228 --transpile-only --ignore-watch node_modules ./src/shared/workers/bull/index.ts"
   },
   "devDependencies": {
