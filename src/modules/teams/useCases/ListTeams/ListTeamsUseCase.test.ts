@@ -43,6 +43,12 @@ describe('List Teams', () => {
     expect(teams).toEqual(expect.arrayContaining(createdTeams))
   })
 
+  it('Should be able to list all teams by page', async () => {
+    const [teams] = await listTeams.execute({ page: 1 })
+
+    expect(teams).toEqual(expect.arrayContaining(createdTeams))
+  })
+
   it('Should be able to list all teams by cache', async () => {
     await listTeams.execute({})
     const [teams] = await listTeams.execute({})

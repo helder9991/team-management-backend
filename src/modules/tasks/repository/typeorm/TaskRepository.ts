@@ -45,6 +45,15 @@ class TaskRepository implements ITaskRepository {
     page,
     where,
   }: IListTasksDTO): Promise<[Task[], ISavedItemCount]> {
+    let pagination = {}
+
+    if (page !== undefined) {
+      pagination = {
+        skip: (page - 1) * itensPerPage,
+        take: itensPerPage,
+      }
+    }
+
     const tasks = await this.repository.findAndCount({
       where: removeUndefinedProperties(where),
       relations: ['taskStatus', 'taskPriority'],
@@ -57,8 +66,7 @@ class TaskRepository implements ITaskRepository {
         'createdAt',
         'deletedAt',
       ],
-      skip: (page - 1) * itensPerPage,
-      take: itensPerPage,
+      ...pagination,
     })
 
     return tasks

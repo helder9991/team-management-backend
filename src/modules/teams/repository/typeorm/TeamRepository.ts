@@ -30,9 +30,16 @@ class TeamRepository implements ITeamRepository {
   }
 
   async list({ page }: IListTeamsDTO): Promise<[Team[], ISavedItemCount]> {
+    let pagination = {}
+
+    if (page !== undefined) {
+      pagination = {
+        skip: (page - 1) * itensPerPage,
+        take: itensPerPage,
+      }
+    }
     const teams = await this.repository.findAndCount({
-      skip: (page - 1) * itensPerPage,
-      take: itensPerPage,
+      ...pagination,
     })
 
     return teams

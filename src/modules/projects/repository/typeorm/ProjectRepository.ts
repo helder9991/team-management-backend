@@ -45,9 +45,17 @@ class ProjectRepository implements IProjectRepository {
   async list({
     page,
   }: IListProjectsDTO): Promise<[Project[], ISavedItemCount]> {
+    let pagination = {}
+
+    if (page !== undefined) {
+      pagination = {
+        skip: (page - 1) * itensPerPage,
+        take: itensPerPage,
+      }
+    }
+
     const project = await this.repository.findAndCount({
-      skip: (page - 1) * itensPerPage,
-      take: itensPerPage,
+      ...pagination,
     })
 
     return project

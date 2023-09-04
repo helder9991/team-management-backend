@@ -29,7 +29,7 @@ class ListTasksUseCase {
   ) {}
 
   async execute({
-    page = 1,
+    page,
     projectId,
     userTeamId,
     userId,
@@ -52,7 +52,7 @@ class ListTasksUseCase {
 
     const tasksListCached = await this.cacheProvider.recover<
       [Task[], ISavedItemCount]
-    >(`tasks-list:${page}:params=${JSON.stringify(whereConditions)}`)
+    >(`tasks-list:${page ?? 'all'}:params=${JSON.stringify(whereConditions)}`)
 
     let tasks, savedItemCount
 
@@ -70,7 +70,7 @@ class ListTasksUseCase {
       })
 
       await this.cacheProvider.save(
-        `tasks-list:${page}:params=${JSON.stringify(whereConditions)}`,
+        `tasks-list:${page ?? 'all'}:params=${JSON.stringify(whereConditions)}`,
         [tasks, savedItemCount],
       )
     }

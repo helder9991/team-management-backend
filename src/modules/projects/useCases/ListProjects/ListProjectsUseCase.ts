@@ -19,11 +19,11 @@ class ListProjectsUseCase {
   ) {}
 
   async execute({
-    page = 1,
+    page,
   }: IListProjectsParams): Promise<[Project[], ISavedItemCount]> {
     const projectsListCached = await this.cacheProvider.recover<
       [Project[], ISavedItemCount]
-    >(`projects-list:${page}`)
+    >(`projects-list:${page ?? 'all'}`)
 
     let projects, savedItemCount
 
@@ -34,7 +34,7 @@ class ListProjectsUseCase {
         page,
       })
 
-      await this.cacheProvider.save(`projects-list:${page}`, [
+      await this.cacheProvider.save(`projects-list:${page ?? 'all'}`, [
         projects,
         savedItemCount,
       ])

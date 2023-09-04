@@ -75,6 +75,12 @@ describe('List Projects', () => {
     expect(projects).toEqual(expect.arrayContaining(createdProjects))
   })
 
+  it('Should be able to list all projects by page', async () => {
+    const [projects] = await listProjects.execute({ page: 1 })
+
+    expect(projects).toEqual(expect.arrayContaining(createdProjects))
+  })
+
   it('Should be able to list all projects by cache', async () => {
     await listProjects.execute({})
     const [projects] = await listProjects.execute({})

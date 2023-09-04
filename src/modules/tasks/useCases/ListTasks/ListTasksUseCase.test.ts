@@ -156,6 +156,46 @@ describe('List Tasks', () => {
     )
   })
 
+  it('Should be able to list all tasks by projectId and page', async () => {
+    const [tasks] = await listTasks.execute({
+      projectId: createdProjects[0].id,
+      userTeamId: createdProjects[0].teamId,
+      page: 1,
+    })
+
+    expect(tasks).toHaveLength(2)
+    expect(
+      tasks.map(({ taskPriority, taskStatus, userId = null, ...rest }) => {
+        return {
+          ...rest,
+          userId,
+          taskStatusId: taskStatus.id,
+          taskPriorityId: taskPriority.id,
+        }
+      }),
+    ).toEqual(
+      expect.arrayContaining(
+        createdTasks
+          .filter((task) => task.projectId === createdProjects[0].id)
+          .map(
+            ({
+              taskPriority,
+              taskStatus,
+              userId = null,
+              description = null,
+              ...rest
+            }) => {
+              return {
+                ...rest,
+                userId,
+                description,
+              }
+            },
+          ),
+      ),
+    )
+  })
+
   it('Should be able to list all tasks in cache by productId', async () => {
     await listTasks.execute({
       projectId: createdProjects[0].id,

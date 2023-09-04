@@ -19,11 +19,11 @@ class ListTeamsUseCase {
   ) {}
 
   async execute({
-    page = 1,
+    page,
   }: IListTeamsParams): Promise<[Team[], ISavedItemCount]> {
     const teamsListCached = await this.cacheProvider.recover<
       [Team[], ISavedItemCount]
-    >(`teams-list:${page}`)
+    >(`teams-list:${page ?? 'all'}`)
 
     let teams, savedItemCount
 
@@ -34,7 +34,7 @@ class ListTeamsUseCase {
         page,
       })
 
-      await this.cacheProvider.save(`teams-list:${page}`, [
+      await this.cacheProvider.save(`teams-list:${page ?? 'all'}`, [
         teams,
         savedItemCount,
       ])
