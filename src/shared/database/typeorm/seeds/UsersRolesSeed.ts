@@ -6,17 +6,18 @@ import {
   teamMemberUserRoleName,
 } from '../../../../modules/users/entities/UserRole'
 
+export const insertUsersRoleName = [
+  adminUserRoleName,
+  teamMemberUserRoleName,
+  commonUserUserRoleName,
+]
+
 class UsersRolesSeed {
   async run(silent: boolean): Promise<void> {
     const sqlQuery =
       'INSERT INTO users_roles (user_role_id, user_role_name, user_role_created_at) VALUES ($1, $2, $3)'
-    const names = [
-      adminUserRoleName,
-      teamMemberUserRoleName,
-      commonUserUserRoleName,
-    ]
 
-    for (const name of names) {
+    for (const name of insertUsersRoleName) {
       try {
         await typeORMConnection.query(sqlQuery, [
           crypto.randomUUID(),

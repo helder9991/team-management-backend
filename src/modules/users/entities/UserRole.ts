@@ -23,10 +23,14 @@ class UserRole {
   @Column({ name: 'user_role_name' })
   name: string
 
-  @CreateDateColumn({ name: 'user_role_created_at' })
+  @CreateDateColumn({ name: 'user_role_created_at', select: false })
   createdAt?: Date
 
-  @DeleteDateColumn({ name: 'user_role_deleted_at', nullable: true })
+  @DeleteDateColumn({
+    name: 'user_role_deleted_at',
+    nullable: true,
+    select: false,
+  })
   deletedAt?: Date
 }
 
