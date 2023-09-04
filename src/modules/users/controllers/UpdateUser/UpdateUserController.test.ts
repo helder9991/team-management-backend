@@ -1,12 +1,13 @@
 import request from 'supertest'
 import crypto from 'crypto'
-import app from '../../../../app'
+import app from 'shared/app'
 import { type IUpdateUserControllerResponse } from './UpdateUserController'
 import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleRepository'
 import type UserRole from 'modules/users/entities/UserRole'
-import clearTablesInTest from 'utils/clearTablesInTest'
+import clearTablesInTest from 'shared/utils/clearTablesInTest'
 import type User from 'modules/users/entities/User'
 import { type IAuthenticateUserControllerResponse } from '../AuthenticateUser/AuthenticateUserController'
+import { adminUserRoleName } from 'modules/users/entities/UserRole'
 
 let userRoleRepository: UserRoleRepository
 let roles: UserRole[] = []
@@ -18,10 +19,10 @@ describe('Update User E2E', () => {
     try {
       userRoleRepository = new UserRoleRepository()
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
       roles = await userRoleRepository.list()
 
-      const response = await request(app).post('/auth').send({
+      let response = await request(app).post('/auth').send({
         email: 'admin@team.com.br',
         password: 'admin123',
       })
@@ -30,21 +31,17 @@ describe('Update User E2E', () => {
         response.body as IAuthenticateUserControllerResponse
 
       adminToken = body.token
-    } catch (err) {
-      console.error(err)
-    }
-  })
 
-  beforeEach(async () => {
-    try {
-      await clearTablesInTest()
+      await clearTablesInTest({})
+
+      // Create User
       const user = {
         name: 'John',
         email: 'john@mail.com',
         password: '123456789',
         roleId: roles[0].id,
       }
-      const response = await request(app)
+      response = await request(app)
         .post('/user')
         .send(user)
         .set('Authorization', `Bearer ${adminToken}`)
@@ -95,12 +92,11 @@ describe('Update User E2E', () => {
 
   it('Shouldn`t be able to update a user with a non-admin account', async () => {
     for (const role of roles) {
-      if (role.name === 'Administrador') continue
+      if (role.name === adminUserRoleName) continue
 
-      await clearTablesInTest()
       const user = {
         name: 'non-admin',
-        email: 'non-admin@mail.com',
+        email: `non-admin-${crypto.randomUUID()}@mail.com`,
         password: '123456789',
         roleId: role.id,
       }

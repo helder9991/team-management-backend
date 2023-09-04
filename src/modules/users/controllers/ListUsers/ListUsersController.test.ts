@@ -1,9 +1,9 @@
 import request from 'supertest'
-import app from '../../../../app'
+import app from 'shared/app'
 import { type IListUsersControllerResponse } from './ListUsersController'
 import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleRepository'
 import type UserRole from 'modules/users/entities/UserRole'
-import clearTablesInTest from 'utils/clearTablesInTest'
+import clearTablesInTest from 'shared/utils/clearTablesInTest'
 import type User from 'modules/users/entities/User'
 import { type IAuthenticateUserControllerResponse } from '../AuthenticateUser/AuthenticateUserController'
 
@@ -17,7 +17,7 @@ describe('List Users E2E', () => {
     try {
       userRoleRepository = new UserRoleRepository()
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
       roles = await userRoleRepository.list()
 
       let response = await request(app).post('/auth').send({
@@ -30,6 +30,7 @@ describe('List Users E2E', () => {
 
       adminToken = body.token
 
+      // Create Users
       response = await request(app)
         .post('/user')
         .send({

@@ -1,5 +1,5 @@
 import { type Request, type Response, Router } from 'express'
-import ensureAdministrator from 'middlewares/ensureAdministrator'
+import ensureAdministrator from 'shared/middlewares/ensureAdministrator'
 import CreateUserController from 'modules/users/controllers/CreateUser/CreateUserController'
 import DeleteUserController from 'modules/users/controllers/DeleteUser/DeleteUserController'
 import ListUsersController from 'modules/users/controllers/ListUsers/ListUsersController'

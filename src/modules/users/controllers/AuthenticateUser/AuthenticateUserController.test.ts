@@ -1,8 +1,8 @@
 import request from 'supertest'
-import app from '../../../../app'
+import app from 'shared/app'
 import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleRepository'
 import type UserRole from 'modules/users/entities/UserRole'
-import clearTablesInTest from 'utils/clearTablesInTest'
+import clearTablesInTest from 'shared/utils/clearTablesInTest'
 import { type IAuthenticateUserControllerResponse } from './AuthenticateUserController'
 import type User from 'modules/users/entities/User'
 
@@ -16,15 +16,8 @@ describe('Authenticate User E2E', () => {
     try {
       userRoleRepository = new UserRoleRepository()
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
       roles = await userRoleRepository.list()
-
-      user = {
-        name: 'John',
-        email: 'john@mail.com',
-        password: '123456789',
-        roleId: roles[0].id,
-      }
 
       const response = await request(app).post('/auth').send({
         email: 'admin@team.com.br',
@@ -35,14 +28,15 @@ describe('Authenticate User E2E', () => {
         response.body as IAuthenticateUserControllerResponse
 
       adminToken = body.token
-    } catch (err) {
-      console.error(err)
-    }
-  })
 
-  beforeEach(async () => {
-    try {
-      await clearTablesInTest()
+      // Create User
+      user = {
+        name: 'John',
+        email: 'john@mail.com',
+        password: '123456789',
+        roleId: roles[0].id,
+      }
+
       await request(app)
         .post('/user')
         .set('Authorization', `Bearer ${adminToken}`)

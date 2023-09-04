@@ -1,5 +1,5 @@
-import typeORMConnection from '../src/database/typeorm'
-import MainSeedController from '../src/database/typeorm/seeds'
+import typeORMConnection from '../src/shared/database/typeorm'
+import MainSeedController from '../src/shared/database/typeorm/seeds'
 
 export default async (): Promise<void> => {
   try {
@@ -7,7 +7,7 @@ export default async (): Promise<void> => {
     await typeORMConnection.runMigrations()
     console.log('Migrations finished.')
     
-    await MainSeedController.run()
+    await MainSeedController.run({})
 
     await typeORMConnection.destroy()
   } catch (err) {

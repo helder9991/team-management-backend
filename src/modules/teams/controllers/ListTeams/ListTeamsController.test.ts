@@ -1,11 +1,13 @@
 import request from 'supertest'
-import app from '../../../../app'
+import crypto from 'crypto'
+import app from 'shared/app'
 import { type IListTeamsControllerResponse } from './ListTeamsController'
 import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleRepository'
 import type UserRole from 'modules/users/entities/UserRole'
-import clearTablesInTest from 'utils/clearTablesInTest'
+import clearTablesInTest from 'shared/utils/clearTablesInTest'
 import type Team from 'modules/teams/entities/Team'
 import { type IAuthenticateUserControllerResponse } from 'modules/users/controllers/AuthenticateUser/AuthenticateUserController'
+import { adminUserRoleName } from 'modules/users/entities/UserRole'
 
 let userRoleRepository: UserRoleRepository
 let roles: UserRole[] = []
@@ -17,7 +19,7 @@ describe('List Teams E2E', () => {
     try {
       userRoleRepository = new UserRoleRepository()
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
       roles = await userRoleRepository.list()
 
       let response = await request(app).post('/auth').send({
@@ -30,6 +32,7 @@ describe('List Teams E2E', () => {
 
       adminToken = body.token
 
+      // Create Teams
       response = await request(app)
         .post('/team')
         .send({
@@ -83,12 +86,11 @@ describe('List Teams E2E', () => {
 
   it('Shouldn`t be able to list all teams with a non-admin account', async () => {
     for (const role of roles) {
-      if (role.name === 'Administrador') continue
+      if (role.name === adminUserRoleName) continue
 
-      await clearTablesInTest()
       const user = {
         name: 'non-admin',
-        email: 'non-admin@mail.com',
+        email: `non-admin-${crypto.randomUUID()}@mail.com`,
         password: '123456789',
         roleId: role.id,
       }

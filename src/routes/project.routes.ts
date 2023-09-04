@@ -1,8 +1,8 @@
 import { type Request, type Response, Router } from 'express'
-import CreateProjectController from 'modules/project/controllers/CreateProject/CreateProjectController'
-import DeleteProjectController from 'modules/project/controllers/DeleteTeam/DeleteProjectController'
-import ListProjectsController from 'modules/project/controllers/ListProjects/ListProjectsController'
-import UpdateProjectController from 'modules/project/controllers/UpdateProject/UpdateProjectController'
+import CreateProjectController from 'modules/projects/controllers/CreateProject/CreateProjectController'
+import DeleteProjectController from 'modules/projects/controllers/DeleteTeam/DeleteProjectController'
+import ListProjectsController from 'modules/projects/controllers/ListProjects/ListProjectsController'
+import UpdateProjectController from 'modules/projects/controllers/UpdateProject/UpdateProjectController'
 
 const projectRoutes = Router()
 

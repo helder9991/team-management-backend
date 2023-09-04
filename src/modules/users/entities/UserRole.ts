@@ -6,6 +6,15 @@ import {
   PrimaryColumn,
 } from 'typeorm'
 
+export type IUserRoleName =
+  | 'Administrador'
+  | 'Membro da Equipe'
+  | 'Usuário Comum'
+
+export const adminUserRoleName = 'Administrador'
+export const teamMemberUserRoleName = 'Membro da Equipe'
+export const commonUserUserRoleName = 'Usuário Comum'
+
 @Entity('users_roles')
 class UserRole {
   @PrimaryColumn({ name: 'user_role_id', type: 'uuid' })

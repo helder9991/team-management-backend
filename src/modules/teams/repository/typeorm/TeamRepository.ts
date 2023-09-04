@@ -1,7 +1,7 @@
 import crypto from 'crypto'
 import type ITeamRepository from '../interfaces/ITeamRepository'
 import { type Repository } from 'typeorm'
-import typeORMConnection from 'database/typeorm'
+import typeORMConnection from 'shared/database/typeorm'
 import Team from 'modules/teams/entities/Team'
 import type ICreateTeamDTO from 'modules/teams/dtos/ICreateTeamDTO'
 import type IListTeamsDTO from 'modules/teams/dtos/IListTeamsDTO'
@@ -30,9 +30,16 @@ class TeamRepository implements ITeamRepository {
   }
 
   async list({ page }: IListTeamsDTO): Promise<[Team[], ISavedItemCount]> {
+    let pagination = {}
+
+    if (page !== undefined) {
+      pagination = {
+        skip: (page - 1) * itensPerPage,
+        take: itensPerPage,
+      }
+    }
     const teams = await this.repository.findAndCount({
-      skip: (page - 1) * itensPerPage,
-      take: itensPerPage,
+      ...pagination,
     })
 
     return teams

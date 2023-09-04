@@ -1,13 +1,13 @@
 import 'reflect-metadata'
 import UpdateUserUseCase from './UpdateUserUseCase'
 import UserRepository from 'modules/users/repository/typeorm/UserRepository'
-import clearTablesInTest from 'utils/clearTablesInTest'
+import clearTablesInTest from 'shared/utils/clearTablesInTest'
 import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleRepository'
 import type UserRole from 'modules/users/entities/UserRole'
 import crypto from 'crypto'
 import CreateUserUseCase from '../CreateUser/CreateUserUseCase'
 import type User from 'modules/users/entities/User'
-import FakeCacheProvider from 'container/providers/CacheProvider/fakes/FakeCacheProvider'
+import FakeCacheProvider from 'shared/container/providers/CacheProvider/fakes/FakeCacheProvider'
 import CreateTeamUseCase from 'modules/teams/useCases/CreateTeam/CreateTeamUseCase'
 import TeamRepository from 'modules/teams/repository/typeorm/TeamRepository'
 import type Team from 'modules/teams/entities/Team'
@@ -47,16 +47,11 @@ describe('Update User', () => {
       )
       createTeam = new CreateTeamUseCase(teamRepository, fakeCacheProvider)
 
-      await clearTablesInTest()
-      roles = await userRoleRepository.list()
-    } catch (err) {
-      console.error(err)
-    }
-  })
+      await clearTablesInTest({})
 
-  beforeEach(async () => {
-    try {
-      await clearTablesInTest()
+      roles = await userRoleRepository.list()
+
+      // Create User
       const user = {
         name: 'John',
         email: 'john@mail.com',
@@ -66,9 +61,12 @@ describe('Update User', () => {
 
       createdUser = await createUser.execute(user)
 
-      createdTeam = await createTeam.execute({
+      // Create Team
+      const team = {
         name: 'Team 1',
-      })
+      }
+
+      createdTeam = await createTeam.execute(team)
     } catch (err) {
       console.error(err)
     }

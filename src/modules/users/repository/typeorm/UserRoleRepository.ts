@@ -1,6 +1,6 @@
 import type IUserRoleRepository from '../interfaces/IUserRoleRepository'
 import { type Repository } from 'typeorm'
-import typeORMConnection from 'database/typeorm'
+import typeORMConnection from 'shared/database/typeorm'
 import UserRole from 'modules/users/entities/UserRole'
 
 class UserRoleRepository implements IUserRoleRepository {
@@ -17,9 +17,15 @@ class UserRoleRepository implements IUserRoleRepository {
   }
 
   async findById(id: string): Promise<UserRole | null> {
-    const user = await this.repository.findOneBy({ id })
+    const userRole = await this.repository.findOneBy({ id })
 
-    return user
+    return userRole
+  }
+
+  async findByName(name: string): Promise<UserRole | null> {
+    const userRole = await this.repository.findOneBy({ name })
+
+    return userRole
   }
 }
 

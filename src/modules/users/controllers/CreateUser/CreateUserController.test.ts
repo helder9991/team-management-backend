@@ -1,12 +1,13 @@
 import 'express-async-errors'
 import request from 'supertest'
 import crypto from 'crypto'
-import app from '../../../../app'
+import app from 'shared/app'
 import { type ICreateUserControllerResponse } from './CreateUserController'
 import UserRoleRepository from 'modules/users/repository/typeorm/UserRoleRepository'
 import type UserRole from 'modules/users/entities/UserRole'
-import clearTablesInTest from 'utils/clearTablesInTest'
+import clearTablesInTest from 'shared/utils/clearTablesInTest'
 import { type IAuthenticateUserControllerResponse } from '../AuthenticateUser/AuthenticateUserController'
+import { adminUserRoleName } from 'modules/users/entities/UserRole'
 
 let userRoleRepository: UserRoleRepository
 let roles: UserRole[] = []
@@ -17,7 +18,7 @@ describe('Create User E2E', () => {
     try {
       userRoleRepository = new UserRoleRepository()
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
       roles = await userRoleRepository.list()
 
       const response = await request(app).post('/auth').send({
@@ -60,12 +61,11 @@ describe('Create User E2E', () => {
 
   it('Shouldn`t be able to create a new user with a non-admin account', async () => {
     for (const role of roles) {
-      if (role.name === 'Administrador') continue
+      if (role.name === adminUserRoleName) continue
 
-      await clearTablesInTest()
       const user = {
         name: 'non-admin',
-        email: 'non-admin@mail.com',
+        email: `non-admin-${crypto.randomUUID()}@mail.com`,
         password: '123456789',
         roleId: role.id,
       }

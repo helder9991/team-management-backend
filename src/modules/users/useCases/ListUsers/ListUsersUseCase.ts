@@ -1,6 +1,6 @@
 import type User from 'modules/users/entities/User'
 import IUserRepository from 'modules/users/repository/interfaces/IUserRepository'
-import ICacheProvider from 'container/providers/CacheProvider/models/ICacheProvider'
+import ICacheProvider from 'shared/container/providers/CacheProvider/interfaces/ICacheProvider'
 import { inject, injectable } from 'tsyringe'
 import { type ISavedItemCount } from 'shared/interfaces/database'
 
@@ -19,11 +19,11 @@ class ListUsersUseCase {
   ) {}
 
   async execute({
-    page = 1,
+    page,
   }: IListUsersParams): Promise<[User[], ISavedItemCount]> {
     const usersListCached = await this.cacheProvider.recover<
       [User[], ISavedItemCount]
-    >(`users-list:${page}`)
+    >(`users-list:${page ?? 'all'}`)
 
     let users, savedItemCount
 
@@ -34,7 +34,7 @@ class ListUsersUseCase {
         page,
       })
 
-      await this.cacheProvider.save(`users-list:${page}`, [
+      await this.cacheProvider.save(`users-list:${page ?? 'all'}`, [
         users,
         savedItemCount,
       ])

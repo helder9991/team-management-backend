@@ -4,7 +4,7 @@ import IAuthenticateRepository, {
 } from 'modules/users/repository/interfaces/IAuthenticateRepository'
 import IUserRepository from 'modules/users/repository/interfaces/IUserRepository'
 import { inject, injectable } from 'tsyringe'
-import AppError from 'utils/AppError'
+import AppError from 'shared/utils/AppError'
 
 type IAuthenticateUserParams = Pick<User, 'email' | 'password'>
 

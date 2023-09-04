@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import ListTeamsUseCase from './ListTeamsUseCase'
-import clearTablesInTest from 'utils/clearTablesInTest'
-import FakeCacheProvider from 'container/providers/CacheProvider/fakes/FakeCacheProvider'
+import clearTablesInTest from 'shared/utils/clearTablesInTest'
+import FakeCacheProvider from 'shared/container/providers/CacheProvider/fakes/FakeCacheProvider'
 import CreateTeamUseCase from '../CreateTeam/CreateTeamUseCase'
 import TeamRepository from 'modules/teams/repository/typeorm/TeamRepository'
 import type Team from 'modules/teams/entities/Team'
@@ -20,7 +20,7 @@ describe('List Teams', () => {
       createTeam = new CreateTeamUseCase(teamsRepository, fakeCacheProvider)
       listTeams = new ListTeamsUseCase(teamsRepository, fakeCacheProvider)
 
-      await clearTablesInTest()
+      await clearTablesInTest({})
 
       createdTeams.push(
         await createTeam.execute({
@@ -39,6 +39,12 @@ describe('List Teams', () => {
 
   it('Should be able to list all teams', async () => {
     const [teams] = await listTeams.execute({})
+
+    expect(teams).toEqual(expect.arrayContaining(createdTeams))
+  })
+
+  it('Should be able to list all teams by page', async () => {
+    const [teams] = await listTeams.execute({ page: 1 })
 
     expect(teams).toEqual(expect.arrayContaining(createdTeams))
   })

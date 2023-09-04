@@ -1,8 +1,8 @@
-import ICacheProvider from 'container/providers/CacheProvider/models/ICacheProvider'
+import ICacheProvider from 'shared/container/providers/CacheProvider/interfaces/ICacheProvider'
 import type User from 'modules/users/entities/User'
 import IUserRepository from 'modules/users/repository/interfaces/IUserRepository'
 import { inject, injectable } from 'tsyringe'
-import AppError from 'utils/AppError'
+import AppError from 'shared/utils/AppError'
 
 type IDeleteUserParams = Pick<User, 'id'>
 

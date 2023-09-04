@@ -1,4 +1,4 @@
-import ICacheProvider from 'container/providers/CacheProvider/models/ICacheProvider'
+import ICacheProvider from 'shared/container/providers/CacheProvider/interfaces/ICacheProvider'
 import { inject, injectable } from 'tsyringe'
 import ITeamRepository from 'modules/teams/repository/interfaces/ITeamRepository'
 import { type ISavedItemCount } from 'shared/interfaces/database'
@@ -19,11 +19,11 @@ class ListTeamsUseCase {
   ) {}
 
   async execute({
-    page = 1,
+    page,
   }: IListTeamsParams): Promise<[Team[], ISavedItemCount]> {
     const teamsListCached = await this.cacheProvider.recover<
       [Team[], ISavedItemCount]
-    >(`teams-list:${page}`)
+    >(`teams-list:${page ?? 'all'}`)
 
     let teams, savedItemCount
 
@@ -34,7 +34,7 @@ class ListTeamsUseCase {
         page,
       })
 
-      await this.cacheProvider.save(`teams-list:${page}`, [
+      await this.cacheProvider.save(`teams-list:${page ?? 'all'}`, [
         teams,
         savedItemCount,
       ])

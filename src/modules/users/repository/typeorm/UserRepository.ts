@@ -4,10 +4,11 @@ import type ICreateUserDTO from 'modules/users/dtos/ICreateUserDTO'
 import User from 'modules/users/entities/User'
 import type IUserRepository from '../interfaces/IUserRepository'
 import { type Repository } from 'typeorm'
-import typeORMConnection from 'database/typeorm'
+import typeORMConnection from 'shared/database/typeorm'
 import type IUpdateUserDTO from 'modules/users/dtos/IUpdateUserDTO'
 import type IListUsersDTO from 'modules/users/dtos/IListUsersDTO'
 import { type ISavedItemCount } from 'shared/interfaces/database'
+import removeUndefinedProperties from 'shared/utils/removeUndefinedProperties'
 
 const itensPerPage = 30
 class UserRepository implements IUserRepository {
@@ -73,8 +74,20 @@ class UserRepository implements IUserRepository {
     return user
   }
 
-  async list({ page }: IListUsersDTO): Promise<[User[], ISavedItemCount]> {
+  async list({
+    page,
+    where,
+  }: IListUsersDTO): Promise<[User[], ISavedItemCount]> {
+    let pagination = {}
+
+    if (page !== undefined) {
+      pagination = {
+        skip: (page - 1) * itensPerPage,
+        take: itensPerPage,
+      }
+    }
     const users = await this.repository.findAndCount({
+      where: removeUndefinedProperties(where),
       select: [
         'id',
         'name',
@@ -84,8 +97,7 @@ class UserRepository implements IUserRepository {
         'createdAt',
         'deletedAt',
       ],
-      skip: (page - 1) * itensPerPage,
-      take: itensPerPage,
+      ...pagination,
     })
 
     return users

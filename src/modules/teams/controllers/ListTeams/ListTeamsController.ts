@@ -2,7 +2,7 @@ import { type Request, type Response } from 'express'
 import { container } from 'tsyringe'
 import { type ParsedQs } from 'qs'
 import * as Yup from 'yup'
-import AppError from 'utils/AppError'
+import AppError from 'shared/utils/AppError'
 import type Team from 'modules/teams/entities/Team'
 import ListTeamsUseCase from 'modules/teams/useCases/ListTeams/ListTeamsUseCase'
 
