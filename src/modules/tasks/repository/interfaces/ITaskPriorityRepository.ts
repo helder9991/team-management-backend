@@ -4,6 +4,7 @@ import type TaskPriority from 'modules/tasks/entities/TaskPriority'
 interface ITaskPriorityRepository {
   list: () => Promise<TaskPriority[]>
   findByName: (name: ITaskPriorityName) => Promise<TaskPriority | null>
+  findById: (id: string) => Promise<TaskPriority | null>
 }
 
 export default ITaskPriorityRepository

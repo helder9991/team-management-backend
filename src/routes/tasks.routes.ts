@@ -7,6 +7,7 @@ import ListTasksController from 'modules/tasks/controllers/ListTasks/ListTasksCo
 import ListTasksPriorityController from 'modules/tasks/controllers/ListTasksPriority/ListTasksPriorityController'
 import ListTasksStatusController from 'modules/tasks/controllers/ListTasksStatus/ListTasksStatusController'
 import ReadyTaskController from 'modules/tasks/controllers/ReadyTask/ReadyTaskController'
+import UpdateTaskController from 'modules/tasks/controllers/UpdateTask/UpdateTaskController'
 
 const taskRoutes = Router()
 
@@ -16,6 +17,10 @@ taskRoutes.post('/', (req: Request, res: Response) =>
 
 taskRoutes.get('/', (req: Request, res: Response) =>
   ListTasksController.handle(req, res),
+)
+
+taskRoutes.put('/:id', (req: Request, res: Response) =>
+  UpdateTaskController.handle(req, res),
 )
 
 taskRoutes.post('/:id/ready', (req: Request, res: Response) =>

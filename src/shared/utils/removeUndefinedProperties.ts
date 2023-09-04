@@ -1,4 +1,4 @@
-function removeUndefinedProperties<T>(obj: T): T {
+function removeUndefinedProperties<T>(obj: T): Partial<T> {
   const sanitizedObj: Partial<T> = {}
 
   for (const key in obj) {

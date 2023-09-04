@@ -23,6 +23,12 @@ class TaskPriorityRepository implements ITaskPriorityRepository {
 
     return taskPriority
   }
+
+  async findById(id: string): Promise<TaskPriority | null> {
+    const taskPriority = await this.repository.findOneBy({ id })
+
+    return taskPriority
+  }
 }
 
 export default TaskPriorityRepository
