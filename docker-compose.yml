@@ -14,6 +14,14 @@ services:
     volumes:
       - pgdata:/data/postgres
 
+  redis:
+    image: redis
+    command: redis-server --requirepass docker --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - /redis:/var/lib/postgresql/data
+
 volumes:
   pgdata:
     driver: local

@@ -1,9 +1,9 @@
 import fs from 'fs'
 import path from 'path'
-import typeORMConnection from '../src/database/typeorm'
+import typeORMConnection from '../src/shared/database/typeorm'
 
 const dbFilePath = path.join(
-  path.resolve(__dirname, '..', 'src', 'database'),
+  path.resolve(__dirname, '..', 'src', 'shared', 'database'),
   'db.sqlite',
 )
 
