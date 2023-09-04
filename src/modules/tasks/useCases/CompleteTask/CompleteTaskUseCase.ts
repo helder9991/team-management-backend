@@ -6,6 +6,9 @@ import ITaskRepository from 'modules/tasks/repository/interfaces/ITaskRepository
 import ITaskStatusRepository from 'modules/tasks/repository/interfaces/ITaskStatusRepository'
 import { inject, injectable } from 'tsyringe'
 import AppError from 'shared/utils/AppError'
+import IMailQueueProvider from 'shared/container/providers/MailQueueProvider/interfaces/IMailQueueProvider'
+import IUserRepository from 'modules/users/repository/interfaces/IUserRepository'
+import { type IMailContact } from 'shared/container/providers/MailProvider/dtos/ISendMailDTO'
 
 type ICreateTaskParams = Pick<Task, 'id'> & {
   userTeamId: string
@@ -23,8 +26,14 @@ class CompleteTaskUseCase {
     @inject('ProjectRepository')
     private readonly projectRepository: IProjectRepository,
 
+    @inject('UserRepository')
+    private readonly userRepository: IUserRepository,
+
     @inject('CacheProvider')
     private readonly cacheProvider: ICacheProvider,
+
+    @inject('MailQueueProvider')
+    private readonly mailQueueProvider: IMailQueueProvider,
   ) {}
 
   async execute({ id, userTeamId }: ICreateTaskParams): Promise<Task> {
@@ -54,6 +63,25 @@ class CompleteTaskUseCase {
     })
 
     await this.cacheProvider.invalidatePrefix('tasks-list')
+
+    const [users] = await this.userRepository.list({
+      where: { teamId: userTeamId },
+    })
+
+    const usersEmail: IMailContact[] = users.map(({ name, email }) => ({
+      name,
+      email,
+    }))
+
+    this.mailQueueProvider.addToQueue({
+      from: {
+        name: 'Admin',
+        email: 'admin@mail.com',
+      },
+      to: usersEmail,
+      subject: `Task completed: ${task.name}`,
+      text: `The task ${task.name} was completed.`,
+    })
 
     return task
   }

@@ -21,6 +21,9 @@ import type Task from 'modules/tasks/entities/Task'
 import type Team from 'modules/teams/entities/Team'
 import TaskPriorityRepository from 'modules/tasks/repository/typeorm/TaskPriorityRepository'
 import CompleteTaskUseCase from '../CompleteTask/CompleteTaskUseCase'
+import UserRepository from 'modules/users/repository/typeorm/UserRepository'
+import FakeMailQueueProvider from 'shared/container/providers/MailQueueProvider/fakes/FakeMailQueueProvider'
+import FakeMailProvider from 'shared/container/providers/MailProvider/fakes/FakeMailProvider'
 
 let createTask: CreateTaskUseCase
 let completeTask: CompleteTaskUseCase
@@ -28,12 +31,15 @@ let readyTask: ReadyTaskUseCase
 let createTeam: CreateTeamUseCase
 let createProject: CreateProjectUseCase
 
+let userRepository: UserRepository
 let taskRepository: TaskRepository
 let taskPriorityRepository: TaskPriorityRepository
 let taskStatusRepository: TaskStatusRepository
 let teamRepository: TeamRepository
 let projectRepository: ProjectRepository
 let fakeCacheProvider: FakeCacheProvider
+let fakeMailQueueProvider: FakeMailQueueProvider
+let fakeMailProvider: FakeMailProvider
 
 let createdTeam: Team
 let createdTask: Task
@@ -49,7 +55,11 @@ describe('Ready Task', () => {
       taskRepository = new TaskRepository()
       taskStatusRepository = new TaskStatusRepository()
       taskPriorityRepository = new TaskPriorityRepository()
+      userRepository = new UserRepository()
 
+      fakeCacheProvider = new FakeCacheProvider()
+      fakeMailProvider = new FakeMailProvider()
+      fakeMailQueueProvider = new FakeMailQueueProvider(fakeMailProvider)
       fakeCacheProvider = new FakeCacheProvider()
       createTeam = new CreateTeamUseCase(teamRepository, fakeCacheProvider)
       createProject = new CreateProjectUseCase(
@@ -67,7 +77,9 @@ describe('Ready Task', () => {
         taskRepository,
         taskStatusRepository,
         projectRepository,
+        userRepository,
         fakeCacheProvider,
+        fakeMailQueueProvider,
       )
       readyTask = new ReadyTaskUseCase(
         taskRepository,
