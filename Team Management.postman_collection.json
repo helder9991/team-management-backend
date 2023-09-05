@@ -1,0 +1,2286 @@
+{
+	"info": {
+		"_postman_id": "5a87c806-49e3-4f41-94f3-55c34fc5798c",
+		"name": "Team Management",
+		"description": "**API de Gerenciamento Completo com Recursos Avançados**\n\nEsta API oferece funcionalidades abrangentes para administrar equipes, projetos, tarefas e usuários. Além disso, inclui uma poderosa busca avançada de tarefas, permitindo filtrar com base em status, prioridade, atribuição a usuários e muito mais. Também disponibiliza um endpoint dedicado para marcar tarefas como concluídas e automatizar o envio de notificações de conclusão. Uma solução completa para o gerenciamento eficiente de projetos e tarefas.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12036505"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Authenticate User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Extrair o token da resposta JSON\r",
+									"const res = pm.response.json();\r",
+									"const token = res.token;\r",
+									"\r",
+									"// Definir o valor da variável global \"token\"\r",
+									"pm.globals.set(\"token\", token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"helder@mail.com\",\r\n    \"password\": \"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/auth",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"auth"
+							]
+						},
+						"description": "Esta rota permite autenticar um usuário e fornecer um token de acesso para autorização em outras partes da API. Para autenticar um usuário, você deve fornecer um objeto JSON contendo os seguintes campos:\n\n- **email**: O endereço de e-mail do usuário que deseja autenticar. Este campo deve ser uma string válida no formato de endereço de e-mail.\n    \n- **password**: A senha do usuário associada ao endereço de e-mail fornecido. Este campo deve ser uma string que corresponda à senha cadastrada do usuário."
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"admin@team.com.br\",\r\n    \"password\": \"admin123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3333/auth",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"auth"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "264"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"108-t9xBT9YRzX63WL89hMZvwa6zZ1w\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 31 Aug 2023 18:23:24 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlSWQiOiIwNjQ1OGE0YS0yYzZiLTQ1YzMtYjg2ZS1hOGZhYjYwNmE2NGQiLCJpYXQiOjE2OTM1MDYyMDQsImV4cCI6MTY5MzU5MjYwNCwic3ViIjoiMDMzYTlkMTQtOGIwYy00MWM3LTg4YzEtMTExY2Y3NGM4ZWNiIn0.Kgge2mzCR2da51qjbnLInb0douiT4aa7XR-Oso1QNi0\"\n}"
+						},
+						{
+							"name": "Error: User doesn`t exist",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"non-existing@team.com.br\",\r\n    \"password\": \"123456789\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3333/auth",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"auth"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "33"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"21-avUunbpam3XMzUdSgYmWBqHtSkM\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 05 Sep 2023 00:16:51 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User doesn`t exist.\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "User Role",
+					"item": [
+						{
+							"name": "List Users Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/user/user-role",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"user",
+										"user-role"
+									]
+								},
+								"description": "Este endpoint retorna uma lista de todas as funções de usuário disponíveis no sistema. Cada função é identificada por um ID exclusivo e possui um nome descritivo. A resposta inclui um array de objetos representando as funções de usuário existentes.\n\n- **Autenticação e Permissões:**\n    \n    - É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n        \n    - Apenas usuários com permissões de Administrador têm autorização para realizar essa requisição."
+							},
+							"response": [
+								{
+									"name": "Success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:3333/user/user-role",
+											"host": [
+												"localhost"
+											],
+											"port": "3333",
+											"path": [
+												"user",
+												"user-role"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "226"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"e2-mS3I7r5dXvJg6YYgp51FqmVdpmI\""
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 05 Sep 2023 00:22:55 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"usersRole\": [\n        {\n            \"id\": \"06458a4a-2c6b-45c3-b86e-a8fab606a64d\",\n            \"name\": \"Administrador\"\n        },\n        {\n            \"id\": \"92b82256-820b-4ade-ba12-dee90b3e68d0\",\n            \"name\": \"Membro da Equipe\"\n        },\n        {\n            \"id\": \"e68e6fc4-9a1f-4add-89b7-a13e9c56b476\",\n            \"name\": \"Usuário Comum\"\n        }\n    ]\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Create New User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"John\",\r\n    \"email\": \"john@team.com.br\",\r\n    \"password\": \"123456789\",\r\n    \"roleId\": \"92b82256-820b-4ade-ba12-dee90b3e68d1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/user",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"user"
+							]
+						},
+						"description": "Esta rota é responsável por criar um novo usuário no sistema. Para utilizar este endpoint, você deve enviar um objeto JSON no corpo da requisição contendo as informações do novo usuário que deseja cadastrar.\n\n- **name:** O nome do usuário a ser cadastrado.\n    \n- **email:** O endereço de e-mail do usuário.\n    \n- **password:** A senha associada a este usuário.\n    \n- **roleId:** O ID da função de usuário que o novo usuário receberá.\n    \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Administrador têm autorização para realizar essa requisição."
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Peter\",\r\n    \"email\": \"peter@team.com.br\",\r\n    \"password\": \"123456789\",\r\n    \"roleId\": \"92b82256-820b-4ade-ba12-dee90b3e68d0\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3333/user",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"user"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "150"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"96-2Qh2NGCzsN0CFm2dmolHQgRjxQI\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 03 Sep 2023 23:56:59 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"5eba54b2-2f80-4450-878b-166ab553be21\",\n    \"name\": \"Peter\",\n    \"email\": \"peter@team.com.br\",\n    \"roleId\": \"92b82256-820b-4ade-ba12-dee90b3e68d0\",\n    \"teamId\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Bob\",\r\n    \"password\": \"987654321\",\r\n    \"teamId\": \"a5763a4e-f3be-4c11-8bf8-209c16cd945f\",\r\n    \"roleId\": \"92b82256-820b-4ade-ba12-dee90b3e68d0\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/user/{{userId}}",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"user",
+								"{{userId}}"
+							]
+						},
+						"description": "Este endpoint permite atualizar informações de um usuário existente no sistema. Para utilizar este recurso, envie um objeto JSON no corpo da requisição contendo os campos que deseja atualizar.\n\n- **name:** O novo nome do usuário.\n    \n- **teamId:** O ID da equipe à qual o usuário está associado (opcional).\n    \n- **roleId:** O ID da função (role) atribuída ao usuário (opcional).\n    \n- **password:** A nova senha do usuário (opcional).\n    \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Administrador têm autorização para realizar essa requisição."
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Bob\",\r\n    \"password\": \"987654321\",\r\n    \"teamId\": \"a5763a4e-f3be-4c11-8bf8-209c16cd945f\",\r\n    \"roleId\": \"92b82256-820b-4ade-ba12-dee90b3e68d0\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3333/user/5eba54b2-2f80-4450-878b-166ab553be21",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"user",
+										"5eba54b2-2f80-4450-878b-166ab553be21"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "154"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"9a-LRp5OleTdGUmXtI/Zvbue3gb9t0\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 05 Sep 2023 01:19:35 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"5eba54b2-2f80-4450-878b-166ab553be21\",\n    \"name\": \"Bob\",\n    \"roleId\": \"92b82256-820b-4ade-ba12-dee90b3e68d0\",\n    \"teamId\": \"a5763a4e-f3be-4c11-8bf8-209c16cd945f\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/user/{{userId}}",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"user",
+								"{{userId}}"
+							]
+						},
+						"description": "Este endpoint permite a exclusão de um usuário existente no sistema. Para utilizar este recurso, faça uma requisição HTTP do tipo DELETE para a rota correspondente, incluindo o ID do usuário que deseja deletar na URL.  \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Administrador têm autorização para realizar essa requisição."
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:3333/user/5eba54b2-2f80-4450-878b-166ab553be21",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"user",
+										"5eba54b2-2f80-4450-878b-166ab553be21"
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 05 Sep 2023 01:22:18 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "List Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/user?page=1",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"user"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Pagina"
+								}
+							]
+						},
+						"description": "Esta rota permite listar os usuários existentes no sistema com suporte a paginação. Você pode especificar a página desejada utilizando o parâmetro `page` na consulta.\n\n- **page** **(opcional)**: Número da página que você deseja recuperar.\n    \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n- Apenas usuários com permissões de Administrador têm autorização para realizar essa requisição."
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3333/user?page=1",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"user"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "486"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1e6-6X205vyLAB0tmD0JPawsxr1Aqng\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 05 Sep 2023 01:43:40 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"users\": [\n        {\n            \"id\": \"ee0cfb59-70d0-40dc-ad2f-8420de99ae56\",\n            \"name\": \"Hélder\",\n            \"email\": \"helder@mail.com\",\n            \"roleId\": \"92b82256-820b-4ade-ba12-dee90b3e68d0\",\n            \"teamId\": \"a5763a4e-f3be-4c11-8bf8-209c16cd945f\",\n            \"createdAt\": \"2023-08-31T15:57:41.131Z\",\n            \"deletedAt\": null\n        },\n        {\n            \"id\": \"033a9d14-8b0c-41c7-88c1-111cf74c8ecb\",\n            \"name\": \"Administrador\",\n            \"email\": \"admin@team.com.br\",\n            \"roleId\": \"06458a4a-2c6b-45c3-b86e-a8fab606a64d\",\n            \"teamId\": null,\n            \"createdAt\": \"2023-08-31T08:41:59.551Z\",\n            \"deletedAt\": null\n        }\n    ],\n    \"savedItemCount\": 2\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Teams",
+			"item": [
+				{
+					"name": "Create New Team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Team 1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/team",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"team"
+							]
+						},
+						"description": "Esta rota permite criar uma nova equipe no sistema. Para utilizar este recurso, faça uma requisição HTTP do tipo POST para a rota correspondente, enviando um objeto JSON com o nome da equipe desejada.\n\n- **name:** Nome da equipe que deseja criar\n    \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Administrador têm autorização para realizar essa requisição."
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Team 1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3333/team",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"team"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "61"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"3d-e2SmaJKcVFvShzK3k5MXTAk2fQ4\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 05 Sep 2023 01:27:01 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"be16b9cf-9954-4edd-8279-14011fcbecc7\",\n    \"name\": \"Team 1\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"New Team Name\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/team/{{teamId}}",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"team",
+								"{{teamId}}"
+							]
+						},
+						"description": "Esta rota permite atualizar as informações de uma equipe existente no sistema. Para atualizar uma equipe, você deve fornecer um objeto JSON contendo o novo nome da equipe.\n\n- **id:** ID da equipe que você deseja atualizar, presente na URL.\n    \n- **name:** Novo nome que deseja atribuir à equipe, no corpo da requisição.\n    \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Administrador têm autorização para realizar essa requisição."
+					},
+					"response": [
+						{
+							"name": "Update Team",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"New Team Name\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3333/team/be16b9cf-9954-4edd-8279-14011fcbecc7",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"team",
+										"be16b9cf-9954-4edd-8279-14011fcbecc7"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "68"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"44-lCcJgvIaJ5kIKAcsPFH4bEYY8s8\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 05 Sep 2023 01:27:31 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"be16b9cf-9954-4edd-8279-14011fcbecc7\",\n    \"name\": \"New Team Name\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/team/{{teamId}}",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"team",
+								"{{teamId}}"
+							]
+						},
+						"description": "Esta rota permite excluir uma equipe existente no sistema com base em seu ID. Para excluir uma equipe, você deve fornecer o ID da equipe que deseja remover.  \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Administrador têm autorização para realizar essa requisição."
+					},
+					"response": [
+						{
+							"name": "Delete Team",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:3333/team/be16b9cf-9954-4edd-8279-14011fcbecc7",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"team",
+										"be16b9cf-9954-4edd-8279-14011fcbecc7"
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 05 Sep 2023 01:27:58 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "List Teams",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/team?page=1",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"team"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Pagina"
+								}
+							]
+						},
+						"description": "Esta rota permite listar todas as equipes existentes no sistema. Para utilizar este recurso, faça uma requisição HTTP do tipo GET para a rota correspondente.\n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Administrador têm autorização para realizar essa requisição."
+					},
+					"response": [
+						{
+							"name": "List Teams",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3333/team?page=1",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"team"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "384"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"180-R1Y9e9U2PKJi73S6TZoEzOkna/c\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 05 Sep 2023 01:40:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"teams\": [\n        {\n            \"id\": \"d95b43b1-dfd2-47c1-abe8-9a5e84b87f91\",\n            \"name\": \"Team 1\",\n            \"createdAt\": \"2023-08-31T08:42:26.652Z\",\n            \"deletedAt\": null\n        },\n        {\n            \"id\": \"9f89d036-33d7-4916-a4b2-03e7fee8db3a\",\n            \"name\": \"Team 2\",\n            \"createdAt\": \"2023-08-31T11:09:44.439Z\",\n            \"deletedAt\": null\n        },\n        {\n            \"id\": \"a5763a4e-f3be-4c11-8bf8-209c16cd945f\",\n            \"name\": \"Team 1\",\n            \"createdAt\": \"2023-08-31T15:59:37.830Z\",\n            \"deletedAt\": null\n        }\n    ],\n    \"savedItemCount\": 3\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Project",
+			"item": [
+				{
+					"name": "Create New Project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Projeto 1\",\r\n    \"teamId\": \"a5763a4e-f3be-4c11-8bf8-209c16cd945f\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/project",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"project"
+							]
+						},
+						"description": "Esta rota permite criar um novo projeto no sistema. Para criar um projeto, você deve fornecer um objeto JSON contendo os seguintes campos:\n\n- **name**: O nome do projeto que você deseja criar.\n    \n- **teamId**: O ID da equipe à qual você deseja associar o projeto.  \n    \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Administrador têm autorização para realizar essa requisição."
+					},
+					"response": [
+						{
+							"name": "Create New Project",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Projeto 1\",\r\n    \"teamId\": \"a5763a4e-f3be-4c11-8bf8-209c16cd945f\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3333/project",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"project"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "112"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"70-9ADSDUl2Yr3jIV0z+8a9JlXutWA\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 05 Sep 2023 01:29:27 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"c99a47e1-c74f-4c24-9ac8-f919fadd1ade\",\n    \"name\": \"Projeto 1\",\n    \"teamId\": \"a5763a4e-f3be-4c11-8bf8-209c16cd945f\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"New Project Name\",\r\n    \"teamId\": \"9f89d036-33d7-4916-a4b2-03e7fee8db3a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/project/{{projectId}}",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"project",
+								"{{projectId}}"
+							]
+						},
+						"description": "Esta rota permite atualizar as informações de um projeto existente no sistema. Para atualizar um projeto, você deve fornecer um objeto JSON contendo os campos que deseja modificar.\n\n- **name (opcional):** O novo nome para o projeto.\n    \n- **teamId (opcional):** O ID da equipe à qual você deseja associar o projeto.\n    \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Administrador têm autorização para realizar essa requisição."
+					},
+					"response": [
+						{
+							"name": "Update Project",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"New Project Name\",\r\n    \"teamId\": \"9f89d036-33d7-4916-a4b2-03e7fee8db3a\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3333/project/c99a47e1-c74f-4c24-9ac8-f919fadd1ade",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"project",
+										"c99a47e1-c74f-4c24-9ac8-f919fadd1ade"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "119"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"77-op9+5LEyRMm2ukLSar4u+ZM8EWM\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 05 Sep 2023 01:30:10 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"c99a47e1-c74f-4c24-9ac8-f919fadd1ade\",\n    \"name\": \"New Project Name\",\n    \"teamId\": \"9f89d036-33d7-4916-a4b2-03e7fee8db3a\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/project/{{projectId}}",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"project",
+								"{{projectId}}"
+							]
+						},
+						"description": "Esta rota permite excluir um projeto existente no sistema. Para excluir um projeto, você deve fornecer o ID do projeto que deseja remover.  \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Administrador têm autorização para realizar essa requisição."
+					},
+					"response": [
+						{
+							"name": "Delete Project",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:3333/project/c99a47e1-c74f-4c24-9ac8-f919fadd1ade",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"project",
+										"c99a47e1-c74f-4c24-9ac8-f919fadd1ade"
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 05 Sep 2023 01:30:57 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "List Projects",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/project?page=1",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"project"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Esta rota permite listar todos os projetos existentes no sistema.\n\n- **page (opcional):** Número da página que você deseja recuperar. Cada página pode conter um número limitado de projetos, dependendo da configuração do sistema.\n    \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Administrador têm autorização para realizar essa requisição."
+					},
+					"response": [
+						{
+							"name": "List Projects",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3333/project?page=1",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"project"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "Pagina"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "378"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"17a-JUpumwC+V3LvA/f27wFbVAqlfNY\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 05 Sep 2023 01:30:38 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"projects\": [\n        {\n            \"id\": \"edacb647-6633-430d-beae-9cb7cbe7941e\",\n            \"name\": \"Projeto 2\",\n            \"teamId\": \"a5763a4e-f3be-4c11-8bf8-209c16cd945f\",\n            \"createdAt\": \"2023-08-31T08:42:44.944Z\",\n            \"deletedAt\": null\n        },\n        {\n            \"id\": \"c99a47e1-c74f-4c24-9ac8-f919fadd1ade\",\n            \"name\": \"New Project Name\",\n            \"teamId\": \"9f89d036-33d7-4916-a4b2-03e7fee8db3a\",\n            \"createdAt\": \"2023-09-05T01:29:27.951Z\",\n            \"deletedAt\": null\n        }\n    ],\n    \"savedItemCount\": 2\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Task",
+			"item": [
+				{
+					"name": "Task Status",
+					"item": [
+						{
+							"name": "List Tasks Status",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/task/task-status",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"task",
+										"task-status"
+									]
+								},
+								"description": "Esta rota permite listar os possíveis status que uma tarefa pode ter em um projeto. Ao listar os status de tarefas, você pode obter informações sobre os diferentes estados em que as tarefas podem estar, como \"Pronta para Iniciar,\" \"Em Andamento,\" e \"Finalizada.\"\n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Membro do Time têm autorização para realizar essa requisição."
+							},
+							"response": [
+								{
+									"name": "List Tasks Status",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:3333/task/task-status",
+											"host": [
+												"localhost"
+											],
+											"port": "3333",
+											"path": [
+												"task",
+												"task-status"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "226"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"e2-wpr0bN+6lby6h5/bpQ/eB6d35J8\""
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 05 Sep 2023 02:03:43 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"tasksStatus\": [\n        {\n            \"id\": \"6b8e0cda-de81-4564-acc8-b3d8a7fd5b06\",\n            \"name\": \"Pronta para Iniciar\"\n        },\n        {\n            \"id\": \"15687bde-c61b-4fe5-a70d-0a962b1409e2\",\n            \"name\": \"Em Andamento\"\n        },\n        {\n            \"id\": \"480e67ed-8e51-4d4e-a4b7-14cb36cbcb44\",\n            \"name\": \"Finalizada\"\n        }\n    ]\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Task Priority",
+					"item": [
+						{
+							"name": "List Tasks Priority",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/task/task-priority",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"task",
+										"task-priority"
+									]
+								},
+								"description": "Esta rota permite listar as diferentes prioridades que podem ser atribuídas a uma tarefa em um projeto. Ao listar as prioridades de tarefas, você pode obter informações sobre os níveis de importância das tarefas, como \"Baixa Prioridade,\" \"Prioridade Normal,\" e \"Alta Prioridade.\"  \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Membro do Time têm autorização para realizar essa requisição."
+							},
+							"response": [
+								{
+									"name": "List Tasks Priority",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:3333/task/task-priority",
+											"host": [
+												"localhost"
+											],
+											"port": "3333",
+											"path": [
+												"task",
+												"task-priority"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "235"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"eb-VccOLI2b0/0eYv3OVOPA1O6Dhdk\""
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 05 Sep 2023 02:03:49 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"tasksPriority\": [\n        {\n            \"id\": \"2c8633e4-5a19-4950-a35f-5110f2163859\",\n            \"name\": \"Baixa Prioridade\"\n        },\n        {\n            \"id\": \"32cee268-b890-499f-ba51-43f4b6a8574e\",\n            \"name\": \"Prioridade Normal\"\n        },\n        {\n            \"id\": \"6d6415e7-bfab-49e9-bce3-6997049b76e2\",\n            \"name\": \"Alta Prioridade\"\n        }\n    ]\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Create New Task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Task 4\",\r\n    \"description\": \"Descrição da Task 4\",\r\n    \"projectId\": \"edacb647-6633-430d-beae-9cb7cbe7941e\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/task",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"task"
+							]
+						},
+						"description": "Esta rota permite criar uma nova tarefa associada a um projeto específico. Para criar uma tarefa, você deve fornecer um objeto JSON contendo os seguintes campos:\n\n- **name:** O nome da tarefa, uma descrição breve do que precisa ser feito.\n    \n- **description:** A descrição detalhada da tarefa, fornecendo informações adicionais.\n    \n- **projectId:** O ID do projeto ao qual a tarefa será associada.  \n    \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Membro do Time têm autorização para realizar essa requisição."
+					},
+					"response": [
+						{
+							"name": "Create New Task",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Task 4\",\r\n    \"description\": \"Descrição da Task 4\",\r\n    \"projectId\": \"edacb647-6633-430d-beae-9cb7cbe7941e\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3333/task",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"task"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "198"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"c6-1wVASZRWv4gQD05KXDT7wG8Az0A\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 05 Sep 2023 02:06:31 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"2b8197cc-b18f-49f0-8540-b9b7ce54a7a6\",\n    \"name\": \"Task 4\",\n    \"description\": \"Descrição da Task 4\",\n    \"projectId\": \"edacb647-6633-430d-beae-9cb7cbe7941e\",\n    \"userId\": \"ee0cfb59-70d0-40dc-ad2f-8420de99ae56\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Mark Task as Completed",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/task/{{taskId}}/complete",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"task",
+								"{{taskId}}",
+								"complete"
+							]
+						},
+						"description": "Esta rota permite marcar uma tarefa específica como concluída, alterando seu status para \"Finalizada\" no sistema.  \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Membro do Time têm autorização para realizar essa requisição."
+					},
+					"response": [
+						{
+							"name": "Mark Task as Completed",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "localhost:3333/task/2b8197cc-b18f-49f0-8540-b9b7ce54a7a6/complete",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"task",
+										"2b8197cc-b18f-49f0-8540-b9b7ce54a7a6",
+										"complete"
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 05 Sep 2023 02:06:43 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Mark Task as Ready",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/task/{{taskId}}/ready",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"task",
+								"{{taskId}}",
+								"ready"
+							]
+						},
+						"description": "Esta rota permite marcar uma tarefa específica como \"Pronta para Iniciar\", alterando seu status no sistema.  \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Membro do Time têm autorização para realizar essa requisição."
+					},
+					"response": [
+						{
+							"name": "Mark Task as Ready",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "localhost:3333/task/2b8197cc-b18f-49f0-8540-b9b7ce54a7a6/ready",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"task",
+										"2b8197cc-b18f-49f0-8540-b9b7ce54a7a6",
+										"ready"
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 05 Sep 2023 02:06:52 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Mark task as In Progress",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/task/{{taskId}}/in-progress",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"task",
+								"{{taskId}}",
+								"in-progress"
+							]
+						},
+						"description": "Esta rota permite marcar uma tarefa específica como \"Em Andamento\", alterando seu status no sistema.  \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Membro do Time têm autorização para realizar essa requisição."
+					},
+					"response": [
+						{
+							"name": "Mark task as In Progress",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "localhost:3333/task/2b8197cc-b18f-49f0-8540-b9b7ce54a7a6/in-progress",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"task",
+										"2b8197cc-b18f-49f0-8540-b9b7ce54a7a6",
+										"in-progress"
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 05 Sep 2023 02:07:03 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Update Task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"New Task Name\",\r\n    \"description\": \"A nova descrição da task\",\r\n    \"taskPriorityId\": \"6d6415e7-bfab-49e9-bce3-6997049b76e2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/task/{{taskId}}",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"task",
+								"{{taskId}}"
+							]
+						},
+						"description": "Esta rota permite atualizar uma tarefa específica associada a um projeto. Para atualizar a tarefa, você deve fornecer um objeto JSON contendo os seguintes campos:\n\n- **name (opcional):** O nome atualizado da tarefa, que descreve brevemente a ação.\n    \n- **description (opcional):** A nova descrição detalhada da tarefa, fornecendo informações adicionais.\n    \n- **taskPriorityId (opcional):** O ID da nova prioridade da tarefa, que pode ser uma das seguintes opções: \"baixa prioridade,\" \"prioridade normal,\" ou \"alta prioridade.\"\n    \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Membro do Time têm autorização para realizar essa requisição."
+					},
+					"response": [
+						{
+							"name": "Update Task",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"New Task Name\",\r\n    \"description\": \"A nova descrição da task\",\r\n    \"taskPriorityId\": \"6d6415e7-bfab-49e9-bce3-6997049b76e2\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3333/task/2b8197cc-b18f-49f0-8540-b9b7ce54a7a6",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"task",
+										"2b8197cc-b18f-49f0-8540-b9b7ce54a7a6"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "167"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"a7-HXj7ZikzqIm6Wo9XgT+6OIVykmI\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 05 Sep 2023 02:07:40 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"2b8197cc-b18f-49f0-8540-b9b7ce54a7a6\",\n    \"name\": \"New Task Name\",\n    \"description\": \"A nova descrição da task\",\n    \"taskPriorityId\": \"6d6415e7-bfab-49e9-bce3-6997049b76e2\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/task/{{taskId}}",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"task",
+								"{{taskId}}"
+							]
+						},
+						"description": "Este endpoint permite a exclusão de uma task existente no sistema. Para utilizar este recurso, faça uma requisição HTTP do tipo DELETE para a rota correspondente, incluindo o ID da task que deseja deletar na URL.\n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Membro do Time têm autorização para realizar essa requisição."
+					},
+					"response": [
+						{
+							"name": "Delete Task",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:3333/task/2b8197cc-b18f-49f0-8540-b9b7ce54a7a6",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"task",
+										"2b8197cc-b18f-49f0-8540-b9b7ce54a7a6"
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 05 Sep 2023 02:07:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "List Tasks",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/task?projectId=edacb647-6633-430d-beae-9cb7cbe7941e",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"task"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Pagina",
+									"disabled": true
+								},
+								{
+									"key": "projectId",
+									"value": "edacb647-6633-430d-beae-9cb7cbe7941e",
+									"description": "Id do projeto"
+								},
+								{
+									"key": "taskPriorityId",
+									"value": "6d6415e7-bfab-49e9-bce3-6997049b76e2",
+									"description": "Id da task priority",
+									"disabled": true
+								},
+								{
+									"key": "taskStatusId",
+									"value": "",
+									"description": "Id da task status",
+									"disabled": true
+								},
+								{
+									"key": "userId",
+									"value": "6b8e0cda-de81-4564-acc8-b3d8a7fd5b06",
+									"description": "Id do usuario",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Esta rota permite listar todas as tarefas existentes, podendo ser filtradas por diferentes critérios, como status, prioridade, atribuídas a um usuário, etc.\n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Membro do Time têm autorização para realizar essa requisição."
+					},
+					"response": [
+						{
+							"name": "List Tasks",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3333/task?page=1&projectId=edacb647-6633-430d-beae-9cb7cbe7941e&taskPriorityId=6d6415e7-bfab-49e9-bce3-6997049b76e2&taskStatusId=&userId=6b8e0cda-de81-4564-acc8-b3d8a7fd5b06",
+									"host": [
+										"localhost"
+									],
+									"port": "3333",
+									"path": [
+										"task"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "Pagina"
+										},
+										{
+											"key": "projectId",
+											"value": "edacb647-6633-430d-beae-9cb7cbe7941e",
+											"description": "Id do projeto"
+										},
+										{
+											"key": "taskPriorityId",
+											"value": "6d6415e7-bfab-49e9-bce3-6997049b76e2",
+											"description": "Id da task priority"
+										},
+										{
+											"key": "taskStatusId",
+											"value": "",
+											"description": "Id da task status"
+										},
+										{
+											"key": "userId",
+											"value": "6b8e0cda-de81-4564-acc8-b3d8a7fd5b06",
+											"description": "Id do usuario"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "3385"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"d39-2o1KWoqEYsTrnVIXojpc4BxoVi8\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 05 Sep 2023 02:05:52 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"tasks\": [\n        {\n            \"id\": \"21c99b31-d516-4c1b-8130-3693c71fe3d2\",\n            \"name\": \"Task 1\",\n            \"description\": \"d95b43b1-dfd2-47c1-abe8-9a5e84b87f91\",\n            \"projectId\": \"edacb647-6633-430d-beae-9cb7cbe7941e\",\n            \"userId\": null,\n            \"createdAt\": \"2023-08-31T21:52:28.675Z\",\n            \"deletedAt\": null,\n            \"taskStatus\": {\n                \"id\": \"6b8e0cda-de81-4564-acc8-b3d8a7fd5b06\",\n                \"name\": \"Pronta para Iniciar\"\n            },\n            \"taskPriority\": {\n                \"id\": \"32cee268-b890-499f-ba51-43f4b6a8574e\",\n                \"name\": \"Prioridade Normal\"\n            }\n        },\n        {\n            \"id\": \"dbb52a84-165d-44ca-a66e-2661896aea1b\",\n            \"name\": \"Task 3\",\n            \"description\": \"d95b43b1-dfd2-47c1-abe8-9a5e84b87f91\",\n            \"projectId\": \"edacb647-6633-430d-beae-9cb7cbe7941e\",\n            \"userId\": null,\n            \"createdAt\": \"2023-09-01T00:23:14.218Z\",\n            \"deletedAt\": null,\n            \"taskStatus\": {\n                \"id\": \"6b8e0cda-de81-4564-acc8-b3d8a7fd5b06\",\n                \"name\": \"Pronta para Iniciar\"\n            },\n            \"taskPriority\": {\n                \"id\": \"32cee268-b890-499f-ba51-43f4b6a8574e\",\n                \"name\": \"Prioridade Normal\"\n            }\n        },\n        {\n            \"id\": \"6d1873c6-81a6-4b33-ab59-f0ae8d0da0d9\",\n            \"name\": \"Task 3\",\n            \"description\": \"d95b43b1-dfd2-47c1-abe8-9a5e84b87f91\",\n            \"projectId\": \"edacb647-6633-430d-beae-9cb7cbe7941e\",\n            \"userId\": null,\n            \"createdAt\": \"2023-09-01T19:53:35.173Z\",\n            \"deletedAt\": null,\n            \"taskStatus\": {\n                \"id\": \"6b8e0cda-de81-4564-acc8-b3d8a7fd5b06\",\n                \"name\": \"Pronta para Iniciar\"\n            },\n            \"taskPriority\": {\n                \"id\": \"32cee268-b890-499f-ba51-43f4b6a8574e\",\n                \"name\": \"Prioridade Normal\"\n            }\n        },\n        {\n            \"id\": \"04f62899-78b7-4880-8e35-57d30721572e\",\n            \"name\": \"Task 3\",\n            \"description\": \"d95b43b1-dfd2-47c1-abe8-9a5e84b87f91\",\n            \"projectId\": \"edacb647-6633-430d-beae-9cb7cbe7941e\",\n            \"userId\": null,\n            \"createdAt\": \"2023-09-01T20:25:09.977Z\",\n            \"deletedAt\": null,\n            \"taskStatus\": {\n                \"id\": \"6b8e0cda-de81-4564-acc8-b3d8a7fd5b06\",\n                \"name\": \"Pronta para Iniciar\"\n            },\n            \"taskPriority\": {\n                \"id\": \"32cee268-b890-499f-ba51-43f4b6a8574e\",\n                \"name\": \"Prioridade Normal\"\n            }\n        },\n        {\n            \"id\": \"68eb7ad4-bd7c-46ea-83f4-70158ce4f9ad\",\n            \"name\": \"Task 3\",\n            \"description\": \"d95b43b1-dfd2-47c1-abe8-9a5e84b87f91\",\n            \"projectId\": \"edacb647-6633-430d-beae-9cb7cbe7941e\",\n            \"userId\": \"ee0cfb59-70d0-40dc-ad2f-8420de99ae56\",\n            \"createdAt\": \"2023-09-02T19:02:28.272Z\",\n            \"deletedAt\": null,\n            \"taskStatus\": {\n                \"id\": \"480e67ed-8e51-4d4e-a4b7-14cb36cbcb44\",\n                \"name\": \"Finalizada\"\n            },\n            \"taskPriority\": {\n                \"id\": \"32cee268-b890-499f-ba51-43f4b6a8574e\",\n                \"name\": \"Prioridade Normal\"\n            }\n        },\n        {\n            \"id\": \"28b9f3f8-8be1-4d1c-8b11-72a922e07b99\",\n            \"name\": \"Projeto 3\",\n            \"description\": \"d95b43b1-dfd2-47c1-abe8-9a5e84b87f91\",\n            \"projectId\": \"edacb647-6633-430d-beae-9cb7cbe7941e\",\n            \"userId\": null,\n            \"createdAt\": \"2023-08-31T16:17:57.012Z\",\n            \"deletedAt\": null,\n            \"taskStatus\": {\n                \"id\": \"15687bde-c61b-4fe5-a70d-0a962b1409e2\",\n                \"name\": \"Em Andamento\"\n            },\n            \"taskPriority\": {\n                \"id\": \"6d6415e7-bfab-49e9-bce3-6997049b76e2\",\n                \"name\": \"Alta Prioridade\"\n            }\n        },\n        {\n            \"id\": \"6968c726-cac4-41f1-b504-359f6f773495\",\n            \"name\": \"Task 3\",\n            \"description\": \"d95b43b1-dfd2-47c1-abe8-9a5e84b87f91\",\n            \"projectId\": \"edacb647-6633-430d-beae-9cb7cbe7941e\",\n            \"userId\": \"ee0cfb59-70d0-40dc-ad2f-8420de99ae56\",\n            \"createdAt\": \"2023-09-03T04:40:51.541Z\",\n            \"deletedAt\": null,\n            \"taskStatus\": {\n                \"id\": \"480e67ed-8e51-4d4e-a4b7-14cb36cbcb44\",\n                \"name\": \"Finalizada\"\n            },\n            \"taskPriority\": {\n                \"id\": \"32cee268-b890-499f-ba51-43f4b6a8574e\",\n                \"name\": \"Prioridade Normal\"\n            }\n        },\n        {\n            \"id\": \"02b37481-a72e-4623-84a1-8b7f43507fd3\",\n            \"name\": \"Task 123\",\n            \"description\": \"A nova descrição da task\",\n            \"projectId\": \"edacb647-6633-430d-beae-9cb7cbe7941e\",\n            \"userId\": \"ee0cfb59-70d0-40dc-ad2f-8420de99ae56\",\n            \"createdAt\": \"2023-09-01T22:49:53.446Z\",\n            \"deletedAt\": null,\n            \"taskStatus\": {\n                \"id\": \"480e67ed-8e51-4d4e-a4b7-14cb36cbcb44\",\n                \"name\": \"Finalizada\"\n            },\n            \"taskPriority\": {\n                \"id\": \"6d6415e7-bfab-49e9-bce3-6997049b76e2\",\n                \"name\": \"Alta Prioridade\"\n            }\n        }\n    ],\n    \"savedItemCount\": 8\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}
