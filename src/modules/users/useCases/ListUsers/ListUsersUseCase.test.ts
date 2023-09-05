@@ -14,7 +14,7 @@ let userRepository: UserRepository
 let fakeCacheProvider: FakeCacheProvider
 let userRoleRepository: UserRoleRepository
 let roles: UserRole[] = []
-const createdUsers: User[] = []
+let createdUsers: User[] = []
 
 describe('List Users', () => {
   beforeAll(async () => {
@@ -31,7 +31,15 @@ describe('List Users', () => {
 
       await clearTablesInTest({})
       roles = await userRoleRepository.list()
+    } catch (err) {
+      console.error(err)
+    }
+  })
 
+  beforeEach(async () => {
+    try {
+      await clearTablesInTest({ users: true })
+      createdUsers = []
       // Create Users
       createdUsers.push(
         await createUser.execute({
@@ -76,6 +84,8 @@ describe('List Users', () => {
 
   it('Should be able to list all users by cache', async () => {
     await listUsers.execute({})
+    await clearTablesInTest({ users: true })
+
     const [users] = await listUsers.execute({})
 
     expect(users).toEqual(
