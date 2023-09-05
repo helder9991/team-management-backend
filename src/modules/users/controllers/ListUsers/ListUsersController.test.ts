@@ -90,4 +90,20 @@ describe('List Users E2E', () => {
       }),
     ).toEqual(expect.arrayContaining(createdUsers))
   })
+
+  it('Should`t be able to list users if you pass a wrong parameters', async () => {
+    const response = await request(app)
+      .get(`/user`)
+      .set('Authorization', `Bearer ${adminToken}`)
+      .query({
+        page: -1,
+      })
+
+    const body: IListUsersControllerResponse =
+      response.body as IListUsersControllerResponse
+
+    expect(response.status).toBe(400)
+
+    expect(body).toMatchObject({ message: 'Validation Fails.' })
+  })
 })

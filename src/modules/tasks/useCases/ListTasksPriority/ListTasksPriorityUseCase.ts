@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe'
-import type TaskStatus from 'modules/tasks/entities/TaskStatus'
 import ICacheProvider from 'shared/container/providers/CacheProvider/interfaces/ICacheProvider'
 import ITaskPriorityRepository from 'modules/tasks/repository/interfaces/ITaskPriorityRepository'
+import type TaskPriority from 'modules/tasks/entities/TaskPriority'
 
 @injectable()
 class ListTasksPriorityUseCase {
@@ -13,9 +13,9 @@ class ListTasksPriorityUseCase {
     private readonly cacheProvider: ICacheProvider,
   ) {}
 
-  async execute(): Promise<TaskStatus[]> {
+  async execute(): Promise<TaskPriority[]> {
     const tasksPrioriryListCached =
-      await this.cacheProvider.recover<TaskStatus[]>(`tasks-priority-list}`)
+      await this.cacheProvider.recover<TaskPriority[]>(`tasks-priority-list`)
 
     let tasksPriority
 
