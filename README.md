@@ -26,10 +26,10 @@ Siga os passos abaixo para utilizar o projeto:
    - `DB_DATABASE`: Nome do banco de dados.
    - `DB_USER`: Usuário ADM que terá acesso ao banco.
    - `DB_PASSWORD`: Senha do usuário.
-   - `TOKEN_SECRET`=token
-   - `REDIS_HOST`=redis
-   - `REDIS_PORT`=6379
-   - `REDIS_PASS`=docker
+   - `TOKEN_SECRET`= Codigo que gera o token JWT
+   - `REDIS_HOST`= Host utilizado para acessar o redis
+   - `REDIS_PORT`= Porta na qual o redis rodará
+   - `REDIS_PASS`= Senha do redis
      
     OBS: Como será utilizado o Dockerfile e docker-compose, os valores presentes já irão funcionar.
      
@@ -48,6 +48,9 @@ Siga os passos abaixo para utilizar o projeto:
   
 6. Rode o seguinte comando no terminal da aplicação para realizar as seeds no banco de dados:
    - ```yarn seed:run```  
+
+7. Abra um novo terminal da aplicação e inicie a fila:
+   - ```yarn queue```  
      
 ## Arquitetura
   - Para o desenvolvimento da API foi realizado a criação de 3 diagramas: **Diagrama de Classe**, **Diagrama de Entidade Relacionamento** e **Diagrama de Casos de Uso**.  
