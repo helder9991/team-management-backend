@@ -7,12 +7,14 @@ import Project from 'modules/projects/entities/Project'
 import Task from 'modules/tasks/entities/Task'
 import TaskStatus from 'modules/tasks/entities/TaskStatus'
 import TaskPriority from 'modules/tasks/entities/TaskPriority'
+import UserRole from 'modules/users/entities/UserRole'
 
 interface IClearTables {
   users?: boolean
   tasks?: boolean
   tasksStatus?: boolean
   tasksPriority?: boolean
+  usersRoles?: boolean
   projects?: boolean
   teams?: boolean
 }
@@ -52,6 +54,11 @@ async function clearTablesInTest(tables: IClearTables): Promise<void> {
 
     if (deleteAll || tables.users === true)
       await typeORMConnection.getRepository(User).delete({ id: Not(admin.id) })
+
+    if (tables.usersRoles === true) {
+      await typeORMConnection.getRepository(User).delete({})
+      await typeORMConnection.getRepository(UserRole).delete({})
+    }
 
     if (deleteAll || tables.teams === true)
       await typeORMConnection.getRepository(Team).delete({})

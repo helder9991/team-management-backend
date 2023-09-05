@@ -1,4 +1,5 @@
 import 'reflect-metadata'
+import MainSeedController from 'shared/database/typeorm/seeds'
 import ListTasksPriorityUseCase from './ListTasksPriorityUseCase'
 import FakeCacheProvider from 'shared/container/providers/CacheProvider/fakes/FakeCacheProvider'
 import clearTablesInTest from 'shared/utils/clearTablesInTest'
@@ -38,11 +39,15 @@ describe('List Tasks Priority', () => {
 
   it('Should be able to list all tasks priority by cache', async () => {
     await listTasksPriority.execute()
+    await clearTablesInTest({ tasksPriority: true })
+
     const tasksPriority = await listTasksPriority.execute()
 
     expect(tasksPriority).toHaveLength(insertTasksPriorityName.length)
     expect(tasksPriority.map(({ name }) => name)).toEqual(
       insertTasksPriorityName,
     )
+
+    await MainSeedController.run({ silent: true })
   })
 })
