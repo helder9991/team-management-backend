@@ -51,6 +51,10 @@ Siga os passos abaixo para utilizar o projeto:
 
 7. Abra um novo terminal da aplicação e inicie a fila:
    - ```yarn queue```  
+
+8. Por padrão já é criado um usuário administrador no sistema.
+   - email: **admin@team.com.br**  
+   - password: **admin123**  
      
 ## Arquitetura
   - Para o desenvolvimento da API foi realizado a criação de 3 diagramas: **Diagrama de Classe**, **Diagrama de Entidade Relacionamento** e **Diagrama de Casos de Uso**.  
