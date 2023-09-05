@@ -11,7 +11,7 @@ import FakeCacheProvider from 'shared/container/providers/CacheProvider/fakes/Fa
 import TeamRepository from 'modules/teams/repository/typeorm/TeamRepository'
 import CreateTeamUseCase from 'modules/teams/useCases/CreateTeam/CreateTeamUseCase'
 import type Team from 'modules/teams/entities/Team'
-import { adminUserRoleName } from 'modules/users/entities/UserRole'
+import { teamMemberUserRoleName } from 'modules/users/entities/UserRole'
 
 let createTeam: CreateTeamUseCase
 
@@ -20,6 +20,7 @@ let teamRepository: TeamRepository
 let fakeCacheProvider: FakeCacheProvider
 
 let roles: UserRole[] = []
+let teamMemberToken = ''
 let adminToken = ''
 
 let createdTeam: Team
@@ -37,7 +38,7 @@ describe('Create Project E2E', () => {
       userRoleRepository = new UserRoleRepository()
       roles = await userRoleRepository.list()
 
-      const response = await request(app).post('/auth').send({
+      let response = await request(app).post('/auth').send({
         email: 'admin@team.com.br',
         password: 'admin123',
       })
@@ -52,6 +53,32 @@ describe('Create Project E2E', () => {
       }
 
       createdTeam = await createTeam.execute(team)
+
+      // create team-member user
+      const teamMemberRole = await userRoleRepository.findByName(
+        teamMemberUserRoleName,
+      )
+
+      const user = {
+        name: 'Peter',
+        email: 'peter@mail.com',
+        password: '123456789',
+        roleId: teamMemberRole?.id,
+        teamId: createdTeam.id,
+      }
+
+      response = await request(app)
+        .post('/user')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send(user)
+
+      // generate team-member token
+      response = await request(app).post('/auth').send(user)
+
+      const authBody: IAuthenticateUserControllerResponse =
+        response.body as IAuthenticateUserControllerResponse
+
+      teamMemberToken = authBody.token
     } catch (err) {
       console.error(err)
     }
@@ -64,7 +91,7 @@ describe('Create Project E2E', () => {
     }
     const response = await request(app)
       .post('/project')
-      .set('Authorization', `Bearer ${adminToken}`)
+      .set('Authorization', `Bearer ${teamMemberToken}`)
       .send(project)
 
     const body: ICreateProjectControllerResponse =
@@ -76,13 +103,13 @@ describe('Create Project E2E', () => {
     expect(body).toHaveProperty('id')
   })
 
-  it('Shouldn`t be able to create a new project with a non-admin account', async () => {
+  it('Shouldn`t be able to create a new project with a non-team-member account', async () => {
     for (const role of roles) {
-      if (role.name === adminUserRoleName) continue
+      if (role.name === teamMemberUserRoleName) continue
 
       const user = {
-        name: 'non-admin',
-        email: `non-admin-${crypto.randomUUID()}@mail.com`,
+        name: 'non-team-member',
+        email: `non-team-member-${crypto.randomUUID()}@mail.com`,
         password: '123456789',
         roleId: role.id,
       }
@@ -124,7 +151,7 @@ describe('Create Project E2E', () => {
 
     const response = await request(app)
       .post('/project')
-      .set('Authorization', `Bearer ${adminToken}`)
+      .set('Authorization', `Bearer ${teamMemberToken}`)
       .send(project)
 
     const body: ICreateProjectControllerResponse =

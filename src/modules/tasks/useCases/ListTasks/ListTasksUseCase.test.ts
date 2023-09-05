@@ -120,7 +120,6 @@ describe('List Tasks', () => {
   it('Should be able to list all tasks by projectId', async () => {
     const [tasks] = await listTasks.execute({
       projectId: createdProjects[0].id,
-      userTeamId: createdProjects[0].teamId,
     })
 
     expect(tasks).toHaveLength(2)
@@ -159,7 +158,6 @@ describe('List Tasks', () => {
   it('Should be able to list all tasks by projectId and page', async () => {
     const [tasks] = await listTasks.execute({
       projectId: createdProjects[0].id,
-      userTeamId: createdProjects[0].teamId,
       page: 1,
     })
 
@@ -199,11 +197,9 @@ describe('List Tasks', () => {
   it('Should be able to list all tasks in cache by productId', async () => {
     await listTasks.execute({
       projectId: createdProjects[0].id,
-      userTeamId: createdProjects[0].teamId,
     })
     const [tasks] = await listTasks.execute({
       projectId: createdProjects[0].id,
-      userTeamId: createdProjects[0].teamId,
     })
 
     expect(
@@ -238,23 +234,10 @@ describe('List Tasks', () => {
     )
   })
 
-  it('Shouldn`t be able to list all tasks by productId if the user doesn`t belongs to those team project', async () => {
-    await expect(
-      listTasks.execute({
-        projectId: createdProjects[0].id,
-        userTeamId: createdTeams[1].id,
-      }),
-    ).rejects.toHaveProperty(
-      'message',
-      'This user doesn`t belongs to this project.',
-    )
-  })
-
   it('Shouldn`t be able to list all tasks by productId if the project doesn`t exist', async () => {
     await expect(
       listTasks.execute({
         projectId: crypto.randomUUID(),
-        userTeamId: createdTeams[1].id,
       }),
     ).rejects.toHaveProperty('message', 'Project doesn`t exist.')
   })

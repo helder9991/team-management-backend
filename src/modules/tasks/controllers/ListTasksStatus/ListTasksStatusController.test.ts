@@ -80,13 +80,11 @@ describe('List Tasks Status E2E', () => {
     )
   })
 
-  it('Shouldn`t be able to list all tasks status with a non-team-member account', async () => {
+  it('Should be able to list all tasks status with a every user role', async () => {
     for (const role of roles) {
-      if (role.name === teamMemberUserRoleName) continue
-
       const user = {
-        name: 'non-admin',
-        email: `non-team-member-${crypto.randomUUID()}@mail.com`,
+        name: 'Some user',
+        email: `some-user-${crypto.randomUUID()}@mail.com`,
         password: '123456789',
         roleId: role.id,
       }
@@ -108,11 +106,10 @@ describe('List Tasks Status E2E', () => {
       const body: IListTasksStatusControllerResponse =
         response.body as IListTasksStatusControllerResponse
 
-      expect(response.status).toBe(401)
-
-      expect(body).toMatchObject({
-        message: 'This user doesn`t have permission to do this action.',
-      })
+      expect(body.tasksStatus).toHaveLength(insertTasksStatusName.length)
+      expect(body.tasksStatus.map(({ name }) => name)).toEqual(
+        insertTasksStatusName,
+      )
     }
   })
 })

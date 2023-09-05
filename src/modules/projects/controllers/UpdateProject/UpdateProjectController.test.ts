@@ -8,7 +8,7 @@ import { type IAuthenticateUserControllerResponse } from 'modules/users/controll
 import type UserRole from 'modules/users/entities/UserRole'
 import type Project from 'modules/projects/entities/Project'
 import type Team from 'modules/teams/entities/Team'
-import { adminUserRoleName } from 'modules/users/entities/UserRole'
+import { teamMemberUserRoleName } from 'modules/users/entities/UserRole'
 
 let userRoleRepository: UserRoleRepository
 
@@ -16,6 +16,7 @@ let roles: UserRole[] = []
 let createdTeam: Team
 let createdProject: Project
 let adminToken = ''
+let teamMemberToken = ''
 
 describe('Update Project E2E', () => {
   beforeAll(async () => {
@@ -47,6 +48,31 @@ describe('Update Project E2E', () => {
 
       createdTeam = response.body
 
+      // Create team-member user
+      const teamMemberRole = await userRoleRepository.findByName(
+        teamMemberUserRoleName,
+      )
+
+      const user = {
+        name: 'Peter',
+        email: 'peter@mail.com',
+        password: '123456789',
+        roleId: teamMemberRole?.id,
+      }
+
+      response = await request(app)
+        .post('/user')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send(user)
+
+      // generate team-member token
+      response = await request(app).post('/auth').send(user)
+
+      const authBody: IAuthenticateUserControllerResponse =
+        response.body as IAuthenticateUserControllerResponse
+
+      teamMemberToken = authBody.token
+
       // Create Projects
       const project = {
         name: 'Project 1',
@@ -56,7 +82,7 @@ describe('Update Project E2E', () => {
       response = await request(app)
         .post('/project')
         .send(project)
-        .set('Authorization', `Bearer ${adminToken}`)
+        .set('Authorization', `Bearer ${teamMemberToken}`)
 
       createdProject = response.body
     } catch (err) {
@@ -73,7 +99,7 @@ describe('Update Project E2E', () => {
     const response = await request(app)
       .put(`/project/${createdProject.id}`)
       .send(updatedProject)
-      .set('Authorization', `Bearer ${adminToken}`)
+      .set('Authorization', `Bearer ${teamMemberToken}`)
 
     const body: IUpdateProjectControllerResponse =
       response.body as IUpdateProjectControllerResponse
@@ -92,7 +118,7 @@ describe('Update Project E2E', () => {
     const response = await request(app)
       .put(`/project/${crypto.randomUUID()}`)
       .send(project)
-      .set('Authorization', `Bearer ${adminToken}`)
+      .set('Authorization', `Bearer ${teamMemberToken}`)
 
     const body: IUpdateProjectControllerResponse =
       response.body as IUpdateProjectControllerResponse
@@ -102,13 +128,13 @@ describe('Update Project E2E', () => {
     expect(body).toMatchObject({ message: 'Project doesn`t exist.' })
   })
 
-  it('Shouldn`t be able to update a project with a non-admin account', async () => {
+  it('Shouldn`t be able to update a project with a non-team-member account', async () => {
     for (const role of roles) {
-      if (role.name === adminUserRoleName) continue
+      if (role.name === teamMemberUserRoleName) continue
 
       const user = {
-        name: 'non-admin',
-        email: `non-admin-${crypto.randomUUID()}@mail.com`,
+        name: 'non-team-member',
+        email: `non-team-member-${crypto.randomUUID()}@mail.com`,
         password: '123456789',
         roleId: role.id,
       }
@@ -150,7 +176,7 @@ describe('Update Project E2E', () => {
     const response = await request(app)
       .put(`/project/1`)
       .send(project)
-      .set('Authorization', `Bearer ${adminToken}`)
+      .set('Authorization', `Bearer ${teamMemberToken}`)
 
     const body: IUpdateProjectControllerResponse =
       response.body as IUpdateProjectControllerResponse

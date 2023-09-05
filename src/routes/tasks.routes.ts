@@ -8,10 +8,11 @@ import ListTasksPriorityController from 'modules/tasks/controllers/ListTasksPrio
 import ListTasksStatusController from 'modules/tasks/controllers/ListTasksStatus/ListTasksStatusController'
 import ReadyTaskController from 'modules/tasks/controllers/ReadyTask/ReadyTaskController'
 import UpdateTaskController from 'modules/tasks/controllers/UpdateTask/UpdateTaskController'
+import ensureTeamMember from 'shared/middlewares/ensureTeamMember'
 
 const taskRoutes = Router()
 
-taskRoutes.post('/', (req: Request, res: Response) =>
+taskRoutes.post('/', ensureTeamMember, (req: Request, res: Response) =>
   CreateTaskController.handle(req, res),
 )
 
@@ -19,23 +20,27 @@ taskRoutes.get('/', (req: Request, res: Response) =>
   ListTasksController.handle(req, res),
 )
 
-taskRoutes.put('/:id', (req: Request, res: Response) =>
+taskRoutes.put('/:id', ensureTeamMember, (req: Request, res: Response) =>
   UpdateTaskController.handle(req, res),
 )
 
-taskRoutes.post('/:id/ready', (req: Request, res: Response) =>
+taskRoutes.post('/:id/ready', ensureTeamMember, (req: Request, res: Response) =>
   ReadyTaskController.handle(req, res),
 )
 
-taskRoutes.post('/:id/in-progress', (req: Request, res: Response) =>
-  InProgressTaskController.handle(req, res),
+taskRoutes.post(
+  '/:id/in-progress',
+  ensureTeamMember,
+  (req: Request, res: Response) => InProgressTaskController.handle(req, res),
 )
 
-taskRoutes.post('/:id/complete', (req: Request, res: Response) =>
-  CompleteTaskController.handle(req, res),
+taskRoutes.post(
+  '/:id/complete',
+  ensureTeamMember,
+  (req: Request, res: Response) => CompleteTaskController.handle(req, res),
 )
 
-taskRoutes.delete('/:id', (req: Request, res: Response) =>
+taskRoutes.delete('/:id', ensureTeamMember, (req: Request, res: Response) =>
   DeleteTaskController.handle(req, res),
 )
 
