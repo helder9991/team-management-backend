@@ -1,4 +1,5 @@
 import 'reflect-metadata'
+import MainSeedController from 'shared/database/typeorm/seeds'
 import ListTasksStatusUseCase from './ListTasksStatusUseCase'
 import TaskStatusRepository from 'modules/tasks/repository/typeorm/TaskStatusRepository'
 import FakeCacheProvider from 'shared/container/providers/CacheProvider/fakes/FakeCacheProvider'
@@ -36,9 +37,13 @@ describe('List Tasks Status', () => {
 
   it('Should be able to list all tasks status by cache', async () => {
     await listTasksStatus.execute()
+    await clearTablesInTest({ tasksStatus: true })
+
     const tasksStatus = await listTasksStatus.execute()
 
     expect(tasksStatus).toHaveLength(insertTasksStatusName.length)
     expect(tasksStatus.map(({ name }) => name)).toEqual(insertTasksStatusName)
+
+    await MainSeedController.run({ silent: true })
   })
 })

@@ -10,7 +10,7 @@ let listTeams: ListTeamsUseCase
 let createTeam: CreateTeamUseCase
 let teamsRepository: TeamRepository
 let fakeCacheProvider: FakeCacheProvider
-const createdTeams: Team[] = []
+let createdTeams: Team[] = []
 
 describe('List Teams', () => {
   beforeAll(async () => {
@@ -19,9 +19,16 @@ describe('List Teams', () => {
       fakeCacheProvider = new FakeCacheProvider()
       createTeam = new CreateTeamUseCase(teamsRepository, fakeCacheProvider)
       listTeams = new ListTeamsUseCase(teamsRepository, fakeCacheProvider)
-
       await clearTablesInTest({})
+    } catch (err) {
+      console.error(err)
+    }
+  })
 
+  beforeEach(async () => {
+    try {
+      await clearTablesInTest({ teams: true })
+      createdTeams = []
       createdTeams.push(
         await createTeam.execute({
           name: 'Team 1',
@@ -51,6 +58,8 @@ describe('List Teams', () => {
 
   it('Should be able to list all teams by cache', async () => {
     await listTeams.execute({})
+    await clearTablesInTest({ teams: true })
+
     const [teams] = await listTeams.execute({})
 
     expect(teams).toEqual(expect.arrayContaining(createdTeams))

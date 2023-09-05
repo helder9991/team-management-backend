@@ -83,6 +83,7 @@ describe('List Projects', () => {
 
   it('Should be able to list all projects by cache', async () => {
     await listProjects.execute({})
+    await clearTablesInTest({ projects: true })
     const [projects] = await listProjects.execute({})
 
     expect(projects).toEqual(expect.arrayContaining(createdProjects))

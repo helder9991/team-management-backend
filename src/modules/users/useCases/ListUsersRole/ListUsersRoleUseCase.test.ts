@@ -1,4 +1,5 @@
 import 'reflect-metadata'
+import MainSeedController from 'shared/database/typeorm/seeds'
 import ListUsersRoleUseCase from './ListUsersRoleUseCase'
 import FakeCacheProvider from 'shared/container/providers/CacheProvider/fakes/FakeCacheProvider'
 import clearTablesInTest from 'shared/utils/clearTablesInTest'
@@ -35,11 +36,15 @@ describe('List Users Roles', () => {
     expect(usersRole.map(({ name }) => name)).toEqual(insertUsersRoleName)
   })
 
-  it('Should be able to list all users role in cache', async () => {
+  it('Should be able to list all users role by cache', async () => {
     await listUsersRole.execute()
+    await clearTablesInTest({ usersRoles: true })
+
     const usersRole = await listUsersRole.execute()
 
     expect(usersRole).toHaveLength(insertTasksPriorityName.length)
     expect(usersRole.map(({ name }) => name)).toEqual(insertUsersRoleName)
+
+    await MainSeedController.run({ silent: true })
   })
 })
