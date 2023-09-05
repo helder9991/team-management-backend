@@ -8,7 +8,7 @@ import clearTablesInTest from 'shared/utils/clearTablesInTest'
 import type Team from 'modules/teams/entities/Team'
 import { type IAuthenticateUserControllerResponse } from 'modules/users/controllers/AuthenticateUser/AuthenticateUserController'
 import type Project from 'modules/projects/entities/Project'
-import { adminUserRoleName } from 'modules/users/entities/UserRole'
+import { teamMemberUserRoleName } from 'modules/users/entities/UserRole'
 
 let userRoleRepository: UserRoleRepository
 
@@ -46,6 +46,32 @@ describe('List Projects E2E', () => {
 
       createdTeam = response.body
 
+      // create team-member user
+      const teamMemberRole = await userRoleRepository.findByName(
+        teamMemberUserRoleName,
+      )
+
+      const user = {
+        name: 'Peter',
+        email: 'peter@mail.com',
+        password: '123456789',
+        roleId: teamMemberRole?.id,
+        teamId: createdTeam.id,
+      }
+
+      response = await request(app)
+        .post('/user')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send(user)
+
+      // generate team-member token
+      response = await request(app).post('/auth').send(user)
+
+      const authBody: IAuthenticateUserControllerResponse =
+        response.body as IAuthenticateUserControllerResponse
+
+      const teamMemberToken = authBody.token
+
       // Create Projects
       response = await request(app)
         .post('/project')
@@ -53,7 +79,7 @@ describe('List Projects E2E', () => {
           name: 'Project 1',
           teamId: createdTeam.id,
         })
-        .set('Authorization', `Bearer ${adminToken}`)
+        .set('Authorization', `Bearer ${teamMemberToken}`)
 
       createdProjects.push(response.body)
 
@@ -63,7 +89,7 @@ describe('List Projects E2E', () => {
           name: 'Project 2',
           teamId: createdTeam.id,
         })
-        .set('Authorization', `Bearer ${adminToken}`)
+        .set('Authorization', `Bearer ${teamMemberToken}`)
 
       createdProjects.push(response.body)
 
@@ -73,7 +99,7 @@ describe('List Projects E2E', () => {
           name: 'Project 3',
           teamId: createdTeam.id,
         })
-        .set('Authorization', `Bearer ${adminToken}`)
+        .set('Authorization', `Bearer ${teamMemberToken}`)
 
       createdProjects.push(response.body)
     } catch (err) {
@@ -101,13 +127,11 @@ describe('List Projects E2E', () => {
     ).toEqual(expect.arrayContaining(createdProjects))
   })
 
-  it('Shouldn`t be able to list all projects with a non-admin account', async () => {
+  it('Should be able to list all projects with every user role', async () => {
     for (const role of roles) {
-      if (role.name === adminUserRoleName) continue
-
       const user = {
-        name: 'non-admin',
-        email: `non-admin-${crypto.randomUUID()}@mail.com`,
+        name: 'Some user',
+        email: `user-role-${crypto.randomUUID()}@mail.com`,
         password: '123456789',
         roleId: role.id,
       }
@@ -133,11 +157,16 @@ describe('List Projects E2E', () => {
       const body: IListProjectsControllerResponse =
         response.body as IListProjectsControllerResponse
 
-      expect(response.status).toBe(401)
+      expect(response.status).toBe(200)
 
-      expect(body).toMatchObject({
-        message: 'This user doesn`t have permission to do this action.',
-      })
+      expect(body.projects).toHaveLength(3)
+      expect(
+        body.projects.map(({ createdAt, deletedAt, ...rest }) => {
+          return {
+            ...rest,
+          }
+        }),
+      ).toEqual(expect.arrayContaining(createdProjects))
     }
   })
 

@@ -59,27 +59,6 @@ describe('Delete Task E2E', () => {
 
       createdTeams.push(response.body)
 
-      // Create Projects
-      response = await request(app)
-        .post('/project')
-        .send({
-          name: 'Project 1',
-          teamId: createdTeams[0].id,
-        })
-        .set('Authorization', `Bearer ${adminToken}`)
-
-      createdProject = response.body
-
-      response = await request(app)
-        .post('/project')
-        .send({
-          name: 'Project 2',
-          teamId: createdTeams[1].id,
-        })
-        .set('Authorization', `Bearer ${adminToken}`)
-
-      createdProject = response.body
-
       // Create team-member user
       const teamMemberRole = await userRoleRepository.findByName(
         teamMemberUserRoleName,
@@ -104,6 +83,27 @@ describe('Delete Task E2E', () => {
         response.body as IAuthenticateUserControllerResponse
 
       teamMemberToken = authBody.token
+
+      // Create Projects
+      response = await request(app)
+        .post('/project')
+        .send({
+          name: 'Project 1',
+          teamId: createdTeams[0].id,
+        })
+        .set('Authorization', `Bearer ${teamMemberToken}`)
+
+      createdProject = response.body
+
+      response = await request(app)
+        .post('/project')
+        .send({
+          name: 'Project 2',
+          teamId: createdTeams[1].id,
+        })
+        .set('Authorization', `Bearer ${teamMemberToken}`)
+
+      createdProject = response.body
     } catch (err) {
       console.error(err)
     }
@@ -112,6 +112,7 @@ describe('Delete Task E2E', () => {
   beforeEach(async () => {
     try {
       await clearTablesInTest({ tasks: true })
+
       // Create Tasks
       const response = await request(app)
         .post('/task')
@@ -140,7 +141,7 @@ describe('Delete Task E2E', () => {
   it('Should be able to delete a existing task', async () => {
     let response = await request(app)
       .get('/project')
-      .set('Authorization', `Bearer ${adminToken}`)
+      .set('Authorization', `Bearer ${teamMemberToken}`)
 
     expect(response.body.projects).toHaveLength(2)
 

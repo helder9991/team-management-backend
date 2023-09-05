@@ -9,7 +9,6 @@ import AppError from 'shared/utils/AppError'
 interface IListTasksParams {
   page?: number
   projectId: string
-  userTeamId: string
   userId?: string
   taskStatusId?: string
   taskPriorityId?: string
@@ -31,7 +30,6 @@ class ListTasksUseCase {
   async execute({
     page,
     projectId,
-    userTeamId,
     userId,
     taskStatusId,
     taskPriorityId,
@@ -39,9 +37,6 @@ class ListTasksUseCase {
     const projectExists = await this.projectRepository.findById(projectId)
 
     if (projectExists === null) throw new AppError('Project doesn`t exist.')
-
-    if (projectExists.teamId !== userTeamId)
-      throw new AppError('This user doesn`t belongs to this project.')
 
     const whereConditions = {
       projectId,

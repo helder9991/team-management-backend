@@ -25,8 +25,7 @@ class ListTasksController {
   constructor() {
     this.schema = Yup.object().shape({
       page: Yup.number().positive(),
-      projectId: Yup.string().strict().required(),
-      userTeamId: Yup.string().strict().required(),
+      projectId: Yup.string().strict(),
       taskStatusId: Yup.string().strict(),
       taskPriorityId: Yup.string().strict(),
       userId: Yup.string().strict(),
@@ -41,12 +40,10 @@ class ListTasksController {
       taskStatusId,
       taskPriorityId,
     } = req.query as IQueryRequest
-    const userTeamId = req.user.teamId as string
 
     if (
       !(await this.schema.isValid({
         page,
-        userTeamId,
         projectId,
         userId,
         taskStatusId,
@@ -61,7 +58,6 @@ class ListTasksController {
     const [tasks, savedItemCount] = await listTasksUseCase.execute({
       page: Number(page),
       projectId,
-      userTeamId,
       userId,
       taskStatusId,
       taskPriorityId,

@@ -49,19 +49,6 @@ describe('Create Task E2E', () => {
 
       const createdTeam = response.body as ICreateTeamControllerResponse
 
-      // Create Project
-      const project = {
-        name: 'Project 1',
-        teamId: createdTeam.id,
-      }
-
-      response = await request(app)
-        .post('/project')
-        .send(project)
-        .set('Authorization', `Bearer ${adminToken}`)
-
-      createdProject = response.body as ICreateProjectControllerResponse
-
       // create team-member user
       const teamMemberRole = await userRoleRepository.findByName(
         teamMemberUserRoleName,
@@ -87,6 +74,19 @@ describe('Create Task E2E', () => {
         response.body as IAuthenticateUserControllerResponse
 
       teamMemberToken = authBody.token
+
+      // Create Project
+      const project = {
+        name: 'Project 1',
+        teamId: createdTeam.id,
+      }
+
+      response = await request(app)
+        .post('/project')
+        .send(project)
+        .set('Authorization', `Bearer ${teamMemberToken}`)
+
+      createdProject = response.body as ICreateProjectControllerResponse
     } catch (err) {
       console.error(err)
     }

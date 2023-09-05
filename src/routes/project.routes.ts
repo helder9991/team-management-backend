@@ -3,14 +3,15 @@ import CreateProjectController from 'modules/projects/controllers/CreateProject/
 import DeleteProjectController from 'modules/projects/controllers/DeleteTeam/DeleteProjectController'
 import ListProjectsController from 'modules/projects/controllers/ListProjects/ListProjectsController'
 import UpdateProjectController from 'modules/projects/controllers/UpdateProject/UpdateProjectController'
+import ensureTeamMember from 'shared/middlewares/ensureTeamMember'
 
 const projectRoutes = Router()
 
-projectRoutes.post('/', (req: Request, res: Response) =>
+projectRoutes.post('/', ensureTeamMember, (req: Request, res: Response) =>
   CreateProjectController.handle(req, res),
 )
 
-projectRoutes.put('/:id', (req: Request, res: Response) =>
+projectRoutes.put('/:id', ensureTeamMember, (req: Request, res: Response) =>
   UpdateProjectController.handle(req, res),
 )
 
@@ -18,7 +19,7 @@ projectRoutes.get('/', (req: Request, res: Response) =>
   ListProjectsController.handle(req, res),
 )
 
-projectRoutes.delete('/:id', (req: Request, res: Response) =>
+projectRoutes.delete('/:id', ensureTeamMember, (req: Request, res: Response) =>
   DeleteProjectController.handle(req, res),
 )
 
