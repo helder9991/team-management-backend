@@ -34,7 +34,7 @@ describe('List Tasks Status', () => {
     expect(tasksStatus.map(({ name }) => name)).toEqual(insertTasksStatusName)
   })
 
-  it('Should be able to list all tasks status', async () => {
+  it('Should be able to list all tasks status by cache', async () => {
     await listTasksStatus.execute()
     const tasksStatus = await listTasksStatus.execute()
 

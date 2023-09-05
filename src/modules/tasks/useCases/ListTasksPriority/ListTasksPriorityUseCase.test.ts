@@ -36,7 +36,7 @@ describe('List Tasks Priority', () => {
     )
   })
 
-  it('Should be able to list all tasks priority', async () => {
+  it('Should be able to list all tasks priority by cache', async () => {
     await listTasksPriority.execute()
     const tasksPriority = await listTasksPriority.execute()
 

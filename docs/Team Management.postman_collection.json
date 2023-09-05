@@ -217,7 +217,7 @@
 										"user-role"
 									]
 								},
-								"description": "Este endpoint retorna uma lista de todas as funções de usuário disponíveis no sistema. Cada função é identificada por um ID exclusivo e possui um nome descritivo. A resposta inclui um array de objetos representando as funções de usuário existentes.\n\n- **Autenticação e Permissões:**\n    \n    - É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n        \n    - Apenas usuários com permissões de Administrador têm autorização para realizar essa requisição."
+								"description": "Este endpoint retorna uma lista de todas as funções de usuário disponíveis no sistema. Cada função é identificada por um ID exclusivo e possui um nome descritivo. A resposta inclui um array de objetos representando as funções de usuário existentes.\n\n- **Autenticação:**\n    \n    - É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota."
 							},
 							"response": [
 								{
@@ -1086,7 +1086,7 @@
 								"project"
 							]
 						},
-						"description": "Esta rota permite criar um novo projeto no sistema. Para criar um projeto, você deve fornecer um objeto JSON contendo os seguintes campos:\n\n- **name**: O nome do projeto que você deseja criar.\n    \n- **teamId**: O ID da equipe à qual você deseja associar o projeto.  \n    \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Administrador têm autorização para realizar essa requisição."
+						"description": "Esta rota permite criar um novo projeto no sistema. Para criar um projeto, você deve fornecer um objeto JSON contendo os seguintes campos:\n\n- **name**: O nome do projeto que você deseja criar.\n- **teamId**: O ID da equipe à qual você deseja associar o projeto.\n    \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n- Apenas usuários com permissões de Membro da Equipe têm autorização para realizar essa requisição."
 					},
 					"response": [
 						{
@@ -1190,7 +1190,7 @@
 								"{{projectId}}"
 							]
 						},
-						"description": "Esta rota permite atualizar as informações de um projeto existente no sistema. Para atualizar um projeto, você deve fornecer um objeto JSON contendo os campos que deseja modificar.\n\n- **name (opcional):** O novo nome para o projeto.\n    \n- **teamId (opcional):** O ID da equipe à qual você deseja associar o projeto.\n    \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Administrador têm autorização para realizar essa requisição."
+						"description": "Esta rota permite atualizar as informações de um projeto existente no sistema. Para atualizar um projeto, você deve fornecer um objeto JSON contendo os campos que deseja modificar.\n\n- **name (opcional):** O novo nome para o projeto.\n- **teamId (opcional):** O ID da equipe à qual você deseja associar o projeto.\n    \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n- Apenas usuários com permissões de Membro da Equipe têm autorização para realizar essa requisição."
 					},
 					"response": [
 						{
@@ -1286,7 +1286,7 @@
 								"{{projectId}}"
 							]
 						},
-						"description": "Esta rota permite excluir um projeto existente no sistema. Para excluir um projeto, você deve fornecer o ID do projeto que deseja remover.  \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Administrador têm autorização para realizar essa requisição."
+						"description": "Esta rota permite excluir um projeto existente no sistema. Para excluir um projeto, você deve fornecer o ID do projeto que deseja remover.\n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n- Apenas usuários com permissões de **Membro da Equipe** têm autorização para realizar essa requisição."
 					},
 					"response": [
 						{
@@ -1366,7 +1366,7 @@
 								}
 							]
 						},
-						"description": "Esta rota permite listar todos os projetos existentes no sistema.\n\n- **page (opcional):** Número da página que você deseja recuperar. Cada página pode conter um número limitado de projetos, dependendo da configuração do sistema.\n    \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Administrador têm autorização para realizar essa requisição."
+						"description": "Esta rota permite listar todos os projetos existentes no sistema.\n\n- **page (opcional):** Número da página que você deseja recuperar. Cada página pode conter um número limitado de projetos, dependendo da configuração do sistema.\n    \n\n**Autenticação:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota."
 					},
 					"response": [
 						{
@@ -1467,7 +1467,7 @@
 										"task-status"
 									]
 								},
-								"description": "Esta rota permite listar os possíveis status que uma tarefa pode ter em um projeto. Ao listar os status de tarefas, você pode obter informações sobre os diferentes estados em que as tarefas podem estar, como \"Pronta para Iniciar,\" \"Em Andamento,\" e \"Finalizada.\"\n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Membro do Time têm autorização para realizar essa requisição."
+								"description": "Esta rota permite listar os possíveis status que uma tarefa pode ter em um projeto. Ao listar os status de tarefas, você pode obter informações sobre os diferentes estados em que as tarefas podem estar, como \"Pronta para Iniciar,\" \"Em Andamento,\" e \"Finalizada.\"\n\n**Autenticação:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota."
 							},
 							"response": [
 								{
@@ -1559,7 +1559,7 @@
 										"task-priority"
 									]
 								},
-								"description": "Esta rota permite listar as diferentes prioridades que podem ser atribuídas a uma tarefa em um projeto. Ao listar as prioridades de tarefas, você pode obter informações sobre os níveis de importância das tarefas, como \"Baixa Prioridade,\" \"Prioridade Normal,\" e \"Alta Prioridade.\"  \n\n**Autenticação e Permissões:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota.\n    \n- Apenas usuários com permissões de Membro do Time têm autorização para realizar essa requisição."
+								"description": "Esta rota permite listar as diferentes prioridades que podem ser atribuídas a uma tarefa em um projeto. Ao listar as prioridades de tarefas, você pode obter informações sobre os níveis de importância das tarefas, como \"Baixa Prioridade,\" \"Prioridade Normal,\" e \"Alta Prioridade.\"\n\n**Autenticação:**\n\n- É necessário incluir um token JWT válido no cabeçalho da requisição para acessar esta rota."
 							},
 							"response": [
 								{

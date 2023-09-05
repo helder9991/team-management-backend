@@ -7,7 +7,7 @@ import clearTablesInTest from 'shared/utils/clearTablesInTest'
 import { type IAuthenticateUserControllerResponse } from 'modules/users/controllers/AuthenticateUser/AuthenticateUserController'
 import type Project from 'modules/projects/entities/Project'
 import type Team from 'modules/teams/entities/Team'
-import { adminUserRoleName } from 'modules/users/entities/UserRole'
+import { teamMemberUserRoleName } from 'modules/users/entities/UserRole'
 
 let userRoleRepository: UserRoleRepository
 
@@ -15,6 +15,7 @@ let roles: UserRole[] = []
 const createdProjects: Project[] = []
 
 let adminToken = ''
+let teamMemberToken = ''
 
 describe('Delete Project E2E', () => {
   beforeAll(async () => {
@@ -24,7 +25,7 @@ describe('Delete Project E2E', () => {
       await clearTablesInTest({})
       roles = await userRoleRepository.list()
 
-      const response = await request(app).post('/auth').send({
+      let response = await request(app).post('/auth').send({
         email: 'admin@team.com.br',
         password: 'admin123',
       })
@@ -33,6 +34,31 @@ describe('Delete Project E2E', () => {
         response.body as IAuthenticateUserControllerResponse
 
       adminToken = body.token
+
+      // Create team-member user
+      const teamMemberRole = await userRoleRepository.findByName(
+        teamMemberUserRoleName,
+      )
+
+      const user = {
+        name: 'Peter',
+        email: 'peter@mail.com',
+        password: '123456789',
+        roleId: teamMemberRole?.id,
+      }
+
+      response = await request(app)
+        .post('/user')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send(user)
+
+      // generate team-member token
+      response = await request(app).post('/auth').send(user)
+
+      const authBody: IAuthenticateUserControllerResponse =
+        response.body as IAuthenticateUserControllerResponse
+
+      teamMemberToken = authBody.token
     } catch (err) {
       console.error(err)
     }
@@ -52,7 +78,7 @@ describe('Delete Project E2E', () => {
 
       response = await request(app)
         .post('/project')
-        .set('Authorization', `Bearer ${adminToken}`)
+        .set('Authorization', `Bearer ${teamMemberToken}`)
         .send({
           name: 'Project 1',
           teamId: createdTeam.id,
@@ -62,7 +88,7 @@ describe('Delete Project E2E', () => {
 
       response = await request(app)
         .post('/project')
-        .set('Authorization', `Bearer ${adminToken}`)
+        .set('Authorization', `Bearer ${teamMemberToken}`)
         .send({
           name: 'Project 2',
           teamId: createdTeam.id,
@@ -77,19 +103,19 @@ describe('Delete Project E2E', () => {
   it('Should be able to delete a existing project', async () => {
     let response = await request(app)
       .get('/project')
-      .set('Authorization', `Bearer ${adminToken}`)
+      .set('Authorization', `Bearer ${teamMemberToken}`)
 
     expect(response.body.projects).toHaveLength(2)
 
     response = await request(app)
       .delete(`/project/${createdProjects[0].id}`)
-      .set('Authorization', `Bearer ${adminToken}`)
+      .set('Authorization', `Bearer ${teamMemberToken}`)
 
     expect(response.status).toBe(204)
 
     response = await request(app)
       .get('/project')
-      .set('Authorization', `Bearer ${adminToken}`)
+      .set('Authorization', `Bearer ${teamMemberToken}`)
 
     expect(response.body.projects).toHaveLength(1)
   })
@@ -97,20 +123,20 @@ describe('Delete Project E2E', () => {
   it('Shouldn`t be able to delete a non-existing project', async () => {
     const response = await request(app)
       .delete(`/project/${crypto.randomUUID()}`)
-      .set('Authorization', `Bearer ${adminToken}`)
+      .set('Authorization', `Bearer ${teamMemberToken}`)
 
     expect(response.status).toBe(400)
 
     expect(response.body).toMatchObject({ message: 'Project doesn`t exist.' })
   })
 
-  it('Shouldn`t be able to delete a project with a non-admin account', async () => {
+  it('Shouldn`t be able to delete a project with a non-team-member account', async () => {
     for (const role of roles) {
-      if (role.name === adminUserRoleName) continue
+      if (role.name === teamMemberUserRoleName) continue
 
       const user = {
-        name: 'non-admin',
-        email: `non-admin-${crypto.randomUUID()}@mail.com`,
+        name: 'non-team-member',
+        email: `non-team-member-${crypto.randomUUID()}@mail.com`,
         password: '123456789',
         roleId: role.id,
       }
@@ -141,7 +167,7 @@ describe('Delete Project E2E', () => {
     const nonExistingId = 'non-existing-id'
     const response = await request(app)
       .delete(`/project/${nonExistingId}`)
-      .set('Authorization', `Bearer ${adminToken}`)
+      .set('Authorization', `Bearer ${teamMemberToken}`)
 
     expect(response.status).toBe(400)
 

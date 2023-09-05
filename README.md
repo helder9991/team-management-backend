@@ -49,11 +49,14 @@ Siga os passos abaixo para utilizar o projeto:
 6. Rode o seguinte comando no terminal da aplicação para realizar as seeds no banco de dados:
    - ```yarn seed:run```  
      
-## Rotas
-  - A documentação das rotas foi desenvolvida no Postman e pode ser encontrada no seguinte link:  
-    [Documentação](https://documenter.getpostman.com/view/12036505/2s9Y5eNziC)  
+## Arquitetura
+  - Para o desenvolvimento da API foi realizado a criação de 3 diagramas: **Diagrama de Classe**, **Diagrama de Entidade Relacionamento** e **Diagrama de Casos de Uso**.  
     
-  - Além disso ela também pode ser encontrada dentro da raiz do projeto com o nome: *Team Management.postman_collection.json*.  
+  - Todos os diagramas podem ser encontrados dentro da pasta doc com o seu respectivo nome.  
+## Rotas
+  - A documentação das rotas foi desenvolvida no Postman e pode ser encontrada no seguinte link: [Documentação](https://documenter.getpostman.com/view/12036505/2s9Y5eNziC)  
+    
+  - Além disso ela também pode ser encontrada dentro da pasta doc com o nome: *Team Management.postman_collection.json*.  
 
 ## Testes
 O projeto inclui testes unitários e end-to-end para garantir o correto funcionamento e a qualidade do código. Para executar os testes, utilize o seguinte comando:    

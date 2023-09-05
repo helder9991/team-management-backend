@@ -15,7 +15,7 @@ class ListTasksStatusUseCase {
 
   async execute(): Promise<TaskStatus[]> {
     const tasksListCached =
-      await this.cacheProvider.recover<TaskStatus[]>(`tasks-status-list}`)
+      await this.cacheProvider.recover<TaskStatus[]>(`tasks-status-list`)
 
     let tasksStatus
 

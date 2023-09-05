@@ -53,28 +53,6 @@ describe('List Tasks E2E', () => {
 
       createdTeam = response.body as ICreateTeamControllerResponse
 
-      // Create Projects
-
-      response = await request(app)
-        .post('/project')
-        .send({
-          name: 'Project 1',
-          teamId: createdTeam.id,
-        })
-        .set('Authorization', `Bearer ${adminToken}`)
-
-      createdProjects.push(response.body)
-
-      response = await request(app)
-        .post('/project')
-        .send({
-          name: 'Project 2',
-          teamId: createdTeam.id,
-        })
-        .set('Authorization', `Bearer ${adminToken}`)
-
-      createdProjects.push(response.body)
-
       // Create team-member user
       const teamMemberRole = await userRoleRepository.findByName(
         teamMemberUserRoleName,
@@ -100,6 +78,28 @@ describe('List Tasks E2E', () => {
         response.body as IAuthenticateUserControllerResponse
 
       teamMemberToken = authBody.token
+
+      // Create Projects
+
+      response = await request(app)
+        .post('/project')
+        .send({
+          name: 'Project 1',
+          teamId: createdTeam.id,
+        })
+        .set('Authorization', `Bearer ${teamMemberToken}`)
+
+      createdProjects.push(response.body)
+
+      response = await request(app)
+        .post('/project')
+        .send({
+          name: 'Project 2',
+          teamId: createdTeam.id,
+        })
+        .set('Authorization', `Bearer ${teamMemberToken}`)
+
+      createdProjects.push(response.body)
 
       // Create Tasks
       response = await request(app)
@@ -173,15 +173,14 @@ describe('List Tasks E2E', () => {
     )
   })
 
-  it('Shouldn`t be able to list all tasks with a non-team-member account', async () => {
+  it('Should be able to list all tasks with a every user role', async () => {
     for (const role of roles) {
-      if (role.name === teamMemberUserRoleName) continue
-
       const user = {
-        name: 'non-admin',
-        email: `non-team-member-${crypto.randomUUID()}@mail.com`,
+        name: 'Some user',
+        email: `some-user-${crypto.randomUUID()}@mail.com`,
         password: '123456789',
         roleId: role.id,
+        teamId: createdProjects[0].teamId,
       }
 
       let response = await request(app)
@@ -199,17 +198,10 @@ describe('List Tasks E2E', () => {
         .set('Authorization', `Bearer ${authBody.token}`)
         .send({
           name: 'Task 1',
-          projectId: crypto.randomUUID(),
+          projectId: createdProjects[0].id,
         })
 
-      const body: IListTasksControllerResponse =
-        response.body as IListTasksControllerResponse
-
-      expect(response.status).toBe(401)
-
-      expect(body).toMatchObject({
-        message: 'This user doesn`t have permission to do this action.',
-      })
+      expect(response.status).toBe(200)
     }
   })
 
